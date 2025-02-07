@@ -1,3 +1,5 @@
+"use client"
+
 import { Calendar, ChevronUp, Home, Inbox, Search, Settings, User2 } from "lucide-react"
 
 import {
@@ -12,13 +14,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarSeparator,
+  useSidebar,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import Image from "next/image"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { createClient } from "@/utils/supabase/server"
-import { redirect } from "next/navigation"
 import Logout from "./Logout"
+import { createClient } from "@/utils/supabase/client"
+import { useEffect, useState } from "react"
 
 // Menu items.
 const items = [
@@ -39,37 +42,48 @@ const items = [
   },
 ]
 
-const deptAdminItems = [
-  {
-    title: "Home",
-    url: "/dashboard",
-    icon: Home,
-  },  
-  {
-    title: "Manage OPD",
-    url: "/dashboard/manage-opd",
-    icon: Inbox,
-  },
-  {
-    title: "Update Counter",
-    url: "/dashboard/update-counter",
-    icon: Calendar,
-  }
-]
+// const deptAdminItems = [
+//   {
+//     title: "Home",
+//     url: "/dashboard",
+//     icon: Home,
+//   },  
+//   {
+//     title: "Manage OPD",
+//     url: "/dashboard/manage-opd",
+//     icon: Inbox,
+//   },
+//   {
+//     title: "Update Counter",
+//     url: "/dashboard/update-counter",
+//     icon: Calendar,
+//   }
+// ]
 
-export async function AppSidebar() {
+export function AppSidebar() {
 
-  const supabase = await createClient();
+  const { setOpenMobile } = useSidebar();
+  const [user, setUser] = useState<any>(null);
 
-  const {data, error} = await supabase.auth.getUser();
+  useEffect(() => {
+    const fetchUser = async () => {
+      const supabase = createClient();
+      const {data, error} = await supabase.auth.getUser();
 
-  if(error || !data?.user) {
-    redirect("/login")
-  }
+      if (!error && data?.user) {
+        setUser(data.user);
+      } else {
+        window.location.href = "/login";
+      }
+    }
 
-  const username = data?.user?.user_metadata?.name;
-  const useremail = data?.user?.email;
-  const role = data?.user?.user_metadata?.role;
+    fetchUser();
+  }, [])
+  
+
+
+
+
 
   return (
     <Sidebar>
@@ -87,7 +101,7 @@ export async function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.url}>
+                    <Link href={item.url} onClick={() => setOpenMobile(false)}>
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>
@@ -105,7 +119,7 @@ export async function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> {useremail}
+                  <User2 /> {user?.email || "Loading..."}
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>

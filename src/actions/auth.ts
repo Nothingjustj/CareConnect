@@ -98,21 +98,21 @@ export async function signIn (formData: FormData) {
         }
     }
 
-    const { error: roleError, data: roleData } = await supabase.from("roles").select("role").eq("user_id", data.user.id).single();
+    // const { error: roleError, data: roleData } = await supabase.from("roles").select("role").eq("user_id", data.user.id).single();
 
-    if(roleError) {
-        return {
-            status: roleError.message,
-            user: null,
-            role: null
-        }
-    } else if (roleData.role) {
-        return {
-            status: "success",
-            user: data.user,
-            role: roleData.role
-        }
-    } 
+    // if(roleError) {
+    //     return {
+    //         status: roleError.message,
+    //         user: null,
+    //         role: null
+    //     }
+    // } else if (roleData.role) {
+    //     return {
+    //         status: "success",
+    //         user: data.user,
+    //         role: roleData.role
+    //     }
+    // } 
 
     // TODO :: Create a user instance in user_profiles table
     // const {data: existingUser} = await supabase
@@ -137,7 +137,8 @@ export async function signIn (formData: FormData) {
     // }
 
     revalidatePath("/", "layout")
-    return { status: "success", user: data.user, role: roleData.role };
+    return { status: "success", user: data.user };
+    // return { status: "success", user: data.user, role: roleData.role };
 }
 
 export async function signOut () {
