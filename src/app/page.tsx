@@ -31,7 +31,7 @@ export default function Home() {
                   <Clock className="h-12 w-12 text-primary" />
                   <h3 className="text-xl font-bold">Real-time Token Updates</h3>
                   <p className="text-muted-foreground">
-                    Track your token status in real-time and get notified when it's your turn.
+                    Track your token status in real-time and get notified when it&apos;s your turn.
                   </p>
                 </div>
                 <div className="flex flex-col items-center space-y-4 text-center">

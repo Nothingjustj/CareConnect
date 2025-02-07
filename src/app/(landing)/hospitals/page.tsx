@@ -5,7 +5,7 @@ import { supabase } from "@/actions/supabaseClient";
 
 export default function HospitalPage() {
   const [loading, setLoading] = useState(true);
-  const [hospitals, setHospitals] = useState<any>([]);
+  const [hospitals, setHospitals] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchHospitals = async () => {
