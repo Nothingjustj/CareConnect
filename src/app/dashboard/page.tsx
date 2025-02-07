@@ -18,7 +18,7 @@ export default async function DashboardPage() {
             {/* The Dashboard contents will appear here. */}
             <h1 className="text-2xl md:text-3xl font-semibold">Welcome, <span className="font-bold">{data?.user.user_metadata.name || "User"}</span>👋</h1>
             <h2 className="text-muted-foreground mt-1 text-lg">Book your appointment and track your opds.</h2>
-            <div className="grid grid-cols-2 gap-4 my-6">
+            <div className="grid sm:grid-cols-2 gap-4 my-6">
                 <Link href="/dashboard/book-opd" className="bg-muted p-4 rounded-xl border hover:border-primary">
                     <Hospital className="text-primary w-8 h-8" />
                     <h3 className="text-xl font-semibold mt-2">Book OPD</h3>
