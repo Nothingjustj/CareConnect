@@ -23,7 +23,7 @@ export default async function AuthLayout({
           </Link>
         </header>
         {children}
-        <footer className="absolute bottom-0 left-0 w-full bg-background">
+        <footer className="w-full bg-background">
           <p className="text-center text-xs p-4 text-muted-foreground">&copy; 2025 RogiSetu | All rights reserved</p>
         </footer>
       </>
