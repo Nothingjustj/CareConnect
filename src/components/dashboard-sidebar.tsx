@@ -21,6 +21,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import Logout from "./Logout"
 import { useEffect, useState } from "react"
 import { getUserSession, signOut } from "@/actions/auth"
+import { toast } from "sonner"
 
 const navItems = {
   patient: [
@@ -64,7 +65,10 @@ export function AppSidebar({ role }: { role: string | null }) {
 
 
   const handleLogout = () => {
-    signOut();
+    toast.promise(signOut(), {
+      loading: "Logging out...",
+      success: "Logged out successfully"
+    })
   }
   
 
@@ -111,9 +115,6 @@ export function AppSidebar({ role }: { role: string | null }) {
               >
                 <DropdownMenuItem>
                   <span>Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Billing</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   <span>Logout</span>
