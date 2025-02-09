@@ -22,6 +22,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import Logout from "./Logout"
 import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState } from "react"
+import { getUserSession } from "@/actions/auth"
 
 // Menu items.
 const items = [
@@ -42,39 +43,40 @@ const items = [
   },
 ]
 
-// const deptAdminItems = [
-//   {
-//     title: "Home",
-//     url: "/dashboard",
-//     icon: Home,
-//   },  
-//   {
-//     title: "Manage OPD",
-//     url: "/dashboard/manage-opd",
-//     icon: Inbox,
-//   },
-//   {
-//     title: "Update Counter",
-//     url: "/dashboard/update-counter",
-//     icon: Calendar,
-//   }
-// ]
+const deptAdminItems = [
+  {
+    title: "Home",
+    url: "/admin/dashboard",
+    icon: Home,
+  },  
+  {
+    title: "Manage OPD",
+    url: "/admin/dashboard/manage-opd",
+    icon: Inbox,
+  },
+  {
+    title: "Update Counter",
+    url: "/admin/dashboard/update-counter",
+    icon: Calendar,
+  }
+]
 
 export function AppSidebar() {
 
   const { setOpenMobile } = useSidebar();
   const [user, setUser] = useState<any>(null);
-
+  const [userRole, setUserRole] = useState<any>(null);
+  
+  
   useEffect(() => {
     const fetchUser = async () => {
-      const supabase = createClient();
-      const {data, error} = await supabase.auth.getUser();
+      const result = await getUserSession();
 
-      if (!error && data?.user) {
-        setUser(data.user);
-      } else {
-        window.location.href = "/login";
+      if (result?.status === "success") {
+        setUser(result.user);
+        setUserRole(result.role);
       }
+
     }
 
     fetchUser();
@@ -98,7 +100,16 @@ export function AppSidebar() {
           {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
+              {userRole && userRole === "patient" ? items.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild>
+                    <Link href={item.url} onClick={() => setOpenMobile(false)}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )) : deptAdminItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
                     <Link href={item.url} onClick={() => setOpenMobile(false)}>
@@ -108,6 +119,7 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              {}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

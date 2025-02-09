@@ -35,8 +35,8 @@ export function RegisterForm({
     const result = await signUp(formData);
 
     if (result.status === "success") {
-      toast.success("Account created successfully");
       router.push("/dashboard");
+      toast.success("Account created successfully");
     } else {
       toast.error(`An error occurred: ${result.status}`);
       setError(result.status);
@@ -101,7 +101,7 @@ export function RegisterForm({
                 />
               </div>
               <Button type="submit" className="w-full">
-                {loading ? "Loading..." : "Create account"}
+                {loading ? "Creating account..." : "Create account"}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

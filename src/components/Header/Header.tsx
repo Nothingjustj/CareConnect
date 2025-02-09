@@ -18,7 +18,6 @@ export default async function Header () {
                 <Image src={Logo} alt="RogiSetu Header Logo Image" className="max-w-40" />
                 </Link>
                 <NavLinks />
-                {/* (condition) ? true : false */}
                 {!user ? 
                 <div className="flex gap-2">
                     <Button variant="outline" asChild>

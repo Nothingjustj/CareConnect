@@ -35,8 +35,20 @@ export function LoginForm({
     const result = await signIn(formData);
 
     if (result.status === "success") {
+      if (result.role === "patient") {
+        router.push("/dashboard");
+      }
+      else if (result.role === "department_admin") {
+        router.push("/admin/dashboard");
+      }
+      else if (result.role === "super_admin") {
+        router.push("super-admin/dashboard");
+      }
+      else {
+        router.push("/");
+        toast("No role detected!");
+      }
       toast.success("Logged in successfully");
-      router.push("/dashboard");
     } else {
       toast.error(`An error occurred: ${result.status}`);
       setError(result.status);
@@ -81,7 +93,7 @@ export function LoginForm({
                 <Input id="password" type="password" name="password" required />
               </div>
               <Button type="submit" className="w-full">
-                {loading ? "Loading..." : "Login"}
+                {loading ? "Logging in..." : "Login"}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">

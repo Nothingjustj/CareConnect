@@ -9,11 +9,16 @@ export async function getUserSession () {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
 
+    const { data: profile, error: profilesError } = await supabase.from("profiles").select("role").eq("id", data?.user?.id).single();
+
     if (error) {
         return null;
     }
+    else if(profilesError) {
+        return null;
+    }
     else {
-        return {status: "success", user: data?.user};
+        return {status: "success", user: data?.user, role: profile?.role};
     }
 }
 
@@ -27,21 +32,19 @@ export async function signUp (formData: FormData) {
         phoneNo: formData.get("phone") as string,
     }
 
-    const {error, data} = await supabase.auth.signUp({
+    const {error: authError, data} = await supabase.auth.signUp({
         email: credentials.email,
         password: credentials.password,
         options: {
             data: {
                 name: credentials.name,
-                phoneNo: credentials.phoneNo,
-                role: "patient",
             }
         }
     })
 
-    if (error) {
+    if (authError) {
         return {
-            status: error?.message,
+            status: authError?.message,
             user: null,
             role: null
         }
@@ -53,28 +56,20 @@ export async function signUp (formData: FormData) {
         }
     }
 
-    const { error: roleError, data: roleData } = await supabase.from("roles").insert(
-        [
-            { user_id: data.user?.id,  role: "patient" }
-        ]
-    )
+    const { error: profilesError } = await supabase.from("profiles").insert([
+        { id: data.user?.id, name: credentials.name, role: "patient", phone_no: credentials.phoneNo }
+    ])
 
-    if (roleError) {
-        return {
-            status: roleError.message,
+    if(profilesError){
+        return{
+            status: profilesError.message,
             user: null,
             role: null
-        }
-    } else if (roleData) {
-        return {
-            status: "success",
-            user: data.user,
-            role: roleData
         }
     }
 
     revalidatePath("/", "layout")
-    return { status: "success", user: data.user, role: roleData };
+    return { status: "success", user: data.user };
 }
 
 export async function signIn (formData: FormData) {
@@ -97,6 +92,8 @@ export async function signIn (formData: FormData) {
             role: null
         }
     }
+
+    const { data: profile } = await supabase.from("profiles").select("role").eq("id", data?.user?.id).single();
 
     // const { error: roleError, data: roleData } = await supabase.from("roles").select("role").eq("user_id", data.user.id).single();
 
@@ -137,7 +134,7 @@ export async function signIn (formData: FormData) {
     // }
 
     revalidatePath("/", "layout")
-    return { status: "success", user: data.user };
+    return { status: "success", user: data.user, role: profile?.role };
     // return { status: "success", user: data.user, role: roleData.role };
 }
 
