@@ -1,6 +1,6 @@
 "use client"
 
-import { Calendar, ChevronUp, Home, Inbox, Search, Settings, User2 } from "lucide-react"
+import { Building, Calendar, ChevronUp, Home, User2, Users } from "lucide-react"
 
 import {
   Sidebar,
@@ -8,7 +8,6 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -20,53 +19,34 @@ import Link from "next/link"
 import Image from "next/image"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import Logout from "./Logout"
-import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState } from "react"
-import { getUserSession } from "@/actions/auth"
+import { getUserSession, signOut } from "@/actions/auth"
 
-// Menu items.
-const items = [
-  {
-    title: "Home",
-    url: "/dashboard",
-    icon: Home,
-  },
-  {
-    title: "Book OPD",
-    url: "/dashboard/book-opd",
-    icon: Inbox,
-  },
-  {
-    title: "Track OPD",
-    url: "/dashboard/track-opd",
-    icon: Calendar,
-  },
-]
+const navItems = {
+  patient: [
+    { href: "/dashboard", label: "Dashboard", icon: Home },
+    { href: "/dashboard/appointments", label: "My Appointments", icon: Calendar },
+    { href: "/dashboard/book-opd", label: "Book OPD", icon: Calendar },
+    { href: "/dashboard/track-opd", label: "Track OPD", icon: Calendar },
+  ],
+  department_admin: [
+    { href: "/admin/dashboard", label: "Admin Dashboard", icon: Home },
+    { href: "/admin/manage-tokens", label: "Manage Tokens", icon: Users },
+  ],
+  super_admin: [
+    { href: "/super-admin/dashboard", label: "Admin Dashboard", icon: Home },
+    { href: "/super-admin/manage-hospitals", label: "Hospitals", icon: Building },
+    { href: "/super-admin/manage-admins", label: "Manage Admins", icon: Users },
+  ],
+};
 
-const deptAdminItems = [
-  {
-    title: "Home",
-    url: "/admin/dashboard",
-    icon: Home,
-  },  
-  {
-    title: "Manage OPD",
-    url: "/admin/dashboard/manage-opd",
-    icon: Inbox,
-  },
-  {
-    title: "Update Counter",
-    url: "/admin/dashboard/update-counter",
-    icon: Calendar,
-  }
-]
 
-export function AppSidebar() {
-
+export function AppSidebar({ role }: { role: string | null }) {
+  
+  const items = navItems[role as keyof typeof navItems] || [];
   const { setOpenMobile } = useSidebar();
   const [user, setUser] = useState<any>(null);
   const [userRole, setUserRole] = useState<any>(null);
-  
   
   useEffect(() => {
     const fetchUser = async () => {
@@ -81,11 +61,12 @@ export function AppSidebar() {
 
     fetchUser();
   }, [])
+
+
+  const handleLogout = () => {
+    signOut();
+  }
   
-
-
-
-
 
   return (
     <Sidebar>
@@ -97,29 +78,18 @@ export function AppSidebar() {
       <SidebarSeparator />
       <SidebarContent>
         <SidebarGroup>
-          {/* <SidebarGroupLabel>Application</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
-              {userRole && userRole === "patient" ? items.map((item) => (
-                <SidebarMenuItem key={item.title}>
+              {items.map((item) => (
+                <SidebarMenuItem key={item.label}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.url} onClick={() => setOpenMobile(false)}>
+                    <Link href={item.href} onClick={() => setOpenMobile(false)}>
                       <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              )) : deptAdminItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url} onClick={() => setOpenMobile(false)}>
-                      <item.icon />
-                      <span>{item.title}</span>
+                      <span>{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
-              {}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -131,7 +101,7 @@ export function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> {user?.email || "Loading..."}
+                  <User2 /> <span className="truncate">{user?.email || "Loading..."}</span>
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
@@ -145,8 +115,8 @@ export function AppSidebar() {
                 <DropdownMenuItem>
                   <span>Billing</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Logout />
+                <DropdownMenuItem onClick={handleLogout}>
+                  <span>Logout</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

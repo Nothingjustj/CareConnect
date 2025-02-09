@@ -52,6 +52,25 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url)
   }
 
+
+  // redirect based on user's role
+  const { data: profile, error } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user?.id)
+      .single();
+  
+  const role = profile?.role;
+  const pathname = request.nextUrl.pathname;
+
+  if (role === "patient" && !pathname.startsWith("/dashboard")) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
+  } else if (role === "department_admin" && !pathname.startsWith("/admin")) {
+    return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+  } else if (role === "super_admin" && !pathname.startsWith("/super-admin")) {
+    return NextResponse.redirect(new URL('/super-admin/dashboard', request.url))
+  }
+
   // protected routes approach - research about this afterwards
 //   if (request.nextUrl.pathname.startsWith("/protected") && user.error) {
 //     return NextResponse.redirect(new URL("/sign-in", request.url));
