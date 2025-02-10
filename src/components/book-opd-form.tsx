@@ -21,11 +21,15 @@ import { format } from "date-fns";
 import { Textarea } from "./ui/textarea";
 import { Checkbox } from "./ui/checkbox";
 import { createClient } from "@/utils/supabase/client";
+import { bookOpd } from "@/actions/opd";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const BookOpdForm = ({hospitals}: {hospitals: any}) => {
   const [date, setDate] = useState<Date>();
   const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
   const [departments, setDepartments] = useState<any[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchDepartments = async () => {
@@ -43,10 +47,30 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
 
     fetchDepartments();
   }, [selectedHospital])
-  
+
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    // setLoading(true);
+    // setError(null);
+
+    const formData = new FormData(event.currentTarget);
+    const result = await bookOpd(formData);
+
+    if (result.status === "success") {
+      router.push("/dashboard");
+      toast.success("Form submitted successfully");
+    } else {
+      toast.error(`An error occurred: ${result.status}`);
+      // setError(result.status);'
+      console.log(result.message);
+    }
+
+    // setLoading(false);
+  }
 
   return (
-    <form className="flex flex-col gap-6">
+    <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
       {/* Personal Information */}
       <div className="p-6 border rounded-2xl bg-primary-foreground">
         <h3 className="text-xl font-medium mb-6">Patient Details</h3>
@@ -56,19 +80,20 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
             <Input
               className="bg-white"
               placeholder="Enter Patient's Full Name"
+              name="name"
             />
           </div>
           <div className="flex flex-col gap-2">
             <Label>Phone No:</Label>
-            <Input className="bg-white" placeholder="Enter Phone Number" />
+            <Input className="bg-white" placeholder="Enter Phone Number" name="phone" />
           </div>
           <div className="flex flex-col gap-2">
             <Label>Age:</Label>
-            <Input className="bg-white" placeholder="Enter your age" />
+            <Input className="bg-white" placeholder="Enter your age" name="age" />
           </div>
           <div className="flex flex-col gap-2">
             <Label>Gender:</Label>
-            <Select>
+            <Select name="gender">
               <SelectTrigger className="bg-white">
                 <SelectValue placeholder="Select gender" />
               </SelectTrigger>
