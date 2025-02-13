@@ -38,6 +38,7 @@ export async function signUp (formData: FormData) {
         options: {
             data: {
                 name: credentials.name,
+                phoneNo: credentials.phoneNo
             }
         }
     })
@@ -57,7 +58,7 @@ export async function signUp (formData: FormData) {
     }
 
     const { error: profilesError } = await supabase.from("profiles").insert([
-        { id: data.user?.id, name: credentials.name, role: "patient", phone_no: credentials.phoneNo }
+        { id: data.user?.id, name: credentials.name, role: "patient", phone_no: credentials.phoneNo, email: data.user?.email }
     ])
 
     if(profilesError){
