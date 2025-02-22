@@ -1,26 +1,35 @@
 "use client"
 
 import { getUserSession } from '@/actions/auth';
+import { RootState } from '@/store/store';
 import { redirect } from 'next/navigation';
 import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux';
 
 const SuperAdminDashboard = () => {
+
+  const user = useSelector((state: RootState) => state.user);
   
-      useEffect(() => {
-        const fetchUser = async () => {
-          const result = await getUserSession();
+      // useEffect(() => {
+      //   const fetchUser = async () => {
+      //     const result = await getUserSession();
   
-          if (!result || !result?.user) {
-              redirect('/login');
-          }
+      //     if (!result || !result?.user) {
+      //         redirect('/login');
+      //     }
           
-        }
+      //   }
   
-        fetchUser();
-      }, [])
+      //   fetchUser();
+      // }, [])
 
   return (
-    <div className="px-2 py-8 text-2xl">Welcome, <span className="font-medium">Super Admin</span> 👋</div>
+    <main className='py-6 md:px-2'>
+      <div className="text-3xl">
+        <h1>Welcome, <span className="font-bold">{user?.name}</span> 👋</h1>
+        <h2 className='text-xl mt-2'>Super Admin Dashboard</h2>
+      </div>
+    </main>
   )
 }
 

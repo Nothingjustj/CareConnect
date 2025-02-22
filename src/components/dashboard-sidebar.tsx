@@ -1,6 +1,6 @@
 "use client"
 
-import { Building, Calendar, ChevronUp, Home, User2, Users } from "lucide-react"
+import { Building, Calendar, ChevronUp, Home, LogOut, User, User2, Users } from "lucide-react"
 
 import {
   Sidebar,
@@ -54,7 +54,8 @@ export function AppSidebar({ role }: { role: string | null }) {
     toast.promise(signOut(), {
       loading: "Logging out..."
     })
-    setTimeout(() => dispatch(clearUser()), 1000);
+    // setTimeout(() => dispatch(clearUser()), 2000);
+    dispatch(clearUser());
   }
   
 
@@ -99,11 +100,11 @@ export function AppSidebar({ role }: { role: string | null }) {
                 side="top"
                 className="w-[--radix-popper-anchor-width]"
               >
-                <DropdownMenuItem>
-                  <span>Account</span>
+                <DropdownMenuItem className="flex items-center">
+                  <User /> <span>Account</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout}>
-                  <span>Logout</span>
+                <DropdownMenuItem onClick={handleLogout} className="flex items-center">
+                  <LogOut /> <span>Logout</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

@@ -53,8 +53,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="flex min-h-screen">
         <SidebarProvider>
         <AppSidebar role={user?.role} />
-        <main className="flex-1 p-6">
-            <div className="flex items-center justify-between">
+        <main className="flex-1 p-3">
+            <div className="flex items-center justify-between py-2">
               <SidebarTrigger />
               <span className="capitalize bg-secondary border border-primary/20 py-1 px-2 rounded-md text-primary text-sm flex items-center gap-1"><User className="w-4 h-4" />{user?.role}</span>
             </div>

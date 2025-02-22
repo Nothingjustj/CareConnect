@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
+import LoadingSpinner from "@/components/loading-screen";
 
 export default function Appointments() {
   const [appointments, setAppointments] = useState<any[]>([]);
@@ -25,7 +26,7 @@ export default function Appointments() {
     fetchAppointments();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <LoadingSpinner />;
 
   return (
     <div className="px-2 py-8">

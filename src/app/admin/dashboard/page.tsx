@@ -1,30 +1,34 @@
 "use client"
 
 import { getUserSession } from '@/actions/auth'
+import { RootState } from '@/store/store'
 import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
 
 const AdminDashboard = () => {
 
-  const [user, setUser] = useState<any>("")
-  const [userRole, setUserRole] = useState<any>("")
+  const user = useSelector((state: RootState) => state.user);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const data = await getUserSession();
+  // const [user, setUser] = useState<any>("")
+  // const [userRole, setUserRole] = useState<any>("")
 
-      if (data?.status === "success") {
-        setUser(data?.user);
-        setUserRole(data?.role);
-      }
-    }
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     const data = await getUserSession();
 
-    fetchUser();
-  }, [])
+  //     if (data?.status === "success") {
+  //       setUser(data?.user);
+  //       setUserRole(data?.role);
+  //     }
+  //   }
+
+  //   fetchUser();
+  // }, [])
 
 
   return (
-    <div className='px-2 py-8'>
-      <h1 className="text-xl md:text-3xl font-semibold mb-2">Welcome, <span className="font-bold">{user?.user_metadata?.name} 👋</span></h1>
+    <div className='py-6 md:px-2'>
+      <h1 className="text-xl md:text-3xl font-semibold mb-2">Welcome, <span className="font-bold">{user?.name} 👋</span></h1>
       <h2 className="text-lg md:text-xl">Department Admin Dashboard</h2>
     </div>
   )
