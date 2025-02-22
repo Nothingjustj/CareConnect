@@ -123,7 +123,7 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
                 <SelectGroup>
                   {hospitals && hospitals.length > 0 ? (
                     hospitals.map((hospital: any) => (
-                      <SelectItem key={hospital.id} value={hospital.id}>{hospital.name}</SelectItem>
+                      <SelectItem key={hospital.id} value={hospital.id} className="truncate">{hospital.name}</SelectItem>
                     ))
                   ) : (
                     <SelectItem value="" disabled>No hospitals available</SelectItem>
