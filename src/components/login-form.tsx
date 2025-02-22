@@ -16,6 +16,8 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { signIn } from "@/actions/auth"
 import { toast } from "sonner"
+import { useDispatch } from "react-redux"
+import { setUser } from "@/store/userSlice"
 
 export function LoginForm({
   className,
@@ -25,6 +27,7 @@ export function LoginForm({
   const [loading, setLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>("")
   const router = useRouter()
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -49,6 +52,15 @@ export function LoginForm({
         toast("No role detected!");
       }
       toast.success("Logged in successfully");
+
+      if (result.status === "success") {
+        dispatch(setUser({
+          id: result.userId,
+          role: result.role,
+          name: result.name,
+          email: result.email,
+        }))
+      }
     } else {
       toast.error(`An error occurred: ${result.status}`);
       setError(result.status);

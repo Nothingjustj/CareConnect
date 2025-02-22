@@ -1,5 +1,3 @@
-import { AppSidebar } from "@/components/dashboard-sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Metadata } from "next";
 import DashboardLayout from "@/components/dashboard-layout";
 

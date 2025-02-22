@@ -18,7 +18,7 @@ export async function getUserSession () {
         return null;
     }
     else {
-        return {status: "success", user: data?.user, role: profile?.role};
+        return {status: "success", user: data?.user, email: data?.user?.email, role: profile?.role, name: data?.user?.user_metadata?.name};
     }
 }
 
@@ -57,7 +57,7 @@ export async function signUp (formData: FormData) {
     }
 
     const { error: profilesError } = await supabase.from("profiles").insert([
-        { id: data.user?.id, name: credentials.name, role: "patient", phone_no: credentials.phoneNo }
+        { id: data.user?.id, name: credentials.name, role: "patient", phone_no: credentials.phoneNo , email: data.user?.email }
     ])
 
     if(profilesError){
@@ -134,7 +134,7 @@ export async function signIn (formData: FormData) {
     // }
 
     revalidatePath("/", "layout")
-    return { status: "success", user: data.user, role: profile?.role };
+    return { status: "success", user: data.user, role: profile?.role, email: data.user.email, name: data.user.user_metadata.name, userId: data.user.id };
     // return { status: "success", user: data.user, role: roleData.role };
 }
 

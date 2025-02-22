@@ -18,10 +18,11 @@ import {
 import Link from "next/link"
 import Image from "next/image"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import Logout from "./Logout"
-import { useEffect, useState } from "react"
-import { getUserSession, signOut } from "@/actions/auth"
+import { signOut } from "@/actions/auth"
 import { toast } from "sonner"
+import { useDispatch, useSelector } from "react-redux"
+import { clearUser } from "@/store/userSlice"
+import { RootState } from "@/store/store"
 
 const navItems = {
   patient: [
@@ -46,29 +47,14 @@ export function AppSidebar({ role }: { role: string | null }) {
   
   const items = navItems[role as keyof typeof navItems] || [];
   const { setOpenMobile } = useSidebar();
-  const [user, setUser] = useState<any>(null);
-  const [userRole, setUserRole] = useState<any>(null);
-  
-  useEffect(() => {
-    const fetchUser = async () => {
-      const result = await getUserSession();
-
-      if (result?.status === "success") {
-        setUser(result.user);
-        setUserRole(result.role);
-      }
-
-    }
-
-    fetchUser();
-  }, [])
-
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user);
 
   const handleLogout = () => {
     toast.promise(signOut(), {
-      loading: "Logging out...",
-      success: "Logged out successfully"
+      loading: "Logging out..."
     })
+    setTimeout(() => dispatch(clearUser()), 1000);
   }
   
 

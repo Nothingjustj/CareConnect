@@ -2,10 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/actions/supabaseClient";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 export default function HospitalPage() {
   const [loading, setLoading] = useState(true);
   const [hospitals, setHospitals] = useState<string[]>([]);
+  const dispatch = useDispatch();
+  const hospitalList = useSelector((state: RootState) => state.hospital.list)
 
   useEffect(() => {
     const fetchHospitals = async () => {

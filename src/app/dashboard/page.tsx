@@ -1,38 +1,42 @@
 "use client"
 
 import { getUserSession } from "@/actions/auth";
+import { RootState } from "@/store/store";
 import { Hospital } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function DashboardPage() {
 
-    const [userRole, setUserRole] = useState<any>("");
-    const [user, setUser] = useState<any>("");
+    const user = useSelector((state: RootState) => state.user);
 
-    useEffect(() => {
-      const fetchUser = async () => {
-        const result = await getUserSession();
+    // const [userRole, setUserRole] = useState<any>("");
+    // const [user, setUser] = useState<any>("");
 
-        if (result?.status === "success") {
-            setUser(result.user);
-            setUserRole(result.role);
-        }
+    // useEffect(() => {
+    //   const fetchUser = async () => {
+    //     const result = await getUserSession();
 
-        if (!result || !result?.user) {
-            redirect('/login');
-        }
+    //     if (result?.status === "success") {
+    //         setUser(result.user);
+    //         setUserRole(result.role);
+    //     }
+
+    //     if (!result || !result?.user) {
+    //         redirect('/login');
+    //     }
         
-      }
+    //   }
 
-      fetchUser();
-    }, [])
+    //   fetchUser();
+    // }, [])
     
 
     return (
             <main className="px-2 py-6">
-                <h1 className="text-2xl md:text-3xl font-semibold">Welcome, <span className="font-bold">{user?.user_metadata?.name}</span>👋</h1>
+                <h1 className="text-2xl md:text-3xl font-semibold">Welcome, <span className="font-bold">{user?.name}</span>👋</h1>
                 <h2 className="text-muted-foreground mt-1 text-lg">Book your appointment and track your opds.</h2>
                 <div className="grid sm:grid-cols-2 gap-4 my-6">
                     <Link href="/dashboard/book-opd" className="bg-muted p-4 rounded-xl border hover:border-primary">
