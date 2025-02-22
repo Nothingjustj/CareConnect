@@ -1,32 +1,31 @@
-"use client"
+"use client";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import Link from "next/link"
-import { useState } from "react"
-import { useRouter } from "next/navigation"
-import { signIn } from "@/actions/auth"
-import { toast } from "sonner"
-import { useDispatch } from "react-redux"
-import { setUser } from "@/store/userSlice"
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { signIn } from "@/actions/auth";
+import { toast } from "sonner";
+import { useDispatch } from "react-redux";
+import { setUser } from "@/store/userSlice";
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
-
-  const [loading, setLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>("")
-  const router = useRouter()
+  const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>("");
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -40,26 +39,25 @@ export function LoginForm({
     if (result.status === "success") {
       if (result.role === "patient") {
         router.push("/dashboard");
-      }
-      else if (result.role === "department_admin") {
+      } else if (result.role === "department_admin") {
         router.push("/admin/dashboard");
-      }
-      else if (result.role === "super_admin") {
+      } else if (result.role === "super_admin") {
         router.push("super-admin/dashboard");
-      }
-      else {
+      } else {
         router.push("/");
         toast("No role detected!");
       }
       toast.success("Logged in successfully");
 
       if (result.status === "success") {
-        dispatch(setUser({
-          id: result.userId,
-          role: result.role,
-          name: result.name,
-          email: result.email,
-        }))
+        dispatch(
+          setUser({
+            id: result.userId,
+            role: result.role,
+            name: result.name,
+            email: result.email,
+          })
+        );
       }
     } else {
       toast.error(`An error occurred: ${result.status}`);
@@ -67,7 +65,7 @@ export function LoginForm({
     }
 
     setLoading(false);
-  }
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -104,8 +102,34 @@ export function LoginForm({
                 </div>
                 <Input id="password" type="password" name="password" required />
               </div>
-              <Button type="submit" className="w-full">
-                {loading ? "Logging in..." : "Login"}
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? (
+                  <div className="flex items-center">
+                    <svg
+                      className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
+                    <span>Logging in...</span>
+                  </div>
+                ) : (
+                  "Login"
+                )}
               </Button>
             </div>
             <div className="mt-4 text-center text-sm">
@@ -118,5 +142,5 @@ export function LoginForm({
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
