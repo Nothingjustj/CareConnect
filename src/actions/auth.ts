@@ -38,6 +38,7 @@ export async function signUp (formData: FormData) {
         options: {
             data: {
                 name: credentials.name,
+                phoneNo: credentials.phoneNo
             }
         }
     })
