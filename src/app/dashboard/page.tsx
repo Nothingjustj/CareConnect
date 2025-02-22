@@ -35,7 +35,7 @@ export default function DashboardPage() {
     
 
     return (
-            <main className="py-6 md:px-2">
+            <main className="py-6 px-2">
                 <h1 className="text-2xl md:text-3xl font-semibold">Welcome, <span className="font-bold">{user?.name}</span>👋</h1>
                 <h2 className="text-muted-foreground mt-1 text-lg">Book your appointment and track your opds.</h2>
                 <div className="grid sm:grid-cols-2 gap-4 my-6">
