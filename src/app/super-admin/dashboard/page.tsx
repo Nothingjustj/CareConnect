@@ -24,10 +24,10 @@ const SuperAdminDashboard = () => {
       // }, [])
 
   return (
-    <main className='py-6 md:px-2'>
-      <div className="text-3xl">
+    <main className='py-6 px-2'>
+      <div className="text-xl md:text-3xl">
         <h1>Welcome, <span className="font-bold">{user?.name}</span> 👋</h1>
-        <h2 className='text-xl mt-2'>Super Admin Dashboard</h2>
+        <h2 className='md:text-xl mt-2'>Super Admin Dashboard</h2>
       </div>
     </main>
   )

@@ -27,9 +27,9 @@ const AdminDashboard = () => {
 
 
   return (
-    <div className='py-6 md:px-2'>
-      <h1 className="text-xl md:text-3xl font-semibold mb-2">Welcome, <span className="font-bold">{user?.name} 👋</span></h1>
-      <h2 className="text-lg md:text-xl">Department Admin Dashboard</h2>
+    <div className='py-6 px-2'>
+      <h1 className="text-xl md:text-3xl font-semibold mb-1 md:mb-2">Welcome, <span className="font-bold">{user?.name} 👋</span></h1>
+      <h2 className="md:text-xl">Department Admin Dashboard</h2>
     </div>
   )
 }
