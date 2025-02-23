@@ -154,3 +154,121 @@ export async function signOut () {
     revalidatePath("/", "layout");
     redirect("/");
 }
+
+
+// Methods for handling department admins
+export async function signUpAsDeptAdmin (formData: FormData) {
+    const supabase = await createClient();
+
+    const credentials = {
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+        hospitalId: formData.get("hospitalId") as string,
+        departmentId: formData.get("departmentId") as string,
+    }
+
+    const {error: authError, data} = await supabase.auth.signUp({
+        email: credentials.email,
+        password: credentials.password,
+        options: {
+            data: {
+                name: credentials.name
+            }
+        }
+    })
+
+    if (authError) {
+        return {
+            status: authError?.message,
+            user: null,
+            role: null
+        }
+    } else if (data?.user?.identities?.length === 0) {
+        return {
+            status: "User with this email already exists",
+            user: null,
+            role: null
+        }
+    }
+
+    const { error: profilesError } = await supabase.from("profiles").insert([
+        { 
+            id: data.user?.id, 
+            name: credentials.name, 
+            role: "department_admin", 
+            email: data.user?.email, 
+            hospital_id: credentials.hospitalId, 
+            department_id: credentials.departmentId
+        }
+    ])
+
+    if(profilesError){
+        return{
+            status: profilesError.message,
+            user: null,
+            role: null
+        }
+    }
+
+    revalidatePath("/", "layout")
+    return { status: "success", user: data.user };
+}
+
+// For handling hospital admin
+export async function signUpAsHospitalAdmin (formData: FormData) {
+    const supabase = await createClient();
+
+    const credentials = {
+        name: formData.get("name") as string,
+        email: formData.get("email") as string,
+        password: formData.get("password") as string,
+        hospitalId: formData.get("hospital") as string,
+    }
+    
+
+    const {error: authError, data} = await supabase.auth.signUp({
+        email: credentials.email,
+        password: credentials.password,
+        options: {
+            data: {
+                name: credentials.name
+            }
+        }
+    })
+
+    if (authError) {
+        return {
+            status: `AuthError :: ${authError.message}`,
+            user: null,
+            role: null
+        }
+    } else if (data?.user?.identities?.length === 0) {
+        return {
+            status: "User with this email already exists",
+            user: null,
+            role: null
+        }
+    }
+
+    const { error: profilesError } = await supabase.from("profiles").insert([
+        { 
+            id: data.user?.id, 
+            name: credentials.name, 
+            role: "hospital_admin", 
+            email: data.user?.email, 
+            hospital_id: credentials.hospitalId,
+        }
+    ])
+
+    if(profilesError){
+        return{
+            status: `ProfilesError :: ${profilesError.message}`,
+            user: null,
+            role: null
+        }
+    }
+
+    revalidatePath("/", "layout")
+    return { status: "success", user: data.user };
+}

@@ -41,6 +41,8 @@ export function LoginForm({
         router.push("/dashboard");
       } else if (result.role === "department_admin") {
         router.push("/admin/dashboard");
+      } else if (result.role === "hospital_admin") {
+        router.push("hospital-admin/dashboard");
       } else if (result.role === "super_admin") {
         router.push("super-admin/dashboard");
       } else {

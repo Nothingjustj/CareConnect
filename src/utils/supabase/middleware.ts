@@ -67,6 +67,8 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
   } else if (role === "department_admin" && !pathname.startsWith("/admin")) {
     return NextResponse.redirect(new URL('/admin/dashboard', request.url))
+  } else if (role === "hospital_admin" && !pathname.startsWith("/hospital-admin")) {
+    return NextResponse.redirect(new URL('/hospital-admin/dashboard', request.url))
   } else if (role === "super_admin" && !pathname.startsWith("/super-admin")) {
     return NextResponse.redirect(new URL('/super-admin/dashboard', request.url))
   }

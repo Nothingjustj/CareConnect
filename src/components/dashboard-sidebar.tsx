@@ -32,13 +32,20 @@ const navItems = {
     { href: "/dashboard/track-opd", label: "Track OPD", icon: Calendar },
   ],
   department_admin: [
-    { href: "/admin/dashboard", label: "Admin Dashboard", icon: Home },
+    { href: "/admin/dashboard", label: "Dashboard", icon: Home },
     { href: "/admin/manage-tokens", label: "Manage Tokens", icon: Users },
+    { href: "/admin/queue-status", label: "Queue Status", icon: Users },
+  ],
+  hospital_admin: [
+    { href: "/hospital-admin/dashboard", label: "Dashboard", icon: Home },
+    { href: "/hospital-admin/departments", label: "Departments", icon: Users },
+    { href: "/hospital-admin/staffs", label: "Staffs", icon: Users },
   ],
   super_admin: [
-    { href: "/super-admin/dashboard", label: "Admin Dashboard", icon: Home },
+    { href: "/super-admin/dashboard", label: "Dashboard", icon: Home },
     { href: "/super-admin/manage-hospitals", label: "Hospitals", icon: Building },
-    { href: "/super-admin/manage-admins", label: "Manage Admins", icon: Users },
+    { href: "/super-admin/manage-admins", label: "Admins", icon: Users },
+    { href: "/super-admin/department-types", label: "Department Types", icon: Users },
   ],
 };
 

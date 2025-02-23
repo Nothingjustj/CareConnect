@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserState {
-    id: string | null | undefined;
+    id: string | undefined;
     name: string | null;
     email: string | null | undefined;
     role: string | null;
 }
 
 const initialState: UserState = {
-    id: null,
+    id: undefined,
     name: null,
     email: null,
     role: null,
@@ -25,7 +25,7 @@ const userSlice = createSlice({
             state.role = action.payload.role;
         },
         clearUser: (state) => {
-            state.id = null;
+            state.id = undefined;
             state.name = null;
             state.email = null;
             state.role = null;
