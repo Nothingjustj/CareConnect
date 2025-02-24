@@ -63,7 +63,7 @@ Open `http://localhost:3000` with your browser to see the result.
 
 ```javascript
 src/
-├── actions/       # Server actions
+├── actions/      # Server actions
 ├── app/          # Next.js app router pages
 ├── components/   # React components
 ├── hooks/        # Custom React hooks
