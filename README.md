@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RogiSetu - Hospital OPD Management System
+
+RogiSetu is a comprehensive web application built with Next.js that simplifies hospital OPD (Outpatient Department) management. It provides features for patients to book appointments, track tokens, and for hospital staff to manage departments and patient flow.
+
+## Features
+
+- Multi-role authentication system (Patient, Department Admin, Hospital Admin, Super Admin)
+- OPD appointment booking and tracking
+- Hospital and department management
+- Real-time token status updates
+- Responsive design with modern UI
+- Dark/Light theme support
+
+## Tech Stack
+
+- Frontend: Next.js 15, React 19
+- Backend: Supabase
+- Styling: Tailwind CSS
+- UI Components: shadcn/ui
+- State Management: Redux Toolkit
+- Authentication: Supabase Auth
+- Database: Supabase PostgreSQL
+- Icons: Lucide Icons
+- Form Handling: React Hook Form
+- Notifications: Sonner
 
 ## Getting Started
 
-First, run the development server:
+Clone the repository:
+
+```bash
+git clone https://github.com/yourusername/rogisetu.git
+cd rogisetu
+```
+
+Install dependencies:
+
+```bash
+npm install
+    or
+yarn install
+```
+
+Set up environment variables:
+Create a `.env.local` file in the root directory:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
+    or
 yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000` with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Project Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```javascript
+src/
+├── actions/      # Server actions
+├── app/          # Next.js app router pages
+├── components/   # React components
+├── hooks/        # Custom React hooks
+├── lib/          # Utility functions
+├── store/        # Redux store configuration
+├── types/        # TypeScript type definitions
+└── utils/        # Helper utilities
+```
 
-## Learn More
+## Key Features by User Role
 
-To learn more about Next.js, take a look at the following resources:
+### Patient
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Book OPD appointments
+- Track token status
+- View appointment history
+- Manage profile
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Department Admin
 
-## Deploy on Vercel
+- Manage tokens
+- View queue status
+- Handle patient flow
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Hospital Admin
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Manage departments
+- Add/remove department admins
+- Monitor hospital operations
+
+### Super Admin
+
+- Manage hospitals
+- Create hospital admins
+- Configure department types
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
