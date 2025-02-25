@@ -1,10 +1,5 @@
 import { RegisterForm } from "@/components/register-form";
 import type { Metadata } from 'next'
- 
-export const metadata: Metadata = {
-  title: 'Register - RogiSetu',
-  description: 'Simplifying Hospital OPD Management System',
-}
 
 export default function RegisterPage() {
   return (
@@ -14,4 +9,9 @@ export default function RegisterPage() {
       </div>
     </div>
   );
+}
+
+export const metadata: Metadata = {
+  title: 'Register - RogiSetu',
+  description: 'Simplifying Hospital OPD Management System',
 }

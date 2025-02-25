@@ -2,14 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/actions/supabaseClient";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 
 export default function HospitalPage() {
   const [loading, setLoading] = useState(true);
   const [hospitals, setHospitals] = useState<string[]>([]);
-  const dispatch = useDispatch();
-  const hospitalList = useSelector((state: RootState) => state.hospital.list)
 
   useEffect(() => {
     const fetchHospitals = async () => {
@@ -43,7 +39,6 @@ export default function HospitalPage() {
             >
               <h2 className="text-lg font-semibold">{hospital.name}</h2>
               <p>Location: {hospital.address}, {hospital.city}</p>
-              {/* <p>Contact: </p> */}
             </li>
           ))}
         </ul>

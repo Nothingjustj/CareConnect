@@ -1,10 +1,5 @@
 import { LoginForm } from "@/components/login-form";
 import type { Metadata } from 'next'
- 
-export const metadata: Metadata = {
-  title: 'Login - RogiSetu',
-  description: 'Simplifying Hospital OPD Management System',
-}
 
 export default function LoginPage() {
   return (
@@ -14,4 +9,9 @@ export default function LoginPage() {
       </div>
     </div>
   );
+}
+
+export const metadata: Metadata = {
+  title: 'Login - RogiSetu',
+  description: 'Simplifying Hospital OPD Management System',
 }
