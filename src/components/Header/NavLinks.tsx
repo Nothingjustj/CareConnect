@@ -10,12 +10,12 @@ export default function NavLinks () {
         },
         {
             name: "Features",
-            url: "#",
+            url: "#features",
             active: true
         },
         {
             name: "Solutions",
-            url: "#",
+            url: "#solutions",
             active: true
         },
         {
@@ -25,7 +25,7 @@ export default function NavLinks () {
         },
         {
             name: "How It Works",
-            url: "#",
+            url: "#how-it-works",
             active: true
         },
         {
