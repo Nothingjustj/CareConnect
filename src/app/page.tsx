@@ -24,8 +24,16 @@ export default function Home() {
             </div>
           </section>
 
-          <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+          {/* Add the ID "features" to this section to link from navigation */}
+          <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
             <div className="container px-4 md:px-6 max-w-7xl mx-auto">
+              <div className="flex flex-col items-center text-center mb-12">
+                <h2 className="text-3xl md:text-4xl font-bold mb-4">Key Features</h2>
+                <p className="text-muted-foreground max-w-3xl">
+                  Our platform offers a comprehensive set of features designed to streamline hospital OPD operations
+                </p>
+              </div>
+              
               <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
                 <div className="flex flex-col items-center space-y-4 text-center">
                   <Clock className="h-12 w-12 text-primary" />
