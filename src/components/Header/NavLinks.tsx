@@ -150,7 +150,7 @@ const isLinkActive = (url: string) => {
       {/* Mobile Menu (dropdown style as in the generated landing page) */}
       <div 
         id="mobile-menu" 
-        className={`md:hidden absolute top-full left-0 right-0 bg-background/95 backdrop-blur-sm shadow-lg ${
+        className={`md:hidden absolute top-12 border rounded-xl left-0 right-0 bg-background/95 backdrop-blur-sm shadow-lg ${
           isMenuOpen ? "block" : "hidden"
         }`}
       >

@@ -29,19 +29,19 @@ export default function DepartmentsPage() {
         const fetchHospital = async () => {
             try {
                 const supabase = createClient();
-                const { data: profile, error } = await supabase
-                    .from("profiles")
+                const { data: admin, error } = await supabase
+                    .from("admins")
                     .select("hospital_id")
                     .eq("id", userId)
                     .single();
 
                 if (error) throw error;
-                if (profile?.hospital_id) {
-                    setHospitalId(profile.hospital_id);
+                if (admin?.hospital_id) {
+                    setHospitalId(admin.hospital_id);
                     const { data: hospitalData, error: hospitalError } = await supabase
                         .from("hospitals")
                         .select("name")
-                        .eq("id", profile.hospital_id)
+                        .eq("id", admin.hospital_id)
                         .single();
 
                     if (hospitalError) throw hospitalError;

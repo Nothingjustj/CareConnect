@@ -27,7 +27,7 @@ export default function HospitalPage() {
 
   return (
     <div className="max-w-7xl w-full px-4 py-8">
-      <h1 className="text-4xl font-bold mb-8 text-center">List of Hospitals</h1>
+      <h1 className="text-2xl md:text-3xl font-bold mb-8 text-center">List of Hospitals</h1>
       {hospitals.length === 0 ? (
         <p>No hospitals found.</p>
       ) : (
