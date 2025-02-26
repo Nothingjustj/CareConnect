@@ -9,11 +9,10 @@ RogiSetu is a comprehensive web application built with Next.js that simplifies h
 - Hospital and department management
 - Real-time token status updates
 - Responsive design with modern UI
-- Dark/Light theme support
 
 ## Tech Stack
 
-- Frontend: Next.js 15, React 19
+- Frontend: Next.js 15, React 18
 - Backend: Supabase
 - Styling: Tailwind CSS
 - UI Components: shadcn/ui
@@ -22,14 +21,13 @@ RogiSetu is a comprehensive web application built with Next.js that simplifies h
 - Database: Supabase PostgreSQL
 - Icons: Lucide Icons
 - Form Handling: React Hook Form
-- Notifications: Sonner
 
 ## Getting Started
 
 Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/rogisetu.git
+git clone https://github.com/AdityaSharmaHub/rogisetu.git
 cd rogisetu
 ```
 

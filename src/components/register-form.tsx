@@ -16,6 +16,8 @@ import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { signUp } from "@/actions/auth"
 import { toast } from "sonner"
+import { useDispatch } from "react-redux"
+import { setUser } from "@/store/userSlice"
 
 export function RegisterForm({
   className,
@@ -25,6 +27,7 @@ export function RegisterForm({
   const [error, setError] = useState<string | null>("");
   const [loading, setLoading] = useState<boolean>(false);
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -37,6 +40,14 @@ export function RegisterForm({
     if (result.status === "success") {
       router.push("/dashboard");
       toast.success("Account created successfully");
+      dispatch(
+        setUser({
+          id: result.user?.id,
+          name: result.user?.user_metadata?.name,
+          email: result.user?.email,
+          role: result.user?.user_metadata?.role
+        })
+      )
     } else {
       toast.error(`An error occurred: ${result.status}`);
       setError(result.status);
@@ -49,7 +60,7 @@ export function RegisterForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle className="text-2xl">Register</CardTitle>
+          <CardTitle className="text-2xl">Register as <span className="font-bold">Patient</span></CardTitle>
           <CardDescription>
             Create an account to get started
           </CardDescription>

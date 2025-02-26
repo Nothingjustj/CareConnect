@@ -1,6 +1,6 @@
 "use client"
 
-import { Building, Calendar, ChevronUp, Home, LogOut, User, User2, Users } from "lucide-react"
+import { Building, Calendar, ChartPie, ChevronUp, Home, LogOut, User, User2, Users } from "lucide-react"
 
 import {
   Sidebar,
@@ -20,9 +20,8 @@ import Image from "next/image"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
 import { signOut } from "@/actions/auth"
 import { toast } from "sonner"
-import { useDispatch, useSelector } from "react-redux"
+import { useDispatch } from "react-redux"
 import { clearUser } from "@/store/userSlice"
-import { RootState } from "@/store/store"
 
 const navItems = {
   patient: [
@@ -38,30 +37,29 @@ const navItems = {
   ],
   hospital_admin: [
     { href: "/hospital-admin/dashboard", label: "Dashboard", icon: Home },
-    { href: "/hospital-admin/departments", label: "Departments", icon: Users },
-    { href: "/hospital-admin/staffs", label: "Staffs", icon: Users },
+    { href: "/hospital-admin/departments", label: "Manage Departments", icon: Users },
+    { href: "/hospital-admin/staffs", label: "Manage Staffs", icon: Users },
   ],
   super_admin: [
     { href: "/super-admin/dashboard", label: "Dashboard", icon: Home },
-    { href: "/super-admin/manage-hospitals", label: "Hospitals", icon: Building },
-    { href: "/super-admin/manage-admins", label: "Admins", icon: Users },
+    { href: "/super-admin/manage-hospitals", label: "Manage Hospitals", icon: Building },
+    { href: "/super-admin/manage-admins", label: "Manage Admins", icon: Users },
     { href: "/super-admin/department-types", label: "Department Types", icon: Users },
+    { href: "/super-admin/analytics", label: "View Analytics", icon: ChartPie },
   ],
 };
 
 
-export function AppSidebar({ role }: { role: string | null }) {
+export function AppSidebar({ user, role }: { user: any; role: string | null}) {
   
   const items = navItems[role as keyof typeof navItems] || [];
   const { setOpenMobile } = useSidebar();
   const dispatch = useDispatch();
-  const user = useSelector((state: RootState) => state.user);
 
   const handleLogout = () => {
     toast.promise(signOut(), {
       loading: "Logging out..."
     })
-    // setTimeout(() => dispatch(clearUser()), 2000);
     dispatch(clearUser());
   }
   
@@ -108,7 +106,7 @@ export function AppSidebar({ role }: { role: string | null }) {
                 className="w-[--radix-popper-anchor-width]"
               >
                 <DropdownMenuItem className="flex items-center">
-                  <User /> <span>Account</span>
+                  <User /> <span>My Account</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout} className="flex items-center">
                   <LogOut /> <span>Logout</span>

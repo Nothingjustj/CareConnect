@@ -1,5 +1,9 @@
-export default function StaffsPage () {
-    return (
-        <div>Manage Department Admins</div>
-    )
+import React from 'react'
+
+const ManageStaffs = () => {
+  return (
+    <div>ManageStaffs</div>
+  )
 }
+
+export default ManageStaffs

@@ -286,3 +286,4 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon: Icon, title, descriptio
     <p className="text-gray-200">{description}</p>
   </div>
 );
+
