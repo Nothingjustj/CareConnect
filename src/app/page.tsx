@@ -92,7 +92,7 @@ export default function Home() {
         </section>
 
         {/* Features---------------------------------Features Section ----------------------------------------------------------*/}
-        <section id="features" className="bg-white py-16 px-6">
+        <section id="features" className="bg-white py-24 px-10">
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900">
               Comprehensive <span className="text-primary">ROGISETU</span> Features
@@ -117,7 +117,7 @@ export default function Home() {
         </section>
 
         {/* Solutions-----------------------------------Solution Approach Section --------------------------------------------- */}
-        <section id="#solutions" className="bg-muted py-16 px-6">
+        <section id="solutions" className="bg-muted py-24 px-6">
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900">Simple OPD Booking Process</h2>
             <p className="text-gray-600 mt-2">
