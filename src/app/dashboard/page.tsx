@@ -1,38 +1,22 @@
 "use client"
 
-import { getUserSession } from "@/actions/auth";
 import { RootState } from "@/store/store";
 import { Hospital } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 
 export default function DashboardPage() {
 
     const user = useSelector((state: RootState) => state.user);
-
-    // const [userRole, setUserRole] = useState<any>("");
-    // const [user, setUser] = useState<any>("");
+    // const router = useRouter();
 
     // useEffect(() => {
-    //   const fetchUser = async () => {
-    //     const result = await getUserSession();
-
-    //     if (result?.status === "success") {
-    //         setUser(result.user);
-    //         setUserRole(result.role);
+    //     if (!user.id) {
+    //         router.push('/login');
     //     }
-
-    //     if (!result || !result?.user) {
-    //         redirect('/login');
-    //     }
-        
-    //   }
-
-    //   fetchUser();
-    // }, [])
-    
+    // }, [user])
 
     return (
             <main className="py-6 px-2">

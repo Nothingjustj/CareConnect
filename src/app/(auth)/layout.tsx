@@ -17,9 +17,9 @@ export default async function AuthLayout({
 
     return (
       <>
-        <header className="flex justify-center pt-16 pb-4">
+        <header className="flex justify-center pt-10">
           <Link href="/">
-            <Image src="/logo.png" width={200} height={500} alt="RogitSetu Logo" />
+            <Image src="/logo.png" width={170} height={100} alt="RogitSetu Logo" />
           </Link>
         </header>
         {children}

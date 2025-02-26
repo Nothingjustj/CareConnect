@@ -1,24 +1,25 @@
 "use server"
 
 import { redirect } from "next/navigation"
-// import { headers } from "next/headers"
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
+import { createClient as createSupabaseClient } from "@supabase/supabase-js"
 
 export async function getUserSession () {
     const supabase = await createClient();
     const { data, error } = await supabase.auth.getUser();
 
-    const { data: profile, error: profilesError } = await supabase.from("profiles").select("role").eq("id", data?.user?.id).single();
-
     if (error) {
         return null;
     }
-    else if(profilesError) {
-        return null;
-    }
     else {
-        return {status: "success", user: data?.user, email: data?.user?.email, role: profile?.role, name: data?.user?.user_metadata?.name};
+        return {
+            status: "success", 
+            user: data?.user, 
+            email: data?.user?.email, 
+            name: data?.user?.user_metadata?.name,
+            role: data?.user.user_metadata?.role, 
+        };
     }
 }
 
@@ -38,7 +39,8 @@ export async function signUp (formData: FormData) {
         options: {
             data: {
                 name: credentials.name,
-                phoneNo: credentials.phoneNo
+                phoneNo: credentials.phoneNo,
+                role: "patient"
             }
         }
     })
@@ -57,13 +59,17 @@ export async function signUp (formData: FormData) {
         }
     }
 
-    const { error: profilesError } = await supabase.from("profiles").insert([
-        { id: data.user?.id, name: credentials.name, role: "patient", phone_no: credentials.phoneNo , email: data.user?.email }
+    const { error: patientsError } = await supabase.from("patients").insert([
+        {
+            id: data?.user?.id,
+            name: credentials.name,
+            phone_no: credentials.phoneNo
+        }
     ])
 
-    if(profilesError){
-        return{
-            status: profilesError.message,
+    if (patientsError) {
+        return {
+            status: patientsError.message,
             user: null,
             role: null
         }
@@ -94,49 +100,15 @@ export async function signIn (formData: FormData) {
         }
     }
 
-    const { data: profile } = await supabase.from("profiles").select("role").eq("id", data?.user?.id).single();
-
-    // const { error: roleError, data: roleData } = await supabase.from("roles").select("role").eq("user_id", data.user.id).single();
-
-    // if(roleError) {
-    //     return {
-    //         status: roleError.message,
-    //         user: null,
-    //         role: null
-    //     }
-    // } else if (roleData.role) {
-    //     return {
-    //         status: "success",
-    //         user: data.user,
-    //         role: roleData.role
-    //     }
-    // } 
-
-    // TODO :: Create a user instance in user_profiles table
-    // const {data: existingUser} = await supabase
-    // .from("user_profiles")
-    // .select("*")
-    // .eq("email", credentials.email)
-    // .limit(1)
-    // .single();
-
-    // if (!existingUser) {
-    //     const { data: user, error: insertError } = await supabase.from("user_profiles").insert({
-    //         email: data?.user.email,
-    //         username: data?.user?.user_metadata.name
-    //     })
-    //     if (insertError) {
-    //         return {
-    //             status: insertError?.message,
-    //             user: null
-    //         }
-    //     }
-
-    // }
-
     revalidatePath("/", "layout")
-    return { status: "success", user: data.user, role: profile?.role, email: data.user.email, name: data.user.user_metadata.name, userId: data.user.id };
-    // return { status: "success", user: data.user, role: roleData.role };
+    return { 
+        status: "success", 
+        user: data.user, 
+        role: data.user.user_metadata.role, 
+        email: data.user.email, 
+        name: data.user.user_metadata.name, 
+        userId: data.user.id 
+    };
 }
 
 export async function signOut () {
@@ -173,7 +145,8 @@ export async function signUpAsDeptAdmin (formData: FormData) {
         password: credentials.password,
         options: {
             data: {
-                name: credentials.name
+                name: credentials.name,
+                role: "department_admin"
             }
         }
     })
@@ -192,7 +165,7 @@ export async function signUpAsDeptAdmin (formData: FormData) {
         }
     }
 
-    const { error: profilesError } = await supabase.from("profiles").insert([
+    const { error: adminsError } = await supabase.from("admins").insert([
         { 
             id: data.user?.id, 
             name: credentials.name, 
@@ -203,9 +176,9 @@ export async function signUpAsDeptAdmin (formData: FormData) {
         }
     ])
 
-    if(profilesError){
+    if(adminsError){
         return{
-            status: profilesError.message,
+            status: adminsError.message,
             user: null,
             role: null
         }
@@ -216,8 +189,11 @@ export async function signUpAsDeptAdmin (formData: FormData) {
 }
 
 // For handling hospital admin
-export async function signUpAsHospitalAdmin (formData: FormData) {
-    const supabase = await createClient();
+export async function createHospitalAdmin (formData: FormData) {
+    const supabase = createSupabaseClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL as string,
+        process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY as string
+    );
 
     const credentials = {
         name: formData.get("name") as string,
@@ -226,22 +202,20 @@ export async function signUpAsHospitalAdmin (formData: FormData) {
         hospitalId: formData.get("hospital") as string,
     }
     
-
-    const {error: authError, data} = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.admin.createUser({
         email: credentials.email,
         password: credentials.password,
-        options: {
-            data: {
-                name: credentials.name
-            }
+        email_confirm: true,
+        user_metadata: {
+            name: credentials.name,
+            role: "hospital_admin",
+            hospitalId: credentials.hospitalId
         }
-    })
+    });
 
-    if (authError) {
+    if (error) {
         return {
-            status: `AuthError :: ${authError.message}`,
-            user: null,
-            role: null
+            status: `Error in creating user :: ${error.message}`,
         }
     } else if (data?.user?.identities?.length === 0) {
         return {
@@ -251,7 +225,7 @@ export async function signUpAsHospitalAdmin (formData: FormData) {
         }
     }
 
-    const { error: profilesError } = await supabase.from("profiles").insert([
+    const { error: adminsError } = await supabase.from("admins").insert([
         { 
             id: data.user?.id, 
             name: credentials.name, 
@@ -261,9 +235,9 @@ export async function signUpAsHospitalAdmin (formData: FormData) {
         }
     ])
 
-    if(profilesError){
+    if(adminsError){
         return{
-            status: `ProfilesError :: ${profilesError.message}`,
+            status: `AdminsError :: ${adminsError.message}`,
             user: null,
             role: null
         }

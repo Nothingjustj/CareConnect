@@ -12,6 +12,6 @@ export default function RegisterPage() {
 }
 
 export const metadata: Metadata = {
-  title: 'Register - RogiSetu',
+  title: 'Register to RogiSetu',
   description: 'Simplifying Hospital OPD Management System',
 }

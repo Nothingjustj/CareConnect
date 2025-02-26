@@ -24,6 +24,7 @@ import { createClient } from "@/utils/supabase/client";
 import { bookOpd } from "@/actions/opd";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const BookOpdForm = ({hospitals}: {hospitals: any}) => {
   const [date, setDate] = useState<Date>();
@@ -183,9 +184,12 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Checkbox /> <span className="text-muted-foreground">I agree to the terms and conditions and confirm that the
-        information provided is accurate</span>
+      <div className="flex items-center gap-2 my-2">
+        <Checkbox id="terms" /> 
+        <Label className="text-muted-foreground" htmlFor="terms">
+          I agree to the <Link href="/terms" className="underline" target="_blank">terms and conditions</Link> and confirm that the
+        information provided is accurate.
+        </Label>
       </div>
 
       <div>

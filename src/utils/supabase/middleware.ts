@@ -1,3 +1,4 @@
+import { getUserSession } from '@/actions/auth'
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
@@ -37,50 +38,42 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (
-    !user &&
-    !request.nextUrl.pathname.includes('/login') &&
-    !request.nextUrl.pathname.includes('/') &&
-    !request.nextUrl.pathname.includes('/register') &&
-    !request.nextUrl.pathname.includes('/forgot-password') &&
-    !request.nextUrl.pathname.includes('/reset-password') &&
-    !request.nextUrl.pathname.startsWith('/auth')
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+  // Public Routes: Accessible without authentication
+  const publicRoutes = [
+    '/',
+    '/login',
+    '/register',
+    '/hospitals',
+    '/about',
+    '/contact',
+  ];
+  
+  const pathname = request.nextUrl.pathname;
+
+  // Public Routes Handling
+  if (!user && !publicRoutes.includes(pathname)) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
     return NextResponse.redirect(url)
   }
 
 
-  // redirect based on user's role
-  const { data: profile, error } = await supabase
-      .from("profiles")
-      .select("role")
-      .eq("id", user?.id)
-      .single();
-  
-  const role = profile?.role;
-  const pathname = request.nextUrl.pathname;
+  // Role-Based Redirection
+  const session = await getUserSession();
+  const role = session?.role;
 
   if (role === "patient" && !pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL('/dashboard', request.url))
-  } else if (role === "department_admin" && !pathname.startsWith("/admin")) {
+  } 
+  else if (role === "department_admin" && !pathname.startsWith("/admin")) {
     return NextResponse.redirect(new URL('/admin/dashboard', request.url))
-  } else if (role === "hospital_admin" && !pathname.startsWith("/hospital-admin")) {
+  } 
+  else if (role === "hospital_admin" && !pathname.startsWith("/hospital-admin")) {
     return NextResponse.redirect(new URL('/hospital-admin/dashboard', request.url))
-  } else if (role === "super_admin" && !pathname.startsWith("/super-admin")) {
+  } 
+  else if (role === "super_admin" && !pathname.startsWith("/super-admin")) {
     return NextResponse.redirect(new URL('/super-admin/dashboard', request.url))
   }
-
-  // protected routes approach - research about this afterwards
-//   if (request.nextUrl.pathname.startsWith("/protected") && user.error) {
-//     return NextResponse.redirect(new URL("/sign-in", request.url));
-//   }
-
-//   if (request.nextUrl.pathname === "/" && !user.error) {
-//     return NextResponse.redirect(new URL("/protected", request.url));
-//   }
 
   // IMPORTANT: You *must* return the supabaseResponse object as it is.
   // If you're creating a new response object with NextResponse.next() make sure to:

@@ -12,22 +12,23 @@ export default function BookOpd() {
     const [hospitals, setHospitals] = useState<any>([]);
 
     useEffect(() => {
-      const fetchHospitals = async () => {
-        try {
-            const supabase = createClient();
-            const {data, error} = await supabase.from("hospitals").select("*");
-            if (error) {
+
+        const fetchHospitals = async () => {
+            try {
+                const supabase = createClient();
+                const {data, error} = await supabase.from("hospitals").select("*");
+                if (error) {
+                    console.error(error);
+                    toast.error("Failed to fetch hospitals");
+                } else {
+                    setHospitals(data);
+                    setLoading(false);
+                }
+            } catch (error) {
                 console.error(error);
-                toast.error("Failed to fetch hospitals");
-            } else {
-                setHospitals(data);
-                setLoading(false);
+                toast.error(`Error fetching hospitals: ${error}`);
             }
-        } catch (error) {
-            console.error(error);
-            toast.error(`Error fetching hospitals: ${error}`);
         }
-      }
 
       fetchHospitals();
     }, [])
