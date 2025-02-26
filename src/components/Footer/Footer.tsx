@@ -35,10 +35,10 @@ export default function Footer () {
           <div className="w-full lg:w-1/5 mb-6 lg:mb-0">
             <h2 className="text-white text-lg font-semibold mb-4">Quick Links</h2>
             <ul className="space-y-2">
-              <li><Link href="#features" className="hover:text-white">Features</Link></li>
-              <li><Link href="#solutions" className="hover:text-white">Solutions</Link></li>
-              <li><Link href="#pricing" className="hover:text-white">Pricing</Link></li>
-              <li><Link href="#contact" className="hover:text-white">Contact</Link></li>
+              <li><Link href="/features" className="hover:text-white">Features</Link></li>
+              <li><Link href="/solutions" className="hover:text-white">Solutions</Link></li>
+              <li><Link href="#" className="hover:text-white">Pricing</Link></li>
+              <li><Link href="/contact" className="hover:text-white">Contact</Link></li>
             </ul>
           </div>
 
@@ -46,10 +46,10 @@ export default function Footer () {
           <div className="w-full lg:w-1/5">
             <h2 className="text-white text-lg font-semibold mb-4">Resources</h2>
             <ul className="space-y-2">
-              <li><Link href="#documentation" className="hover:text-white">Documentation</Link></li>
-              <li><Link href="#help-center" className="hover:text-white">Help Center</Link></li>
-              <li><Link href="#blog" className="hover:text-white">Blog</Link></li>
-              <li><Link href="#api-status" className="hover:text-white">API Status</Link></li>
+              <li><Link href="#" className="hover:text-white">Documentation</Link></li>
+              <li><Link href="#" className="hover:text-white">Help Center</Link></li>
+              <li><Link href="#" className="hover:text-white">Blog</Link></li>
+              <li><Link href="#" className="hover:text-white">API Status</Link></li>
             </ul>
           </div>
 
@@ -65,7 +65,7 @@ export default function Footer () {
         <div className="flex flex-wrap justify-between mt-10 border-t border-t-accent/10 pt-8">
           {/* Legal Links */}
           <div className="w-full text-center flex flex-col md:flex-row gap-4 md:gap-0 items-center justify-between">
-            <p>© 2025 RogiSetu. All rights reserved.</p>
+            <p>&copy; 2025 RogiSetu. All rights reserved.</p>
             <div className="flex justify-center space-x-4">
               <Link href="#privacy-policy" className="hover:text-white text-gray-300 text-sm">Privacy Policy</Link>
               <Link href="#terms-of-service" className="hover:text-white text-gray-300 text-sm">Terms of Service</Link>
