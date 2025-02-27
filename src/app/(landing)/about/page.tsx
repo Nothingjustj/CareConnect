@@ -44,7 +44,7 @@ const AboutPage = () => {
       </div>
 
       {/* Mission Section */}
-      <div className="bg-white text-primary py-12 mt-16 px-6 max-w-6xl mx-auto rounded-lg">
+      <div className="bg-white text-primary py-6 mt-6 px-6 max-w-6xl mx-auto rounded-lg">
         <h3 className="text-2xl font-bold">Our Mission</h3>
         <p className="mt-2 text-gray-600 max-w-3xl">
           To provide accessible, efficient, and transparent healthcare services to all citizens through digital innovation

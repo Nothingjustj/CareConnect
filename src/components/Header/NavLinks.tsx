@@ -90,8 +90,8 @@ useEffect(() => {
       active: true
     },
     {
-      name: "Testimonials",
-      url: "#testimonials",
+      name: "About",
+      url: "/about",
       active: true
     },
     {
@@ -101,7 +101,7 @@ useEffect(() => {
     },
     {
       name: "Contact",
-      url: "#contact",
+      url: "/contact",
       active: true
     },
   ];

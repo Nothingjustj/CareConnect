@@ -92,7 +92,7 @@ export default function Home() {
         </section>
 
         {/* Features---------------------------------Features Section ----------------------------------------------------------*/}
-        <section id="features" className="bg-white py-16 px-6">
+        <section id="features" className="bg-white py-24 px-10">
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900">
               Comprehensive <span className="text-primary">ROGISETU</span> Features
@@ -117,7 +117,7 @@ export default function Home() {
         </section>
 
         {/* Solutions-----------------------------------Solution Approach Section --------------------------------------------- */}
-        <section id="#solutions" className="bg-muted py-16 px-6">
+        <section id="solutions" className="bg-muted py-24 px-6">
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900">Simple OPD Booking Process</h2>
             <p className="text-gray-600 mt-2">
@@ -198,25 +198,6 @@ export default function Home() {
                     <Clock className="h-6 w-6" />
                   </div>
                   <h3 className="text-lg font-semibold">Live Queue Status</h3>
-          </section>
-
-          {/* Add the ID "features" to this section to link from navigation */}
-          <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-muted">
-            <div className="container px-4 md:px-6 max-w-7xl mx-auto">
-              <div className="flex flex-col items-center text-center mb-12">
-                <h2 className="text-3xl md:text-4xl font-bold mb-4">Key Features</h2>
-                <p className="text-muted-foreground max-w-3xl">
-                  Our platform offers a comprehensive set of features designed to streamline hospital OPD operations
-                </p>
-              </div>
-              
-              <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-                <div className="flex flex-col items-center space-y-4 text-center">
-                  <Clock className="h-12 w-12 text-primary" />
-                  <h3 className="text-xl font-bold">Real-time Token Updates</h3>
-                  <p className="text-muted-foreground">
-                    Track your token status in real-time and get notified when it&apos;s your turn.
-                  </p>
                 </div>
                 <p className="text-gray-600 mt-1">
                   See real-time updates of your position in the queue
@@ -305,4 +286,4 @@ const FeatureCard: React.FC<FeatureCardProps> = ({ icon: Icon, title, descriptio
     <p className="text-gray-200">{description}</p>
   </div>
 );
-}
+
