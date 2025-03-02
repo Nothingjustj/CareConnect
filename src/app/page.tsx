@@ -181,7 +181,7 @@ export default function Home() {
         </section>
 
         {/* Real-time Token Tracking -------------------------------------------------------------*/}          
-        <section className="max-w-6xl mx-auto py-12 px-6">
+        <section id="benefits" className="max-w-6xl mx-auto py-24 px-6">
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900">Real-time Token Tracking</h2>
               <p className="text-gray-600 mt-2">

@@ -9,7 +9,7 @@ export default function Header() {
     <header className="sticky top-0 border-b border-b-secondary py-5 px-4 md:px-12 bg-background/90 backdrop-blur z-30">
       <div className="w-full max-w-7xl mx-auto flex justify-between items-center relative">
         <Link href="/">
-          <Image src={Logo} alt="RogiSetu Header Logo Image" className="max-w-32 md:max-w-40" />
+          <Image src={Logo} alt="RogiSetu Header Logo Image" className="max-w-32 md:max-w-40" loading="lazy" />
         </Link>
         <NavLinks />
         <div className="hidden md:flex gap-2">
