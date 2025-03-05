@@ -1,6 +1,20 @@
-# RogiSetu - Hospital OPD Management System
+<div align="center">
+    <img src="https://github.com/user-attachments/assets/85e65bf3-2fa5-4cc4-9f1e-c46f40ec069e" alt="RogiSetu Logo" width="150" />
+    <div id="toc">
+      <ul style="list-style: none">
+        <summary>
+          <h1>RogiSetu</h1>
+        </summary>
+      </ul>
+    </div>
+    <h3>Simplifying Hospital OPD System<h3>
+</div>
+
+## Overview
 
 RogiSetu is a comprehensive web application built with Next.js that simplifies hospital OPD (Outpatient Department) management. It provides features for patients to book appointments, track tokens, and for hospital staff to manage departments and patient flow.
+<br /><br />
+The deployed version can be found at [`rogisetu.vercel.app`](https://rogisetu.vercel.app)
 
 ## Features
 
