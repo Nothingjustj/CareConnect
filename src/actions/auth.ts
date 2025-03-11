@@ -129,7 +129,7 @@ export async function signOut () {
 
 
 // Methods for handling department admins
-export async function signUpAsDeptAdmin (formData: FormData) {
+export default async function signUpAsDeptAdmin (formData: FormData) {
     const supabase = await createClient();
 
     const credentials = {
