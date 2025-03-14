@@ -113,7 +113,7 @@ const ManageStaffs = () => {
       <h1 className="text-2xl font-semibold mb-10">Manage Department Staffs</h1>
 
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-none md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {error && <p className="text-red-600 font-medium">{error}</p>}
 
           <div className="grid gap-2">
@@ -155,7 +155,7 @@ const ManageStaffs = () => {
             </Select>
           </div>
 
-          <Button type="submit" className="w-full col-span-2" disabled={loading}>
+          <Button type="submit" className="w-full md:col-span-2" disabled={loading}>
             {loading ? "Adding..." : "Add Department Admins"}
           </Button>
         </div>

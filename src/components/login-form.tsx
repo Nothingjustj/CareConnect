@@ -37,18 +37,6 @@ export function LoginForm({
     const result = await signIn(formData);
 
     if (result.status === "success") {
-      if (result.role === "patient") {
-        router.push("/dashboard");
-      } else if (result.role === "department_admin") {
-        router.push("/admin/dashboard");
-      } else if (result.role === "hospital_admin") {
-        router.push("hospital-admin/dashboard");
-      } else if (result.role === "super_admin") {
-        router.push("super-admin/dashboard");
-      } else {
-        router.push("/");
-        toast("No role detected!");
-      }
       toast.success("Logged in successfully");
 
       if (result.status === "success") {

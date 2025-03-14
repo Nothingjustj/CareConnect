@@ -186,7 +186,7 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
 
       <div className="flex items-center gap-2 my-2">
         <Checkbox id="terms" /> 
-        <Label className="text-muted-foreground" htmlFor="terms">
+        <Label className="text-muted-foreground leading-snug" htmlFor="terms">
           I agree to the <Link href="/terms" className="underline" target="_blank">terms and conditions</Link> and confirm that the
         information provided is accurate.
         </Label>

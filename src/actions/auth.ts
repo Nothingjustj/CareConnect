@@ -101,10 +101,23 @@ export async function signIn (formData: FormData) {
     }
 
     revalidatePath("/", "layout")
+
+    const role = data.user.user_metadata.role;
+
+    if (role === "patient") {
+        redirect("/dashboard")
+    } else if (role === "department_admin") {
+        redirect("/admin/dashboard")
+    } else if (role === "hospital_admin") {
+        redirect("/hospital-admin/dashboard")
+    } else if (role === "super_admin") {
+        redirect("/super-admin/dashboard")
+    }
+
     return { 
         status: "success", 
         user: data.user, 
-        role: data.user.user_metadata.role, 
+        role: role, 
         email: data.user.email, 
         name: data.user.user_metadata.name, 
         userId: data.user.id 
