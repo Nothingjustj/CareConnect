@@ -16,16 +16,16 @@ export default async function AuthLayout({
     }
 
     return (
-      <>
-        <header className="flex justify-center pt-10">
+      <div className="flex flex-col min-h-screen justify-center">
+        <header className="flex justify-center">
           <Link href="/">
             <Image src="/logo.png" width={170} height={100} alt="RogitSetu Logo" />
           </Link>
         </header>
         {children}
         <footer className="w-full bg-background">
-          <p className="text-center text-xs p-4 text-muted-foreground">&copy; 2025 RogiSetu | All rights reserved</p>
+          <p className="text-center text-xs text-muted-foreground">&copy; 2025 RogiSetu | All rights reserved</p>
         </footer>
-      </>
+      </div>
     );
   }

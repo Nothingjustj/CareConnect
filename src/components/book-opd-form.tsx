@@ -37,7 +37,7 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
       if(!selectedHospital) return;
 
       const supabase = createClient();
-      const { data, error } = await supabase.from("departments").select("*").eq("hospital_id", selectedHospital);
+      const { data, error } = await supabase.from("hospital_departments").select("*").eq("hospital_id", selectedHospital);
 
       if(error) {
         console.error("Error fetching departments: ", error);

@@ -35,7 +35,7 @@ export default function DepartmentsPage() {
                     .eq("id", userId)
                     .single();
 
-                if (error) throw error;
+                // if (error) throw error;
                 if (admin?.hospital_id) {
                     setHospitalId(admin.hospital_id);
                     const { data: hospitalData, error: hospitalError } = await supabase
@@ -44,7 +44,7 @@ export default function DepartmentsPage() {
                         .eq("id", admin.hospital_id)
                         .single();
 
-                    if (hospitalError) throw hospitalError;
+                    // if (hospitalError) throw hospitalError;
                     setHospital(hospitalData?.name || "Unknown Hospital");
                 }
             } catch (error) {

@@ -17,7 +17,7 @@ export interface DepartmentType {
   }
   
   export interface Hospital {
-    id: number;
+    id: string;
     name: string;
     address: string;
     city: string;
