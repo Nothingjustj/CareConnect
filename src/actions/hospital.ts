@@ -47,10 +47,3 @@ export async function updateHospital(id: any, hospital: Hospital) {
         console.error("Error updating hospital: ", error);
     }
 }
- 
-//  In the above code, we have created a file  hospital.ts  in the  actions  folder. This file contains functions related to hospital operations like fetching, adding, deleting, and updating hospitals. 
-//  The  fetchHospitals  function fetches all the hospitals from the database. The  fetchHospitalById  function fetches a hospital by its id. The  addHospital  function adds a new hospital to the database. The  deleteHospital  function deletes a hospital by its id. The  updateHospital  function updates a hospital by its id. 
-//  Step 5: Create a file to manage the state of hospitals 
-//  We will create a file  hospital.ts  in the  store  folder to manage the state of hospitals.
-
-//  Create a file named  hospital.ts  in the  store  folder and add the following code to it:
