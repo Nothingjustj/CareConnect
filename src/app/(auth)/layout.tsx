@@ -1,19 +1,11 @@
-import { getUserSession } from "@/actions/auth";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
 export default async function AuthLayout({
     children,
   }: Readonly<{
     children: React.ReactNode;
   }>) {
-
-    const userSession = await getUserSession();
-    
-    if (userSession?.user) {
-        redirect('/');
-    }
 
     return (
       <div className="flex flex-col min-h-screen justify-center">
