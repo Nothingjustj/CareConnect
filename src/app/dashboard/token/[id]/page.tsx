@@ -15,19 +15,17 @@ type TokenPageProps = {
   }>;
 }
 
-export default async function TokenPage({ params }: TokenPageProps) {
+export default function TokenPage({ params }: TokenPageProps) {
   const [tokenData, setTokenData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  const id = (await params).id;
-
   useEffect(() => {
     async function fetchTokenData() {
-      if (!id) return;
+      if (!(await params).id) return;
       
       try {
-        const result = await trackOpdByToken(id);
+        const result = await trackOpdByToken((await params).id);
         
         if (result.status === "success" && result.found) {
           setTokenData(result);
@@ -45,7 +43,7 @@ export default async function TokenPage({ params }: TokenPageProps) {
     }
 
     fetchTokenData();
-  }, [id]);
+  }, []);
 
   // Helper function to format date
   const formatDate = (dateString: string) => {
