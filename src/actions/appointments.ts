@@ -217,8 +217,8 @@ export async function bookOpdAppointment(formData: FormData) {
     const hospitalCode = hospital?.name
       ? hospital.name
           .split(/[\s.]+/) // Split by spaces and periods
-          .filter(part => part.length > 0) // Remove empty parts
-          .map(part => part.charAt(0)) // Take first character of each part
+          .filter((part: any) => part.length > 0) // Remove empty parts
+          .map((part: any) => part.charAt(0)) // Take first character of each part
           .join('') // Join them together
           .substring(0, 3) // Take first 3 characters (if available)
           .toUpperCase()
@@ -475,7 +475,7 @@ export async function trackOpdByToken(tokenNumber: string) {
         time_slot: appointment.time_slot,
         status: appointment.status,
         estimated_time: appointment.estimated_time,
-        patient_id: appointment.patients?.id
+        // patient_id: appointment.patients?.id
       },
       hospital: appointment.hospitals,
       department: appointment.departments
