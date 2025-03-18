@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import LoadingSpinner from "@/components/loading-screen";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Calendar, Clock, Download, Hospital, Share2 } from "lucide-react";
+import { Calendar, Clock, Download, Share2 } from "lucide-react";
 import Link from "next/link";
 import QRCode from "react-qr-code";
 
@@ -13,7 +13,7 @@ type TokenPageProps = {
   params: {
     id: string;
   };
-};
+}
 
 export default function TokenPage({ params }: TokenPageProps) {
   const [tokenData, setTokenData] = useState<any>(null);
