@@ -10,22 +10,24 @@ import Link from "next/link";
 import QRCode from "react-qr-code";
 
 type TokenPageProps = {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
-export default function TokenPage({ params }: TokenPageProps) {
+export default async function TokenPage({ params }: TokenPageProps) {
   const [tokenData, setTokenData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const id = (await params).id;
+
   useEffect(() => {
     async function fetchTokenData() {
-      if (!params.id) return;
+      if (!id) return;
       
       try {
-        const result = await trackOpdByToken(params.id);
+        const result = await trackOpdByToken(id);
         
         if (result.status === "success" && result.found) {
           setTokenData(result);
@@ -43,7 +45,7 @@ export default function TokenPage({ params }: TokenPageProps) {
     }
 
     fetchTokenData();
-  }, [params.id]);
+  }, [id]);
 
   // Helper function to format date
   const formatDate = (dateString: string) => {
