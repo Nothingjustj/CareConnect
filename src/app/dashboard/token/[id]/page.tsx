@@ -9,7 +9,13 @@ import { Calendar, Clock, Download, Hospital, Share2 } from "lucide-react";
 import Link from "next/link";
 import QRCode from "react-qr-code";
 
-export default function TokenPage({ params }: { params: { id: string } }) {
+type TokenPageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export default function TokenPage({ params }: TokenPageProps) {
   const [tokenData, setTokenData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
