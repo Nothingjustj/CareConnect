@@ -10,6 +10,7 @@ export async function getUserSession () {
     const { data, error } = await supabase.auth.getUser();
 
     if (error) {
+        console.error("Error getting user session:", error.message);
         return null;
     }
     else {
@@ -46,6 +47,7 @@ export async function signUp (formData: FormData) {
     })
 
     if (authError) {
+        console.error("Error during signup:", authError.message);
         return {
             status: authError?.message,
             user: null,
@@ -59,17 +61,22 @@ export async function signUp (formData: FormData) {
         }
     }
 
+    // Create patient record with user ID as the patient ID
     const { error: patientsError } = await supabase.from("patients").insert([
         {
-            id: data?.user?.id,
+            id: data?.user?.id, // Use user ID as patient ID
+            user_id: data?.user?.id,
             name: credentials.name,
-            phone_no: credentials.phoneNo
+            phone_no: credentials.phoneNo,
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString()
         }
     ])
 
     if (patientsError) {
+        console.error("Error creating patient record:", patientsError.message, patientsError.code, patientsError.details);
         return {
-            status: patientsError.message,
+            status: `Failed to create patient record: ${patientsError.message}`,
             user: null,
             role: null
         }
@@ -93,6 +100,7 @@ export async function signIn (formData: FormData) {
     })
 
     if (error) {
+        console.error("Error during signin:", error.message);
         return {
             status: error?.message,
             user: null,
@@ -130,6 +138,7 @@ export async function signOut () {
     const { error } = await supabase.auth.signOut();
 
     if (error) {
+        console.error("Error logging out:", error.message);
         return (
             console.error("Error logging out...", error),
             redirect("/error")
@@ -165,6 +174,7 @@ export default async function signUpAsDeptAdmin (formData: FormData) {
     })
 
     if (authError) {
+        console.error("Error creating department admin:", authError.message);
         return {
             status: authError?.message,
             user: null,
@@ -185,13 +195,14 @@ export default async function signUpAsDeptAdmin (formData: FormData) {
             role: "department_admin", 
             email: data.user?.email, 
             hospital_id: credentials.hospitalId, 
-            department_id: credentials.departmentId
+            department_id: parseInt(credentials.departmentId) // Fixed: Convert to number
         }
     ])
 
     if(adminsError){
+        console.error("Error creating admin record:", adminsError.message, adminsError.code, adminsError.details);
         return{
-            status: adminsError.message,
+            status: `Failed to create admin record: ${adminsError.message}`,
             user: null,
             role: null
         }
@@ -227,6 +238,7 @@ export async function createHospitalAdmin (formData: FormData) {
     });
 
     if (error) {
+        console.error("Error creating hospital admin:", error.message);
         return {
             status: `Error in creating user :: ${error.message}`,
         }
@@ -249,6 +261,7 @@ export async function createHospitalAdmin (formData: FormData) {
     ])
 
     if(adminsError){
+        console.error("Error creating admin record:", adminsError.message, adminsError.code, adminsError.details);
         return{
             status: `AdminsError :: ${adminsError.message}`,
             user: null,
