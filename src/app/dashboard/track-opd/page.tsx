@@ -67,30 +67,72 @@ export default function TrackOpd() {
         });
     };
 
-    // Helper function to format time
-    const formatTime = (timeString: string) => {
-        return new Date(timeString).toLocaleTimeString('en-US', {
-            hour: '2-digit',
-            minute: '2-digit'
-        });
-    };
-
-    // Calculate estimated waiting time
-    const getEstimatedWaitingTime = () => {
-        if (!tokenData) return '';
-        
-        const position = tokenData.positionInQueue;
-        // Assuming each patient takes about 15 minutes
-        const waitingMinutes = position * 15;
-        
-        if (waitingMinutes < 60) {
-            return `${waitingMinutes} minutes`;
-        } else {
-            const hours = Math.floor(waitingMinutes / 60);
-            const minutes = waitingMinutes % 60;
-            return `${hours} hour${hours > 1 ? 's' : ''} ${minutes > 0 ? `${minutes} minutes` : ''}`;
+// Helper function to format time - Handle all formats including timestamps
+const formatTime = (timeString: string) => {
+    try {
+      if (!timeString) {
+        return "Not available";
+      }
+      
+      // If it's an ISO date string (contains 'T')
+      if (timeString.includes('T')) {
+        const date = new Date(timeString);
+        if (isNaN(date.getTime())) {
+          return "Invalid date";
         }
-    };
+        
+        // Format to 12-hour time with AM/PM
+        return date.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: true
+        });
+      }
+      
+      // If it's a database timestamp like "2025-03-26 09:15:00"
+      if (timeString.includes(' ') && timeString.includes(':')) {
+        // Extract just the time part
+        const timePart = timeString.split(' ')[1];
+        const [hours, minutes] = timePart.split(':').map(Number);
+        
+        // Format to 12-hour time with AM/PM
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const hours12 = hours % 12 || 12; // Convert 0 to 12
+        return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+      }
+      
+      // If it's a simple time string like "09:15"
+      if (timeString.length === 5 && timeString.includes(':')) {
+        const [hours, minutes] = timeString.split(':').map(Number);
+        const period = hours >= 12 ? 'PM' : 'AM';
+        const hours12 = hours % 12 || 12; // Convert 0 to 12
+        return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+      }
+      
+      // If it's in an unknown format, return as is
+      return timeString;
+    } catch (error) {
+      console.error("Error formatting time:", error);
+      return "Time format error";
+    }
+  };
+// Calculate estimated waiting time based on position in queue
+const getEstimatedWaitingTime = () => {
+    if (!tokenData) return '';
+    
+    // MODIFIED: Always return "0 minutes" for waiting tokens
+    if (tokenData.token.status === "waiting") {
+      return "0 minutes";
+    } else if (tokenData.token.status === "in-progress") {
+      return "Currently being served";
+    } else if (tokenData.token.status === "completed") {
+      return "Completed";
+    } else if (tokenData.token.status === "cancelled") {
+      return "Cancelled";
+    } else {
+      return "Unknown status";
+    }
+  };
 
     return (
         <div className="px-2 py-6 mx-auto w-full max-w-4xl">

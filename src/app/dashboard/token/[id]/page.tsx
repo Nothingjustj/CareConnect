@@ -55,14 +55,55 @@ export default function TokenPage({ params }: TokenPageProps) {
     });
   };
 
-  // Helper function to format time
-  const formatTime = (timeString: string) => {
-    return new Date(timeString).toLocaleTimeString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit'
-    });
-  };
-
+ // Helper function to format time - Handle all formats including timestamps
+const formatTime = (timeString: string) => {
+  try {
+    if (!timeString) {
+      return "Not available";
+    }
+    
+    // If it's an ISO date string (contains 'T')
+    if (timeString.includes('T')) {
+      const date = new Date(timeString);
+      if (isNaN(date.getTime())) {
+        return "Invalid date";
+      }
+      
+      // Format to 12-hour time with AM/PM
+      return date.toLocaleTimeString('en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true
+      });
+    }
+    
+    // If it's a database timestamp like "2025-03-26 09:15:00"
+    if (timeString.includes(' ') && timeString.includes(':')) {
+      // Extract just the time part
+      const timePart = timeString.split(' ')[1];
+      const [hours, minutes] = timePart.split(':').map(Number);
+      
+      // Format to 12-hour time with AM/PM
+      const period = hours >= 12 ? 'PM' : 'AM';
+      const hours12 = hours % 12 || 12; // Convert 0 to 12
+      return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+    }
+    
+    // If it's a simple time string like "09:15"
+    if (timeString.length === 5 && timeString.includes(':')) {
+      const [hours, minutes] = timeString.split(':').map(Number);
+      const period = hours >= 12 ? 'PM' : 'AM';
+      const hours12 = hours % 12 || 12; // Convert 0 to 12
+      return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+    }
+    
+    // If it's in an unknown format, return as is
+    return timeString;
+  } catch (error) {
+    console.error("Error formatting time:", error);
+    return "Time format error";
+  }
+};
   const handleShare = async () => {
     if (navigator.share) {
       try {
