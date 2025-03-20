@@ -24,6 +24,9 @@ import { toast } from "sonner"
 import { useDispatch } from "react-redux"
 import { clearUser } from "@/store/userSlice"
 
+// In src/components/dashboard-sidebar.tsx
+
+// Update the navItems object
 const navItems = {
   patient: [
     { href: "/dashboard", label: "Dashboard", icon: Home },
@@ -36,12 +39,14 @@ const navItems = {
     { href: "/admin/dashboard", label: "Dashboard", icon: Home },
     { href: "/admin/manage-tokens", label: "Manage Tokens", icon: Users },
     { href: "/admin/queue-status", label: "Queue Status", icon: Users },
+    { href: "/admin/analytics", label: "Analytics", icon: ChartPie }, // Add analytics link
     { href: "/admin/account", label: "My Account", icon: User },
   ],
   hospital_admin: [
     { href: "/hospital-admin/dashboard", label: "Dashboard", icon: Home },
     { href: "/hospital-admin/departments", label: "Manage Departments", icon: Users },
     { href: "/hospital-admin/staffs", label: "Manage Staffs", icon: Users },
+    { href: "/hospital-admin/analytics", label: "Analytics", icon: ChartPie }, // Add analytics link
     { href: "/hospital-admin/account", label: "My Account", icon: User },
   ],
   super_admin: [
