@@ -23,75 +23,88 @@ export default function DepartmentsPage() {
     const [hospital, setHospital] = useState<string | null>(null);
     const [hospitalId, setHospitalId] = useState<string | null>(null);
     const [dailyTokenLimit, setDailyTokenLimit] = useState("");
+    const [loading, setLoading] = useState(true);
 
     const userId = useSelector((state: RootState) => state.user.id);
 
-    useEffect(() => {
-        const fetchHospital = async () => {
-            try {
-                const supabase = createClient();
-                const { data: admin, error } = await supabase
-                    .from("admins")
-                    .select("hospital_id")
-                    .eq("id", userId)
+    // Combined fetch function to ensure proper sequencing
+    const fetchAllData = async () => {
+        setLoading(true);
+        try {
+            // Step 1: Fetch hospital details
+            const supabase = createClient();
+            const { data: admin, error } = await supabase
+                .from("admins")
+                .select("hospital_id")
+                .eq("id", userId)
+                .single();
+
+            if (error) {
+                console.error("Error fetching hospital ID:", error);
+                toast.error("Failed to fetch hospital data.");
+                return;
+            }
+
+            if (admin?.hospital_id) {
+                setHospitalId(admin.hospital_id);
+                
+                // Step 2: Fetch hospital name
+                const { data: hospitalData, error: hospitalError } = await supabase
+                    .from("hospitals")
+                    .select("name")
+                    .eq("id", admin.hospital_id)
                     .single();
 
-                // if (error) throw error;
-                if (admin?.hospital_id) {
-                    setHospitalId(admin.hospital_id);
-                    const { data: hospitalData, error: hospitalError } = await supabase
-                        .from("hospitals")
-                        .select("name")
-                        .eq("id", admin.hospital_id)
-                        .single();
-
-                    // if (hospitalError) throw hospitalError;
+                if (hospitalError) {
+                    console.error("Error fetching hospital name:", hospitalError);
+                } else {
                     setHospital(hospitalData?.name || "Unknown Hospital");
                 }
-            } catch (error) {
-                console.error("Error fetching hospital:", error);
-                toast.error("Failed to fetch hospital data.");
-            }
-        };
 
-        const fetchDepartments = async () => {
-            try {
-                const supabase = createClient();
-                const { data, error } = await supabase.from("department_types").select("id, name");
+                // Step 3: Fetch all department types
+                const { data: deptData, error: deptError } = await supabase
+                    .from("department_types")
+                    .select("id, name");
 
-                if (error) throw error;
-                setDepartments(data || []);
-            } catch (error) {
-                console.error("Error fetching departments:", error);
-                toast.error("Failed to fetch department types.");
-            }
-        };
+                if (deptError) {
+                    console.error("Error fetching department types:", deptError);
+                    toast.error("Failed to fetch department types.");
+                    return;
+                }
 
-        const fetchAddedDepartments = async () => {
-            if (!hospitalId) return;
-            try {
-                const supabase = createClient();
-                const { data, error } = await supabase
+                setDepartments(deptData || []);
+
+                // Step 4: Fetch departments added to this hospital
+                const { data: hospitalDepts, error: hospitalDeptError } = await supabase
                     .from("hospital_departments")
                     .select("department_type_id")
-                    .eq("hospital_id", hospitalId);
+                    .eq("hospital_id", admin.hospital_id);
 
-                if (error) throw error;
+                if (hospitalDeptError) {
+                    console.error("Error fetching hospital departments:", hospitalDeptError);
+                    toast.error("Failed to fetch added departments.");
+                    return;
+                }
 
-                const addedDeptIds = data.map((item: any) => item.department_type_id);
-                const addedDeptDetails = departments.filter((d) => addedDeptIds.includes(d.id));
-
+                // Step 5: Filter departments to get added ones
+                const addedDeptIds = hospitalDepts.map((item: any) => item.department_type_id);
+                const addedDeptDetails = deptData.filter((d) => addedDeptIds.includes(d.id));
                 setAddedDepartments(addedDeptDetails);
-            } catch (error) {
-                console.error("Error fetching added departments:", error);
-                toast.error("Failed to fetch added departments.");
             }
-        };
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            toast.error("An error occurred while loading data.");
+        } finally {
+            setLoading(false);
+        }
+    };
 
-        fetchHospital();
-        fetchDepartments();
-        fetchAddedDepartments();
-    }, [userId, hospitalId]);
+    // Single useEffect to trigger the data fetch
+    useEffect(() => {
+        if (userId) {
+            fetchAllData();
+        }
+    }, [userId]);
 
     // Get unadded departments
     const unaddedDepartments = departments.filter(
@@ -99,12 +112,22 @@ export default function DepartmentsPage() {
     );
 
     const handleAddDepartment = async () => {
-        if (!selectedDepartment || !hospitalId) return;
+        if (!selectedDepartment || !hospitalId) {
+            toast.error("Please select a department");
+            return;
+        }
+        
         try {
             const supabase = createClient();
             const { error } = await supabase
                 .from("hospital_departments")
-                .insert([{ hospital_id: hospitalId, department_type_id: selectedDepartment, daily_token_limit: dailyTokenLimit }]);
+                .insert([{ 
+                    hospital_id: hospitalId, 
+                    department_type_id: selectedDepartment, 
+                    daily_token_limit: dailyTokenLimit || "50",
+                    status: true,
+                    created_at: new Date().toISOString()
+                }]);
 
             if (error) throw error;
 
@@ -114,8 +137,11 @@ export default function DepartmentsPage() {
             }
 
             setSelectedDepartment(null);
-            toast.success("Department added successfully!");
             setDailyTokenLimit("");
+            toast.success("Department added successfully!");
+            
+            // Refresh data to ensure UI is up to date
+            fetchAllData();
         } catch (error) {
             console.error("Error adding department:", error);
             toast.error("Failed to add department.");
@@ -149,63 +175,85 @@ export default function DepartmentsPage() {
                     <strong>Hospital Name:</strong> {hospital || "Loading..."}
                 </h2>
             </div>
-            <div className="grid grid-cols-2 items-center gap-4 my-8">
-                <div className="flex flex-col gap-2">
-                    <Label>Department:</Label>
-                    <Select onValueChange={(value) => setSelectedDepartment(Number(value))} value={selectedDepartment?.toString() || ""}>
-                        <SelectTrigger className="bg-white">
-                            <SelectValue placeholder="Select department" />
-                        </SelectTrigger>
-                        <SelectContent>
-                            <SelectGroup>
-                                {unaddedDepartments.length > 0 ? (
-                                    unaddedDepartments.map((department) => (
-                                        <SelectItem key={department.id} value={department.id.toString()} className="truncate">
-                                            {department.name}
-                                        </SelectItem>
-                                    ))
-                                ) : (
-                                    <SelectItem value={"No departments available"} disabled>
-                                        No departments available
-                                    </SelectItem>
-                                )}
-                            </SelectGroup>
-                        </SelectContent>
-                    </Select>
+            
+            {loading ? (
+                <div className="flex items-center justify-center h-40">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
                 </div>
-                <div className="flex flex-col gap-2">
-                    <Label>Daily Token Limit</Label>
-                    <Input className="" placeholder="Default: 50" type="number" value={dailyTokenLimit} onChange={(e) => setDailyTokenLimit((e.target.value))} />
-                </div>
-                <Button className="mt-4 col-span-2" onClick={handleAddDepartment} disabled={!selectedDepartment}>
-                    Add Department
-                </Button>
-            </div>
+            ) : (
+                <>
+                    <div className="grid grid-cols-2 items-center gap-4 my-8">
+                        <div className="flex flex-col gap-2">
+                            <Label>Department:</Label>
+                            <Select 
+                                onValueChange={(value) => setSelectedDepartment(Number(value))} 
+                                value={selectedDepartment?.toString() || ""}
+                            >
+                                <SelectTrigger className="bg-white">
+                                    <SelectValue placeholder="Select department" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectGroup>
+                                        {unaddedDepartments.length > 0 ? (
+                                            unaddedDepartments.map((department) => (
+                                                <SelectItem key={department.id} value={department.id.toString()} className="truncate">
+                                                    {department.name}
+                                                </SelectItem>
+                                            ))
+                                        ) : (
+                                            <SelectItem value={"No departments available"} disabled>
+                                                No departments available
+                                            </SelectItem>
+                                        )}
+                                    </SelectGroup>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <Label>Daily Token Limit</Label>
+                            <Input 
+                                className="" 
+                                placeholder="Default: 50" 
+                                type="number" 
+                                value={dailyTokenLimit} 
+                                onChange={(e) => setDailyTokenLimit(e.target.value)} 
+                            />
+                        </div>
+                        <Button 
+                            className="mt-4 col-span-2" 
+                            onClick={handleAddDepartment} 
+                            disabled={!selectedDepartment}
+                        >
+                            Add Department
+                        </Button>
+                    </div>
 
-            {/* Added Departments List */}
-            <div className="mt-6">
-                <h2 className="text-xl font-semibold">Added Departments</h2>
-                {addedDepartments.length > 0 ? (
-                    <ul className="mt-2">
-                        {addedDepartments.map((department) => (
-                            <li key={department.id} className="flex justify-between items-center p-2 border-b">
-                                <span>{department.name}</span>
-                                <Button
-                                    className="bg-red-500 hover:bg-red-600"
-                                    onClick={() => handleRemoveDepartment(department.id)}
-                                >
-                                    Remove
-                                </Button>
-                            </li>
-                        ))}
-                    </ul>
-                ) : (
-                    <p className="text-gray-500 mt-2">No departments added.</p>
-                )}
-            </div>
-            <div className="mt-8">
-                <DepartmentUtilizationChart hospitalId={hospitalId || ''} />
-            </div>
-        </div>
-    );
+                    {/* Added Departments List */}
+                    <div className="mt-6">
+                        <h2 className="text-xl font-semibold">Added Departments</h2>
+                        {addedDepartments.length > 0 ? (
+                            <ul className="mt-2">
+                                {addedDepartments.map((department) => (
+                                    <li key={department.id} className="flex justify-between items-center p-2 border-b">
+                                        <span>{department.name}</span>
+                                        <Button
+                                            className="bg-red-500 hover:bg-red-600"
+                                            onClick={() => handleRemoveDepartment(department.id)}
+                                        >
+                                            Remove
+                                        </Button>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : (
+                            <p className="text-gray-500 mt-2">No departments added.</p>
+                        )}
+                    </div>
+                    <div className="mt-8">
+                        {hospitalId && <DepartmentUtilizationChart hospitalId={hospitalId} />}
+                    </div>
+                </>
+            )}
+        </div>
+    );
 }

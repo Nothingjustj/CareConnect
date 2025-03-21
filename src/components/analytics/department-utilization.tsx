@@ -35,53 +35,56 @@ export default function DepartmentUtilizationChart({
         const startDate = subDays(endDate, 30);
         const startDateString = format(startDate, "yyyy-MM-dd");
         
+        // First, get all department types for name mapping
+        const { data: departmentTypes, error: deptTypesError } = await supabase
+          .from("department_types")
+          .select("id, name");
+        
+        if (deptTypesError) throw deptTypesError;
+        
+        // Create a map of department IDs to names for easy lookup
+        const departmentNameMap = new Map();
+        departmentTypes.forEach(dept => {
+          departmentNameMap.set(dept.id, dept.name);
+        });
+        
         // Get all departments for this hospital
         const { data: departmentsData, error: deptError } = await supabase
           .from("hospital_departments")
           .select(`
             id,
-            department_type_id,
-            department_types:department_type_id(name)
+            department_type_id
           `)
           .eq("hospital_id", hospitalId);
         
         if (deptError) throw deptError;
         
         // Get appointment counts for each department
-        // Get appointment counts for each department
-const deptStats = await Promise.all(
-  departmentsData.map(async (dept) => {
-    // Log the structure to understand what we're working with
-    console.log('Department Types structure:', {
-      departmentTypes: dept.department_types,
-      type: typeof dept.department_types,
-      isArray: Array.isArray(dept.department_types),
-      departmentTypeId: dept.department_type_id
-    });
-    
-    const { count, error } = await supabase
-      .from("appointments")
-      .select("id", { count: "exact" })
-      .eq("hospital_id", hospitalId)
-      .eq("department_id", dept.department_type_id)
-      .gte("date", startDateString);
-    
-    if (error) throw error;
-    
-    // Temporary solution to avoid TypeScript error
-    const departmentName = `Department ${dept.department_type_id}`;
-    
-    // We'll update this after seeing the logs
-    return {
-      name: departmentName,
-      appointments: count || 0
-    };
-  })
-);
+        const deptStats = await Promise.all(
+          departmentsData.map(async (dept) => {
+            const { count, error } = await supabase
+              .from("appointments")
+              .select("id", { count: "exact" })
+              .eq("hospital_id", hospitalId)
+              .eq("department_id", dept.department_type_id)
+              .gte("date", startDateString);
+            
+            if (error) throw error;
+            
+            // Use the department name from our map, or fall back to a default
+            const departmentName = departmentNameMap.get(dept.department_type_id) || 
+                                   `Department ${dept.department_type_id}`;
+            
+            return {
+              name: departmentName,
+              appointments: count || 0
+            };
+          })
+        );
         
         // Sort by number of appointments (descending)
         const sortedData = deptStats.sort((a, b) => b.appointments - a.appointments);
-        setData(sortedData as Array<{ name: string; appointments: number }>);
+        setData(sortedData);
         
       } catch (error) {
         console.error("Error fetching department utilization:", error);
