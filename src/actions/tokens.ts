@@ -72,6 +72,18 @@ export async function updateTokenStatus(
   try {
     const supabase = await createClient()
     
+    // First get the appointment details
+    const { data: appointment, error: fetchError } = await supabase
+      .from("appointments")
+      .select("hospital_id, department_id, date, token_number, time_slot")
+      .eq("id", appointmentId)
+      .single();
+    
+    if (fetchError) {
+      console.error("Error fetching appointment:", fetchError.message, fetchError.code, fetchError.details);
+      throw fetchError;
+    }
+    
     // Update status directly in appointments table
     const updateData: any = { status }
     
@@ -95,6 +107,16 @@ export async function updateTokenStatus(
       throw updateError;
     }
     
+    // If status changed to completed or cancelled, update estimated times for remaining tokens
+    // Note: This will now reset all estimated times to their appointment times (no waiting time)
+    if (status === 'completed' || status === 'cancelled') {
+      await updateQueueEstimatedTimes(
+        appointment.hospital_id,
+        appointment.department_id,
+        appointment.date
+      );
+    }
+    
     revalidatePath(`/admin/manage-tokens`)
     
     return {
@@ -110,6 +132,68 @@ export async function updateTokenStatus(
   }
 }
 
+// Helper function to update estimated times for the queue
+async function updateQueueEstimatedTimes(
+  hospitalId: string,
+  departmentId: number,
+  date: string
+) {
+  try {
+    const supabase = await createClient();
+    
+    // Get all waiting tokens for this hospital, department, and date
+    const { data: waitingTokens, error } = await supabase
+      .from("appointments")
+      .select("id, time_slot")
+      .eq("hospital_id", hospitalId)
+      .eq("department_id", departmentId)
+      .eq("date", date)
+      .eq("status", "waiting")
+      .order("created_at", { ascending: true });
+    
+    if (error) {
+      console.error("Error fetching waiting tokens:", error.message, error.code, error.details);
+      throw error;
+    }
+    
+    // Update estimated times for each waiting token
+    for (let i = 0; i < waitingTokens.length; i++) {
+      const token = waitingTokens[i];
+      
+      // Parse time slot
+      const [hoursStr, minutesStr] = token.time_slot.split(':');
+      const hours = parseInt(hoursStr, 10);
+      const minutes = parseInt(minutesStr, 10);
+      
+      // Create a Date object for the appointment date
+      const baseDate = new Date(date);
+      // Set the hours and minutes
+      baseDate.setHours(hours, minutes, 0, 0);
+      
+      // MODIFIED: Set estimated time equal to appointment time (no waiting time)
+      const estimatedDate = new Date(baseDate);
+      
+      // Format as timestamp for database storage (YYYY-MM-DD HH:MM:SS)
+      const estimatedTimeString = `${estimatedDate.getFullYear()}-${(estimatedDate.getMonth() + 1).toString().padStart(2, '0')}-${estimatedDate.getDate().toString().padStart(2, '0')} ${estimatedDate.getHours().toString().padStart(2, '0')}:${estimatedDate.getMinutes().toString().padStart(2, '0')}:00`;
+      
+      // Update the database
+      const { error: updateError } = await supabase
+        .from("appointments")
+        .update({ estimated_time: estimatedTimeString })
+        .eq("id", token.id);
+      
+      if (updateError) {
+        console.error("Error updating estimated time:", updateError.message, updateError.code, updateError.details);
+        // Continue with next token even if this one fails
+      }
+    }
+    
+    return true;
+  } catch (error) {
+    console.error("Error updating queue estimated times:", error);
+    return false;
+  }
+}
 // Get current queue status for a department
 export async function getDepartmentQueueStatus(
   hospitalId: string,

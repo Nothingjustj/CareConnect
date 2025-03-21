@@ -8,7 +8,8 @@ import { redirect } from "next/navigation"
 import { getUserSession } from "./auth"
 import crypto from "crypto"
 
-// Check availability for a specific date, hospital, and department
+// src/actions/appointments.ts - Modified checkAvailability function
+
 export async function checkAvailability(
   hospitalId: string,
   departmentId: number,
@@ -20,7 +21,7 @@ export async function checkAvailability(
     // Get the hospital department record
     const { data: hospitalDept, error: deptError } = await supabase
       .from("hospital_departments")
-      .select("id, daily_token_limit, current_token_count")
+      .select("id, daily_token_limit")
       .eq("hospital_id", hospitalId)
       .eq("department_type_id", departmentId)
       .single()
@@ -50,7 +51,8 @@ export async function checkAvailability(
       console.error("Error counting appointments:", countError.message, countError.code, countError.details);
       throw countError;
     }
-    
+    console.log("Count of existing appointments:", count); // Log the count
+
     const isAvailable = count !== null && count < hospitalDept.daily_token_limit
     const remainingSlots = hospitalDept.daily_token_limit - (count || 0)
     
@@ -59,7 +61,8 @@ export async function checkAvailability(
       available: isAvailable,
       remainingSlots: remainingSlots,
       totalSlots: hospitalDept.daily_token_limit,
-      hospitalDepartmentId: hospitalDept.id
+      hospitalDepartmentId: hospitalDept.id,
+      count: count || 0,
     }
   } catch (error) {
     console.error("Error checking availability:", error);
@@ -117,6 +120,30 @@ export async function bookOpdAppointment(formData: FormData) {
         status: "error",
         message: "No slots available for the selected date"
       }
+    }
+    
+    // Check if the specific time slot is already booked by ANY user
+    const { data: existingBookings, error: slotCheckError } = await supabase
+      .from("appointments")
+      .select("id")
+      .eq("hospital_id", hospitalId)
+      .eq("department_id", departmentId)
+      .eq("date", appointmentDate)
+      .eq("time_slot", timeSlot);
+    
+    if (slotCheckError) {
+      console.error("Error checking slot availability:", slotCheckError);
+      return {
+        status: "error",
+        message: "Failed to check slot availability"
+      };
+    }
+    
+    if (existingBookings && existingBookings.length > 0) {
+      return {
+        status: "error",
+        message: "This time slot has already been booked. Please select another slot."
+      };
     }
     
     // Check if patient record exists, and update it if needed
@@ -177,11 +204,11 @@ export async function bookOpdAppointment(formData: FormData) {
     // Get the hospital department record
     const { data: hospitalDept, error: deptError } = await supabase
       .from("hospital_departments")
-      .select("id, last_token_number, current_token_count")
+      .select("id, daily_token_limit")
       .eq("hospital_id", hospitalId)
       .eq("department_type_id", departmentId)
       .single();
-    
+
     if (deptError) {
       console.error("Error fetching hospital department:", deptError.message, deptError.code, deptError.details);
       return {
@@ -212,6 +239,23 @@ export async function bookOpdAppointment(formData: FormData) {
       console.error("Error fetching department:", departmentError.message, departmentError.code, departmentError.details);
     }
     
+    // Get ALL existing appointments for this hospital/department/date to determine next token number
+    const { data: existingAppointments, error: countError } = await supabase
+      .from("appointments")
+      .select("token_number")
+      .eq("hospital_id", hospitalId)
+      .eq("department_id", departmentId)
+      .eq("date", appointmentDate)
+      .order("created_at", { ascending: true });
+    
+    if (countError) {
+      console.error("Error counting appointments:", countError.message, countError.code, countError.details);
+      return {
+        status: "error",
+        message: `Failed to generate token: ${countError.message}`
+      };
+    }
+    
     // Generate token number (hosp-dept-date-3 digit number)
     // Improved hospital code generation
     const hospitalCode = hospital?.name
@@ -226,29 +270,24 @@ export async function bookOpdAppointment(formData: FormData) {
     
     const departmentCode = department?.name.substring(0, 3).toUpperCase() || "GEN";
     const dateCode = appointmentDate.replace(/-/g, "");
-    const nextTokenNumber = (hospitalDept.last_token_number || 0) + 1;
+    const nextTokenNumber = (availability.count || 0) + 1;
     const tokenNumber = `${hospitalCode}-${departmentCode}-${dateCode}-${nextTokenNumber.toString().padStart(3, '0')}`;
     
-    // Update the last token number
-    const { error: updateTokenError } = await supabase
-      .from("hospital_departments")
-      .update({ 
-        last_token_number: nextTokenNumber,
-        current_token_count: (hospitalDept.current_token_count || 0) + 1
-      })
-      .eq("id", hospitalDept.id);
+    // MODIFIED: Set estimated time equal to appointment time (no waiting time)
+    const [hoursStr, minutesStr] = timeSlot.split(':');
+    const hours = parseInt(hoursStr, 10);
+    const minutes = parseInt(minutesStr, 10);
     
-    if (updateTokenError) {
-      console.error("Error updating token number:", updateTokenError.message, updateTokenError.code, updateTokenError.details);
-      return {
-        status: "error",
-        message: `Failed to generate token: ${updateTokenError.message}`
-      };
-    }
+    // Create a Date object for the appointment date
+    const baseDate = new Date(appointmentDate);
+    // Set the hours and minutes
+    baseDate.setHours(hours, minutes, 0, 0);
     
-    // Calculate estimated time (simple algorithm - 15 minutes per patient)
-    const baseTime = new Date(`${appointmentDate}T${timeSlot}`);
-    const estimatedTime = new Date(baseTime.getTime() + (nextTokenNumber * 15 * 60000));
+    // Set estimated time equal to appointment time (no waiting time)
+    const estimatedDate = new Date(baseDate);
+    
+    // Format as timestamp for database storage (YYYY-MM-DD HH:MM:SS)
+    const estimatedTimeString = `${estimatedDate.getFullYear()}-${(estimatedDate.getMonth() + 1).toString().padStart(2, '0')}-${estimatedDate.getDate().toString().padStart(2, '0')} ${estimatedDate.getHours().toString().padStart(2, '0')}:${estimatedDate.getMinutes().toString().padStart(2, '0')}:00`;
     
     // Log the data being inserted for debugging
     console.log("Creating appointment with data:", {
@@ -260,7 +299,7 @@ export async function bookOpdAppointment(formData: FormData) {
       time_slot: timeSlot,
       token_number: tokenNumber,
       status: "waiting",
-      estimated_time: estimatedTime.toISOString()
+      estimated_time: estimatedTimeString,
     });
     
     // Create the appointment - use userId as patient_id
@@ -275,7 +314,7 @@ export async function bookOpdAppointment(formData: FormData) {
         time_slot: timeSlot,
         token_number: tokenNumber,
         status: "waiting",
-        estimated_time: estimatedTime.toISOString()
+        estimated_time: estimatedTimeString // Store as timestamp string
       })
       .select("id, token_number")
       .single();
@@ -295,7 +334,7 @@ export async function bookOpdAppointment(formData: FormData) {
       message: "Appointment booked successfully",
       tokenNumber: tokenNumber,
       appointmentId: appointment.id,
-      estimatedTime: estimatedTime.toISOString()
+      estimatedTime: estimatedTimeString
     }
   } catch (error) {
     console.error("Error booking appointment:", error);
@@ -312,7 +351,7 @@ export async function getTimeSlots(
   date: string
 ) {
   try {
-    const supabase = await createClient();
+    const supabase = await createClient()
     
     // Default time slots if no configuration is found
     let allTimeSlots = [
@@ -475,7 +514,6 @@ export async function trackOpdByToken(tokenNumber: string) {
         time_slot: appointment.time_slot,
         status: appointment.status,
         estimated_time: appointment.estimated_time,
-        // patient_id: appointment.patients?.id
       },
       hospital: appointment.hospitals,
       department: appointment.departments

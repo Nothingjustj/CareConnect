@@ -9,6 +9,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
+import DepartmentUtilizationChart from "@/components/analytics/department-utilization";
 
 type Department = {
     id: number;
@@ -201,6 +202,9 @@ export default function DepartmentsPage() {
                 ) : (
                     <p className="text-gray-500 mt-2">No departments added.</p>
                 )}
+            </div>
+            <div className="mt-8">
+                <DepartmentUtilizationChart hospitalId={hospitalId || ''} />
             </div>
         </div>
     );
