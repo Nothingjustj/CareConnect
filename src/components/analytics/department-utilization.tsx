@@ -69,7 +69,7 @@ const deptStats = await Promise.all(
     if (error) throw error;
     
     // Temporary solution to avoid TypeScript error
-    let departmentName = `Department ${dept.department_type_id}`;
+    const departmentName = `Department ${dept.department_type_id}`;
     
     // We'll update this after seeing the logs
     return {
