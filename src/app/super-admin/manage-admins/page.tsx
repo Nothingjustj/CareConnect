@@ -1,3 +1,5 @@
+// src/app/super-admin/manage-admins/page.tsx (modified)
+
 "use client";
 
 import { createHospitalAdmin } from "@/actions/auth";
@@ -12,15 +14,26 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { createClient } from "@/utils/supabase/client";
 import React, { useEffect, useState } from "react";
 import { toast } from "sonner";
+import { Edit, Trash } from "lucide-react";
 
 type Admin = {
   id: string;
   name: string;
   email: string;
   hospital_id: string;
+  phone_no?: string;
 };
 
 const ManageAdmins = () => {
@@ -28,51 +41,61 @@ const ManageAdmins = () => {
   const [loading, setLoading] = useState(false);
   const [hospitals, setHospitals] = useState<any[]>([]);
   const [admins, setAdmins] = useState<Admin[]>([]);
+  const [editingAdmin, setEditingAdmin] = useState<Admin | null>(null);
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [adminToDelete, setAdminToDelete] = useState<string | null>(null);
 
   // Local state for form inputs
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [phoneNo, setPhoneNo] = useState("");
   const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchHospitals = async () => {
-      try {
-        const supabase = createClient();
-        const { data, error } = await supabase.from("hospitals").select("*");
-
-        if (error) {
-          setError(error.message);
-          return;
-        }
-
-        setHospitals(data || []);
-      } catch (error) {
-        console.error("Error in fetchHospitals:", error);
-        toast.error(`Error in fetchHospitals: ${error}`);
-      }
-    };
-
-    const fetchHospitalAdmins = async () => {
-      try {
-        const supabase = createClient();
-        const { data, error } = await supabase
-          .from("admins")
-          .select("*")
-          .eq("role", "hospital_admin");
-        setAdmins(data as Admin[]);
-        if (error) {
-          setError(error.message);
-        }
-      } catch (error) {
-        console.error(`Error fetching hospital admins: ${error}`);
-        toast.error(`Error fetching hospital admins: ${error}`);
-      }
-    };
-
-    fetchHospitals();
-    fetchHospitalAdmins();
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    await Promise.all([fetchHospitals(), fetchHospitalAdmins()]);
+  };
+
+  const fetchHospitals = async () => {
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase.from("hospitals").select("*");
+
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      setHospitals(data || []);
+    } catch (error) {
+      console.error("Error in fetchHospitals:", error);
+      toast.error(`Error in fetchHospitals: ${error}`);
+    }
+  };
+
+  const fetchHospitalAdmins = async () => {
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("admins")
+        .select("*")
+        .eq("role", "hospital_admin");
+      
+      if (error) {
+        setError(error.message);
+        return;
+      }
+      
+      setAdmins(data as Admin[]);
+    } catch (error) {
+      console.error(`Error fetching hospital admins: ${error}`);
+      toast.error(`Error fetching hospital admins: ${error}`);
+    }
+  };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -99,8 +122,14 @@ const ManageAdmins = () => {
         setName("");
         setEmail("");
         setPassword("");
+        setPhoneNo("");
         setSelectedHospital(null);
         setError("");
+        
+        // Refresh admin list
+        fetchHospitalAdmins();
+      } else {
+        toast.error(result.status);
       }
     } catch (error) {
       console.error("Error in handleSubmit (Manage Admins): ", error);
@@ -108,6 +137,64 @@ const ManageAdmins = () => {
     }
 
     setLoading(false);
+  };
+
+  const handleEdit = (admin: Admin) => {
+    setEditingAdmin(admin);
+    setName(admin.name || "");
+    setEmail(admin.email || "");
+    setPhoneNo(admin.phone_no || "");
+    setSelectedHospital(admin.hospital_id || null);
+  };
+
+  const handleUpdateAdmin = async () => {
+    if (!editingAdmin || !selectedHospital) return;
+    
+    try {
+      const supabase = createClient();
+      const { error } = await supabase
+        .from("admins")
+        .update({
+          name,
+          phone_no: phoneNo,
+          hospital_id: selectedHospital,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", editingAdmin.id);
+      
+      if (error) throw error;
+      
+      toast.success("Admin updated successfully");
+      setEditingAdmin(null);
+      fetchHospitalAdmins();
+    } catch (error) {
+      console.error("Error updating admin:", error);
+      toast.error("Failed to update admin");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!adminToDelete) return;
+    
+    try {
+      const supabase = createClient();
+      
+      // First delete from admins table
+      const { error } = await supabase
+        .from("admins")
+        .delete()
+        .eq("id", adminToDelete);
+      
+      if (error) throw error;
+      
+      toast.success("Admin deleted successfully");
+      setAdminToDelete(null);
+      setDeleteConfirmOpen(false);
+      fetchHospitalAdmins();
+    } catch (error) {
+      console.error("Error deleting admin:", error);
+      toast.error("Failed to delete admin");
+    }
   };
 
   return (
@@ -153,6 +240,18 @@ const ManageAdmins = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+            />
+          </div>
+
+          <div className="grid gap-2">
+            <Label htmlFor="phone">Phone Number</Label>
+            <Input
+              id="phone"
+              name="phone"
+              type="text"
+              placeholder="1234567890"
+              value={phoneNo}
+              onChange={(e) => setPhoneNo(e.target.value)}
             />
           </div>
 
@@ -237,7 +336,13 @@ const ManageAdmins = () => {
                   Email
                 </th>
                 <th className="px-4 py-2 border-b text-left whitespace-nowrap">
+                  Phone
+                </th>
+                <th className="px-4 py-2 border-b text-left whitespace-nowrap">
                   Hospital
+                </th>
+                <th className="px-4 py-2 border-b text-left whitespace-nowrap">
+                  Actions
                 </th>
               </tr>
             </thead>
@@ -255,7 +360,31 @@ const ManageAdmins = () => {
                       {admin.email}
                     </td>
                     <td className="px-4 py-2 border-b whitespace-nowrap">
+                      {admin.phone_no || "N/A"}
+                    </td>
+                    <td className="px-4 py-2 border-b whitespace-nowrap">
                       {hospitalName}
+                    </td>
+                    <td className="px-4 py-2 border-b whitespace-nowrap">
+                      <div className="flex space-x-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={() => handleEdit(admin)}
+                        >
+                          <Edit className="h-4 w-4 mr-1" /> Edit
+                        </Button>
+                        <Button 
+                          variant="destructive" 
+                          size="sm" 
+                          onClick={() => {
+                            setAdminToDelete(admin.id);
+                            setDeleteConfirmOpen(true);
+                          }}
+                        >
+                          <Trash className="h-4 w-4 mr-1" /> Delete
+                        </Button>
+                      </div>
                     </td>
                   </tr>
                 );
@@ -264,6 +393,86 @@ const ManageAdmins = () => {
           </table>
         </div>
       </div>
+
+      {/* Edit Admin Dialog */}
+      {editingAdmin && (
+        <Dialog open={!!editingAdmin} onOpenChange={(open) => !open && setEditingAdmin(null)}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Edit Hospital Admin</DialogTitle>
+              <DialogDescription>
+                Update the hospital admin details below.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="edit-name">Name</Label>
+                <Input
+                  id="edit-name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-email">Email</Label>
+                <Input
+                  id="edit-email"
+                  value={email}
+                  disabled
+                  className="bg-gray-100"
+                />
+                <p className="text-xs text-muted-foreground">Email cannot be changed</p>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-phone">Phone Number</Label>
+                <Input
+                  id="edit-phone"
+                  value={phoneNo}
+                  onChange={(e) => setPhoneNo(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label>Hospital</Label>
+                <Select
+                  value={selectedHospital || ""}
+                  onValueChange={(value) => setSelectedHospital(value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select hospital" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {hospitals.map((hospital) => (
+                      <SelectItem key={hospital.id} value={hospital.id}>
+                        {hospital.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setEditingAdmin(null)}>Cancel</Button>
+              <Button onClick={handleUpdateAdmin}>Save Changes</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this hospital admin? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteConfirmOpen(false)}>Cancel</Button>
+            <Button variant="destructive" onClick={handleDelete}>Delete</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

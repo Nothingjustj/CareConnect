@@ -259,7 +259,7 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
       if (result.status === "success") {
         toast.success("Appointment booked successfully!");
         // Navigate to appointment details or token page
-        router.push(`/dashboard/appointments?token=${result.tokenNumber}`);
+        router.push(`/dashboard/token/${result.tokenNumber}`);
       } else {
         // Show the exact error message
         setFormError(result.message || "Unknown error occurred");

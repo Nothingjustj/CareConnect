@@ -150,8 +150,13 @@ export async function signOut () {
 }
 
 
-// Methods for handling department admins
-export default async function signUpAsDeptAdmin (formData: FormData) {
+// src/actions/auth.ts (modified sections)
+
+// For handling department admins
+// src/actions/auth.ts (fix for the UUID error)
+
+// For handling department admins
+export default async function signUpAsDeptAdmin(formData: FormData) {
     const supabase = await createClient();
 
     const credentials = {
@@ -160,6 +165,7 @@ export default async function signUpAsDeptAdmin (formData: FormData) {
         password: formData.get("password") as string,
         hospitalId: formData.get("hospitalId") as string,
         departmentId: formData.get("departmentId") as string,
+        phoneNo: formData.get("phone") as string,
     }
 
     const {error: authError, data} = await supabase.auth.signUp({
@@ -168,6 +174,7 @@ export default async function signUpAsDeptAdmin (formData: FormData) {
         options: {
             data: {
                 name: credentials.name,
+                phoneNo: credentials.phoneNo,
                 role: "department_admin"
             }
         }
@@ -188,24 +195,45 @@ export default async function signUpAsDeptAdmin (formData: FormData) {
         }
     }
 
-    const { error: adminsError } = await supabase.from("admins").insert([
-        { 
-            id: data.user?.id, 
-            name: credentials.name, 
-            role: "department_admin", 
-            email: data.user?.email, 
-            hospital_id: credentials.hospitalId, 
-            department_id: parseInt(credentials.departmentId) // Fixed: Convert to number
-        }
-    ])
+    try {
+        // Debug log to see the exact values
+        console.log("Admin creation values:", {
+            id: data.user?.id,
+            name: credentials.name,
+            role: "department_admin",
+            email: data.user?.email,
+            phone_no: credentials.phoneNo,
+            hospital_id: credentials.hospitalId,
+            department_id: parseInt(credentials.departmentId)
+        });
 
-    if(adminsError){
-        console.error("Error creating admin record:", adminsError.message, adminsError.code, adminsError.details);
-        return{
-            status: `Failed to create admin record: ${adminsError.message}`,
+        const { error: adminsError } = await supabase.from("admins").insert([
+            { 
+                id: data.user?.id, 
+                name: credentials.name, 
+                role: "department_admin", 
+                email: data.user?.email, 
+                phone_no: credentials.phoneNo,
+                hospital_id: credentials.hospitalId, 
+                department_id: parseInt(credentials.departmentId) // Make sure this is a number
+            }
+        ]);
+
+        if(adminsError){
+            console.error("Error creating admin record:", adminsError.message, adminsError.code, adminsError.details);
+            return{
+                status: `Failed to create admin record: ${adminsError.message}`,
+                user: null,
+                role: null
+            }
+        }
+    } catch (error) {
+        console.error("Exception in admin creation:", error);
+        return {
+            status: `Exception in admin creation: ${error instanceof Error ? error.message : String(error)}`,
             user: null,
             role: null
-        }
+        };
     }
 
     revalidatePath("/", "layout")
@@ -224,6 +252,7 @@ export async function createHospitalAdmin (formData: FormData) {
         email: formData.get("email") as string,
         password: formData.get("password") as string,
         hospitalId: formData.get("hospital") as string,
+        phoneNo: formData.get("phone") as string, // Add phone number
     }
     
     const { data, error } = await supabase.auth.admin.createUser({
@@ -232,6 +261,7 @@ export async function createHospitalAdmin (formData: FormData) {
         email_confirm: true,
         user_metadata: {
             name: credentials.name,
+            phoneNo: credentials.phoneNo, // Include phone in metadata
             role: "hospital_admin",
             hospitalId: credentials.hospitalId
         }
@@ -256,6 +286,7 @@ export async function createHospitalAdmin (formData: FormData) {
             name: credentials.name, 
             role: "hospital_admin", 
             email: data.user?.email, 
+            phone_no: credentials.phoneNo, // Add phone number
             hospital_id: credentials.hospitalId,
         }
     ])
