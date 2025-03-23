@@ -47,7 +47,7 @@ export default function Home() {
         <section 
         className="bg-background flex flex-col items-center justify-center py-28 w-full"
         style={{
-          backgroundImage: `radial-gradient(circle at 0.5px 0.5px, rgba(6,182,212,0.6) 0.5px, transparent 0)`,
+          backgroundImage: `radial-gradient(circle at 0.5px 0.5px, rgba(6,182,212,0.2) 0.5px, transparent 0)`,
           backgroundSize: "8px 8px",
           backgroundRepeat: "repeat"
         }}
@@ -57,7 +57,7 @@ export default function Home() {
               Simplifying Hospital <span className="text-primary">OPD Management</span> System
             </h1>
             <p className="text-balance mt-6 text-lg text-secondary-foreground">
-              A one stop solution for managing all your hospital OPD needs like Book and Track OPDs, Check Bed Availability, Patient Admission, Check Medicine Inventory and many more.
+              A one stop solution for managing all your hospital OPD needs like book and track OPDs, check bed availability, patient admission and check medicine inventory.
             </p>
             <div className="mt-8 flex justify-center gap-4">
               <Button className="text-base py-6 px-6" asChild>
@@ -98,7 +98,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features---------------------------------Features Section ----------------------------------------------------------*/}
+        {/* ----------------Features Section ---------------*/}
         <section id="features" className="bg-white py-24 px-10">
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900">
@@ -113,7 +113,7 @@ export default function Home() {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded-lg shadow-md flex flex-col space-y-3 transition-shadow duration-300 hover:shadow-lg hover:shadow-gray-400 cursor-pointer"
+                className="bg-white p-6 rounded-2xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] flex flex-col space-y-3 cursor-pointer"
               >
                 <div className="p-3 rounded-lg bg-gray-100 w-fit">{feature.icon}</div>
                 <h3 className="text-lg font-semibold text-gray-900">{feature.title}</h3>
@@ -123,7 +123,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Solutions-----------------------------------Solution Approach Section --------------------------------------------- */}
+        {/* --------------------Solutions-------------------- */}
         <section id="solutions" className="bg-muted py-24 px-6">
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900">Simple OPD Booking Process</h2>
@@ -161,7 +161,7 @@ export default function Home() {
             ].map((item, index) => (
               <div
                 key={index}
-                className="bg-[#e9f9ff] text-black p-6 rounded-lg shadow-lg relative hover:shadow-lg duration-300 hover:shadow-gray-400 cursor-pointer"
+                className="bg-white text-black p-6 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] relative cursor-pointer pt-10"
               >
                 <div className="absolute -top-3 left-5 bg-primary text-white rounded-full px-3 py-1 text-lg font-bold">
                   {item.step}
@@ -180,9 +180,9 @@ export default function Home() {
           </div>
 
           <div className="text-center mt-10">
-            <button className="bg-[hsl(196,98%,33%)] text-white px-6 py-3 rounded-lg font-bold text-lg hover:bg-[#1B87AF] transition">
-              Book Appointment Now
-            </button>
+            <Button className="bg-[hsl(196,98%,33%)] text-white p-6 rounded-lg font-bold text-lg hover:bg-[#1B87AF] transition" asChild>
+              <Link href="/dashboard/book-opd">Book Appointment Now</Link>
+            </Button>
             <p className="text-gray-500 mt-2">Need help? Contact our support team 24/7</p>
           </div>
         </section>
@@ -263,9 +263,9 @@ export default function Home() {
                   <option>Select Hospital</option>
                 </select>
               </div>
-              <button className="w-full bg-primary text-white font-semibold py-3 rounded-lg mt-4 hover:bg-primary/90">
-                Track Now
-              </button>
+              <Button className="w-full bg-primary text-white font-semibold p-3 rounded-lg mt-4 hover:bg-primary/90" asChild>
+                <Link href="/dashboard/track-opd">Track Now</Link>
+              </Button>
               <p className="text-gray-500 text-center mt-2">
                 Track your token status anytime, anywhere
               </p>

@@ -314,8 +314,8 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
                 name="hospital"
                 value={selectedHospital || ""}
               >
-                <SelectTrigger className="bg-white">
-                  <SelectValue placeholder="Select hospital" />
+                <SelectTrigger className="bg-white w-full max-w-[80vw] md:max-w-none truncate">
+                  <SelectValue placeholder="Select hospital" className="truncate" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>

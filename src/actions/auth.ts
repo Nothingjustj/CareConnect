@@ -82,6 +82,8 @@ export async function signUp (formData: FormData) {
         }
     }
 
+    redirect("/dashboard")
+
     revalidatePath("/", "layout")
     return { status: "success", user: data.user };
 }

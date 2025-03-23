@@ -8,7 +8,7 @@ import { Button } from "../ui/button";
 
 export default function NavLinks() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("/");
+  // const [activeSection, setActiveSection] = useState("/");
   const pathname = usePathname();
 
   // Close the menu when the route changes
@@ -17,49 +17,49 @@ export default function NavLinks() {
   }, [pathname]);
 
   // Update the useEffect for scroll detection
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = document.querySelectorAll("section[id]");
-      const scrollPosition = window.scrollY + 150; // Add offset to account for header height
+  // useEffect(() => {
+  //   const handleScroll = () => {
+  //     const sections = document.querySelectorAll("section[id]");
+  //     const scrollPosition = window.scrollY + 150; // Add offset to account for header height
 
-      // Special case for home section when at the top of the page
-      if (scrollPosition < 300) {
-        // Adjust this value based on your hero section height
-        setActiveSection("/");
-        return;
-      }
+  //     // Special case for home section when at the top of the page
+  //     if (scrollPosition < 300) {
+  //       // Adjust this value based on your hero section height
+  //       setActiveSection("/");
+  //       return;
+  //     }
 
-      // Check other sections
-      let foundActiveSection = false;
-      sections.forEach((section) => {
-        const htmlSection = section as HTMLElement;
-        const sectionTop = htmlSection.offsetTop;
-        const sectionBottom = sectionTop + htmlSection.offsetHeight;
+  //     // Check other sections
+  //     let foundActiveSection = false;
+  //     sections.forEach((section) => {
+  //       const htmlSection = section as HTMLElement;
+  //       const sectionTop = htmlSection.offsetTop;
+  //       const sectionBottom = sectionTop + htmlSection.offsetHeight;
 
-        if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
-          setActiveSection(`#${htmlSection.id}`);
-          foundActiveSection = true;
-        }
-      });
+  //       if (scrollPosition >= sectionTop && scrollPosition < sectionBottom) {
+  //         setActiveSection(`#${htmlSection.id}`);
+  //         foundActiveSection = true;
+  //       }
+  //     });
 
-      // If no section is active and we're not at the top, don't highlight any
-      if (!foundActiveSection && scrollPosition >= 300) {
-        setActiveSection("");
-      }
-    };
+  //     // If no section is active and we're not at the top, don't highlight any
+  //     if (!foundActiveSection && scrollPosition >= 300) {
+  //       setActiveSection("");
+  //     }
+  //   };
 
-    // Only run on client side
-    if (typeof window !== "undefined") {
-      window.addEventListener("scroll", handleScroll);
+  //   // Only run on client side
+  //   if (typeof window !== "undefined") {
+  //     window.addEventListener("scroll", handleScroll);
 
-      // Initial check
-      setTimeout(handleScroll, 100); // Small delay to ensure DOM is fully loaded
+  //     // Initial check
+  //     setTimeout(handleScroll, 100); // Small delay to ensure DOM is fully loaded
 
-      return () => {
-        window.removeEventListener("scroll", handleScroll);
-      };
-    }
-  }, []);
+  //     return () => {
+  //       window.removeEventListener("scroll", handleScroll);
+  //     };
+  //   }
+  // }, []);
 
   const navlinks = [
     {
@@ -95,13 +95,13 @@ export default function NavLinks() {
   ];
 
   // Replace the isLinkActive function with this:
-  const isLinkActive = (url: string) => {
-    // Home is only active when explicitly at the top
-    if (url === "/" && activeSection === "/") return true;
+  // const isLinkActive = (url: string) => {
+  //   // Home is only active when explicitly at the top
+  //   if (url === "/" && activeSection === "/") return true;
 
-    // For other sections, match exactly with the current active section
-    return url === activeSection;
-  };
+  //   // For other sections, match exactly with the current active section
+  //   return url === activeSection;
+  // };
   return (
     <>
       {/* Desktop Navigation */}
@@ -110,11 +110,7 @@ export default function NavLinks() {
           <Link
             key={navlink.name}
             href={navlink.url}
-            className={`transition duration-300 ${
-              isLinkActive(navlink.url)
-                ? "text-primary font-medium"
-                : "text-zinc-600 hover:text-primary"
-            }`}
+            className={`transition duration-300 text-foreground/60 hover:text-foreground`}
           >
             {navlink.name}
           </Link>
@@ -143,10 +139,7 @@ export default function NavLinks() {
             <Link
               key={navlink.name}
               href={navlink.url}
-              className={`block px-3 py-2 rounded-md transition duration-300 ${
-                isLinkActive(navlink.url)
-                  ? "bg-primary/10 text-primary font-medium"
-                  : "hover:bg-muted text-zinc-600"
+              className={`block px-3 py-2 rounded-md transition duration-300 hover:bg-muted text-muted-foreground"
               }`}
               onClick={() => setIsMenuOpen(false)}
             >

@@ -38,7 +38,6 @@ export function RegisterForm({
     const result = await signUp(formData);
 
     if (result.status === "success") {
-      router.push("/dashboard");
       toast.success("Account created successfully");
       dispatch(
         setUser({

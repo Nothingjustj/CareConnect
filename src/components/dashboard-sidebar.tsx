@@ -23,6 +23,7 @@ import { signOut } from "@/actions/auth"
 import { toast } from "sonner"
 import { useDispatch } from "react-redux"
 import { clearUser } from "@/store/userSlice"
+import { usePathname } from "next/navigation"
 
 // In src/components/dashboard-sidebar.tsx
 
@@ -65,6 +66,7 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
   const items = navItems[role as keyof typeof navItems] || [];
   const { setOpenMobile } = useSidebar();
   const dispatch = useDispatch();
+  const pathname = usePathname();
 
   const handleLogout = () => {
     toast.promise(signOut(), {
@@ -86,16 +88,18 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.label}>
+              {items.map((item) => {
+                const isActive = pathname === item.href;
+                return (
+                <SidebarMenuItem className={`rounded-md ${isActive ? "bg-primary/10 text-primary" : "bg-none"}`} key={item.label}>
                   <SidebarMenuButton asChild>
-                    <Link href={item.href} onClick={() => setOpenMobile(false)}>
+                    <Link href={item.href} onClick={() => setOpenMobile(false)}>  
                       <item.icon />
                       <span>{item.label}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
-              ))}
+              )})}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
