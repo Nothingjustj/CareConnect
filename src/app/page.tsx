@@ -44,7 +44,14 @@ export default function Home() {
     <>
       <Header />
       <div className="w-full">
-        <section className="bg-background flex flex-col items-center justify-center py-28 w-full">
+        <section 
+        className="bg-background flex flex-col items-center justify-center py-28 w-full"
+        style={{
+          backgroundImage: `radial-gradient(circle at 0.5px 0.5px, rgba(6,182,212,0.6) 0.5px, transparent 0)`,
+          backgroundSize: "8px 8px",
+          backgroundRepeat: "repeat"
+        }}
+        >
           <div className="w-full max-w-2xl px-4 md:px-0 text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-balance md:leading-tight">
               Simplifying Hospital <span className="text-primary">OPD Management</span> System
