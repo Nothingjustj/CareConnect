@@ -95,10 +95,18 @@ export default function AnalyticsPage() {
         </div>
       </div>
       
-      <AnalyticsDashboard 
-        hospitalId={selectedHospital} 
-        departmentId={selectedDepartment} 
-      />
+      {loading ? (
+        <div className="flex justify-center items-center h-64">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
+      ) : (
+        <div className="overflow-hidden">
+          <AnalyticsDashboard 
+            hospitalId={selectedHospital} 
+            departmentId={selectedDepartment} 
+          />
+        </div>
+      )}
     </div>
   );
 }

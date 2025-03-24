@@ -1,5 +1,3 @@
-// src/app/admin/manage-tokens/page.tsx - Updated version (continued)
-
 "use client";
 
 import { getDepartmentTokens, updateTokenStatus } from "@/actions/tokens";
@@ -99,8 +97,8 @@ const ManageTokens = () => {
       <h1 className="text-2xl font-semibold mb-6">Manage Tokens</h1>
       
       <div className="mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="w-full md:w-1/2">
             <Label>Date</Label>
             <input
               type="date"
@@ -110,8 +108,8 @@ const ManageTokens = () => {
             />
           </div>
           
-          <div className="flex items-end">
-            <Button onClick={fetchTokens} className="ml-auto">
+          <div className="flex items-end mt-4 md:mt-0">
+            <Button onClick={fetchTokens} className="w-full md:w-auto">
               Refresh Tokens
             </Button>
           </div>
@@ -119,67 +117,118 @@ const ManageTokens = () => {
       </div>
       
       {loading ? (
-        <p>Loading tokens...</p>
+        <div className="flex justify-center py-8">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        </div>
       ) : tokens.length === 0 ? (
         <div className="text-center py-8">
           <p className="text-muted-foreground">No tokens found for this date</p>
         </div>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse">
-            <thead>
-              <tr className="bg-muted">
-                <th className="px-4 py-2 text-left border">Token #</th>
-                <th className="px-4 py-2 text-left border">Patient</th>
-                <th className="px-4 py-2 text-left border">Time Slot</th>
-                <th className="px-4 py-2 text-left border">Status</th>
-                <th className="px-4 py-2 text-left border">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tokens.map((token) => (
-                <tr key={token.id} className="hover:bg-muted/50">
-                  <td className="px-4 py-2 border font-medium">{token.token_number}</td>
-                  <td className="px-4 py-2 border">
-                    <div>
-                      <p>{token.patient?.name || "Unknown"}</p>
-                      <p className="text-sm text-muted-foreground">
-                        {token.patient ? `${token.patient.age}y, ${token.patient.gender}` : ""}
-                      </p>
-                    </div>
-                  </td>
-                  <td className="px-4 py-2 border">{formatTime(token.timeSlot)}</td>
-                  <td className="px-4 py-2 border">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      token.status === 'waiting' ? 'bg-blue-100 text-blue-800' :
-                      token.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
-                      token.status === 'completed' ? 'bg-green-100 text-green-800' :
-                      'bg-red-100 text-red-800'
-                    }`}>
-                      {token.status.charAt(0).toUpperCase() + token.status.slice(1)}
-                    </span>
-                  </td>
-                  <td className="px-4 py-2 border">
-                    <Select
-                      value={token.status}
-                      onValueChange={(value) => handleStatusChange(token.id, value as any)}
-                      disabled={token.status === 'completed' || token.status === 'cancelled'}
-                    >
-                      <SelectTrigger className="h-8">
-                        <SelectValue placeholder="Change status" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="waiting">Waiting</SelectItem>
-                        <SelectItem value="in-progress">In Progress</SelectItem>
-                        <SelectItem value="completed">Completed</SelectItem>
-                        <SelectItem value="cancelled">Cancelled</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </td>
+        <div className="space-y-4">
+          {/* Mobile card view */}
+          <div className="md:hidden space-y-4">
+            {tokens.map((token) => (
+              <div key={token.id} className="bg-white rounded-lg border shadow-sm p-4">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-medium">{token.token_number}</h3>
+                    <p className="text-sm text-muted-foreground">
+                      {token.patient?.name || "Unknown"} • {token.timeSlot}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      {token.patient ? `${token.patient.age}y, ${token.patient.gender}` : ""}
+                    </p>
+                  </div>
+                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                    token.status === 'waiting' ? 'bg-blue-100 text-blue-800' :
+                    token.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
+                    token.status === 'completed' ? 'bg-green-100 text-green-800' :
+                    'bg-red-100 text-red-800'
+                  }`}>
+                    {token.status.charAt(0).toUpperCase() + token.status.slice(1)}
+                  </span>
+                </div>
+                
+                <div className="mt-4">
+                  <Label className="text-sm">Change Status:</Label>
+                  <Select
+                    value={token.status}
+                    onValueChange={(value) => handleStatusChange(token.id, value as any)}
+                    disabled={token.status === 'completed' || token.status === 'cancelled'}
+                  >
+                    <SelectTrigger className="mt-1">
+                      <SelectValue placeholder="Change status" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="waiting">Waiting</SelectItem>
+                      <SelectItem value="in-progress">In Progress</SelectItem>
+                      <SelectItem value="completed">Completed</SelectItem>
+                      <SelectItem value="cancelled">Cancelled</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            ))}
+          </div>
+          
+          {/* Desktop table view */}
+          <div className="hidden md:block overflow-x-auto">
+            <table className="w-full border-collapse">
+              <thead>
+                <tr className="bg-muted">
+                  <th className="px-4 py-2 text-left border">Token #</th>
+                  <th className="px-4 py-2 text-left border">Patient</th>
+                  <th className="px-4 py-2 text-left border">Time Slot</th>
+                  <th className="px-4 py-2 text-left border">Status</th>
+                  <th className="px-4 py-2 text-left border">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {tokens.map((token) => (
+                  <tr key={token.id} className="hover:bg-muted/50">
+                    <td className="px-4 py-2 border font-medium">{token.token_number}</td>
+                    <td className="px-4 py-2 border">
+                      <div>
+                        <p>{token.patient?.name || "Unknown"}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {token.patient ? `${token.patient.age}y, ${token.patient.gender}` : ""}
+                        </p>
+                      </div>
+                    </td>
+                    <td className="px-4 py-2 border">{formatTime(token.timeSlot)}</td>
+                    <td className="px-4 py-2 border">
+                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                        token.status === 'waiting' ? 'bg-blue-100 text-blue-800' :
+                        token.status === 'in-progress' ? 'bg-yellow-100 text-yellow-800' :
+                        token.status === 'completed' ? 'bg-green-100 text-green-800' :
+                        'bg-red-100 text-red-800'
+                      }`}>
+                        {token.status.charAt(0).toUpperCase() + token.status.slice(1)}
+                      </span>
+                    </td>
+                    <td className="px-4 py-2 border">
+                      <Select
+                        value={token.status}
+                        onValueChange={(value) => handleStatusChange(token.id, value as any)}
+                        disabled={token.status === 'completed' || token.status === 'cancelled'}
+                      >
+                        <SelectTrigger className="h-8">
+                          <SelectValue placeholder="Change status" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="waiting">Waiting</SelectItem>
+                          <SelectItem value="in-progress">In Progress</SelectItem>
+                          <SelectItem value="completed">Completed</SelectItem>
+                          <SelectItem value="cancelled">Cancelled</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

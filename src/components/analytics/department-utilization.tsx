@@ -117,30 +117,32 @@ export default function DepartmentUtilizationChart({
         <CardTitle>Department Utilization (Last 30 Days)</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[300px]">
+        <div className="h-[300px] w-full overflow-x-auto">
           {data.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <p className="text-muted-foreground">No data available</p>
             </div>
           ) : (
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                layout="vertical"
-                data={data}
-                margin={{
-                  top: 5,
-                  right: 30,
-                  left: 60,
-                  bottom: 5,
-                }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis type="number" />
-                <YAxis dataKey="name" type="category" width={100} />
-                <Tooltip formatter={(value) => [`${value} appointments`, 'Count']} />
-                <Bar dataKey="appointments" fill="hsl(var(--primary))" />
-              </BarChart>
-            </ResponsiveContainer>
+            <div className="min-w-[400px] h-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  layout="vertical"
+                  data={data}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 60,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis type="number" />
+                  <YAxis dataKey="name" type="category" width={100} />
+                  <Tooltip formatter={(value) => [`${value} appointments`, 'Count']} />
+                  <Bar dataKey="appointments" fill="hsl(var(--primary))" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
           )}
         </div>
       </CardContent>

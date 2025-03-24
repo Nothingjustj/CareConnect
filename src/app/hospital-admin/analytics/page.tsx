@@ -43,20 +43,15 @@ export default function HospitalAnalyticsPage() {
         if (deptsError) throw deptsError;
         
         // Transform the data
-        // Transform the data
-// Transform the data
-// Transform the data
-const deptData = hospitalDepts.map(dept => {
-  // Use type assertion to tell TypeScript what we know about the structure
-  const deptTypes = dept.department_types as unknown as { id: number; name: string };
-  
-  return {
-    id: dept.department_type_id,
-    name: deptTypes.name || 'Unknown'
-  };
-});
-        // Debug: Log the structure of the first item
-console.log('First department structure:', JSON.stringify(hospitalDepts[0], null, 2));
+        const deptData = hospitalDepts.map(dept => {
+          // Use type assertion to tell TypeScript what we know about the structure
+          const deptTypes = dept.department_types as unknown as { id: number; name: string };
+          
+          return {
+            id: dept.department_type_id,
+            name: deptTypes.name || 'Unknown'
+          };
+        });
 
         setDepartments(deptData || []);
         
@@ -77,14 +72,18 @@ console.log('First department structure:', JSON.stringify(hospitalDepts[0], null
   };
 
   if (loading) {
-    return <div className="p-4">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (
     <div className="p-4 space-y-6">
       <h1 className="text-2xl font-bold">Hospital Analytics</h1>
       
-      <div>
+      <div className="w-full md:w-1/2">
         <Label htmlFor="department">Filter by Department</Label>
         <Select onValueChange={handleDepartmentChange} defaultValue="all">
           <SelectTrigger className="w-full">
@@ -101,10 +100,12 @@ console.log('First department structure:', JSON.stringify(hospitalDepts[0], null
         </Select>
       </div>
       
-      <AnalyticsDashboard 
-        hospitalId={hospitalId} 
-        departmentId={selectedDepartment} 
-      />
+      <div className="overflow-hidden">
+        <AnalyticsDashboard 
+          hospitalId={hospitalId} 
+          departmentId={selectedDepartment} 
+        />
+      </div>
     </div>
   );
 }
