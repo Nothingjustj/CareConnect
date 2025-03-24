@@ -37,7 +37,7 @@ export function AddHospitalBtn() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button size={"sm"}>
-            <Plus /> Add Hospital
+            <Plus className="h-4 w-4 mr-1" /> Add Hospital
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-xl">
@@ -47,7 +47,7 @@ export function AddHospitalBtn() {
               Fill the details below to add a new hospital.
             </DialogDescription>
           </DialogHeader>
-          <AddHospitalForm />
+          <AddHospitalForm setOpen={setOpen} />
         </DialogContent>
       </Dialog>
     );
@@ -57,7 +57,7 @@ export function AddHospitalBtn() {
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
         <Button size={"sm"}>
-          <Plus /> Add Hospital
+          <Plus className="h-4 w-4 mr-1" /> Add Hospital
         </Button>
       </DrawerTrigger>
       <DrawerContent>
@@ -67,7 +67,7 @@ export function AddHospitalBtn() {
             Fill the details below to add a new hospital.
           </DrawerDescription>
         </DrawerHeader>
-        <AddHospitalForm className="px-4" />
+        <AddHospitalForm className="px-4" setOpen={setOpen} />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -78,27 +78,34 @@ export function AddHospitalBtn() {
   );
 }
 
-function AddHospitalForm({ className }: React.ComponentProps<"form">) {
+function AddHospitalForm({ className, setOpen }: React.ComponentProps<"form"> & { setOpen?: (open: boolean) => void }) {
   const [newHospital, setNewHospital] = React.useState({
     name: "",
     address: "",
+    city: "Mumbai",
     contact_number: "",
     email: "",
   });
   const [error, setError] = React.useState<string | null>(null);
+  const [loading, setLoading] = React.useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setLoading(true);
     const supabase = createClient();
     try {
       const { error } = await supabase.from("hospitals").insert([newHospital]);
 
       if (error) throw error;
 
-      setNewHospital({ name: "", address: "", contact_number: "", email: "" });
+      setNewHospital({ name: "", address: "", city: "Mumbai", contact_number: "", email: "" });
       toast.success("Hospital added successfully!");
+      if (setOpen) setOpen(false);
     } catch (error) {
       setError((error as Error).message);
+      toast.error(`Failed to add hospital: ${(error as Error).message}`);
+    } finally {
+      setLoading(false);
     }
   }
   return (
@@ -112,11 +119,12 @@ function AddHospitalForm({ className }: React.ComponentProps<"form">) {
         <Input
           type="text"
           id="name"
-          placeholder="John Doe"
+          placeholder="Hospital Name"
           value={newHospital.name}
           onChange={(e) =>
             setNewHospital({ ...newHospital, name: e.target.value })
           }
+          required
         />
       </div>
       <div className="grid gap-2">
@@ -132,9 +140,9 @@ function AddHospitalForm({ className }: React.ComponentProps<"form">) {
         />
       </div>
       <div className="grid gap-2">
-        <Label htmlFor="contact">Contact No,</Label>
+        <Label htmlFor="contact">Contact No.</Label>
         <Input
-          type="number"
+          type="tel"
           id="contact"
           placeholder="7896541230"
           value={newHospital.contact_number}
@@ -146,13 +154,17 @@ function AddHospitalForm({ className }: React.ComponentProps<"form">) {
       <div className="grid gap-2">
         <Label htmlFor="address">Address</Label>
         <Textarea
+          id="address"
           value={newHospital.address}
           onChange={(e) =>
             setNewHospital({ ...newHospital, address: e.target.value })
           }
+          required
         />
       </div>
-      <Button type="submit">Add Hospital</Button>
+      <Button type="submit" disabled={loading}>
+        {loading ? "Adding..." : "Add Hospital"}
+      </Button>
     </form>
   );
 }

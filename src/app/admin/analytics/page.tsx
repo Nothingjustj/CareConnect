@@ -9,8 +9,8 @@ import { RootState } from "@/store/store";
 
 export default function DepartmentAnalyticsPage() {
   const [loading, setLoading] = useState(true);
-  const [hospitalId, setHospitalId] = useState(null);
-  const [departmentId, setDepartmentId] = useState(null);
+  const [hospitalId, setHospitalId] = useState<string | null>(null);
+  const [departmentId, setDepartmentId] = useState<number | null>(null);
   const user = useSelector((state: RootState) => state.user);
 
   useEffect(() => {
@@ -42,17 +42,23 @@ export default function DepartmentAnalyticsPage() {
   }, [user]);
 
   if (loading) {
-    return <div className="p-4">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (
     <div className="p-4 space-y-6">
       <h1 className="text-2xl font-bold">Department Analytics</h1>
       
-      <AnalyticsDashboard 
-        hospitalId={hospitalId} 
-        departmentId={departmentId} 
-      />
+      <div className="overflow-hidden">
+        <AnalyticsDashboard 
+          hospitalId={hospitalId} 
+          departmentId={departmentId} 
+        />
+      </div>
     </div>
   );
 }

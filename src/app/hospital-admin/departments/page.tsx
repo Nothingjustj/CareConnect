@@ -182,7 +182,7 @@ export default function DepartmentsPage() {
                 </div>
             ) : (
                 <>
-                    <div className="grid grid-cols-2 items-center gap-4 my-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
                         <div className="flex flex-col gap-2">
                             <Label>Department:</Label>
                             <Select 
@@ -220,7 +220,7 @@ export default function DepartmentsPage() {
                             />
                         </div>
                         <Button 
-                            className="mt-4 col-span-2" 
+                            className="mt-4 col-span-1 md:col-span-2" 
                             onClick={handleAddDepartment} 
                             disabled={!selectedDepartment}
                         >
@@ -232,25 +232,29 @@ export default function DepartmentsPage() {
                     <div className="mt-6">
                         <h2 className="text-xl font-semibold">Added Departments</h2>
                         {addedDepartments.length > 0 ? (
-                            <ul className="mt-2">
+                            <div className="mt-4 space-y-3">
                                 {addedDepartments.map((department) => (
-                                    <li key={department.id} className="flex justify-between items-center p-2 border-b">
-                                        <span>{department.name}</span>
+                                    <div key={department.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border rounded-lg">
+                                        <span className="font-medium mb-2 md:mb-0">{department.name}</span>
                                         <Button
-                                            className="bg-red-500 hover:bg-red-600"
+                                            className="bg-red-500 hover:bg-red-600 w-full md:w-auto"
                                             onClick={() => handleRemoveDepartment(department.id)}
                                         >
                                             Remove
                                         </Button>
-                                    </li>
+                                    </div>
                                 ))}
-                            </ul>
+                            </div>
                         ) : (
                             <p className="text-gray-500 mt-2">No departments added.</p>
                         )}
                     </div>
                     <div className="mt-8">
-                        {hospitalId && <DepartmentUtilizationChart hospitalId={hospitalId} />}
+                        {hospitalId && (
+                            <div className="overflow-hidden">
+                                <DepartmentUtilizationChart hospitalId={hospitalId} />
+                            </div>
+                        )}
                     </div>
                 </>
             )}

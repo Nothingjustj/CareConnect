@@ -1,4 +1,3 @@
-// src/app/admin/queue-status/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -90,14 +89,18 @@ export default function QueueStatusPage() {
     }, [user]);
 
     if (loading) {
-        return <div className="p-4">Loading...</div>;
+        return (
+          <div className="flex justify-center items-center h-40">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        );
     }
 
     return (
         <div className="px-2 py-4">
             <h1 className="text-2xl font-bold mb-6">Queue Status</h1>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2">
                         <CardTitle className="text-sm font-medium">Today's Appointments</CardTitle>

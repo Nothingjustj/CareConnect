@@ -114,16 +114,16 @@ export default function AnalyticsDashboard({
       
       // Process department stats
       const deptMap = new Map();
-data.forEach(appointment => {
-  // Use type assertion to tell TypeScript that departments is an object with a name property
-  const deptName = (appointment.departments as any).name || `Department ${appointment.department_id}`;
-  
-  if (deptMap.has(deptName)) {
-    deptMap.set(deptName, deptMap.get(deptName) + 1);
-  } else {
-    deptMap.set(deptName, 1);
-  }
-});
+      data.forEach(appointment => {
+        // Use type assertion to tell TypeScript that departments is an object with a name property
+        const deptName = (appointment.departments as any)?.name || `Department ${appointment.department_id}`;
+        
+        if (deptMap.has(deptName)) {
+          deptMap.set(deptName, deptMap.get(deptName) + 1);
+        } else {
+          deptMap.set(deptName, 1);
+        }
+      });
       const deptData = Array.from(deptMap.entries()).map(([deptName, value]) => ({ name: deptName, value }));
       setDepartmentStats(deptData);
       
@@ -184,9 +184,9 @@ data.forEach(appointment => {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <h2 className="text-2xl font-bold">Analytics Dashboard</h2>
-        <Tabs defaultValue={dateRange} onValueChange={setDateRange} className="w-[400px]">
+        <Tabs defaultValue={dateRange} onValueChange={setDateRange} className="w-full sm:w-auto">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="7">7 Days</TabsTrigger>
             <TabsTrigger value="14">14 Days</TabsTrigger>
@@ -202,7 +202,7 @@ data.forEach(appointment => {
         </div>
       ) : (
         <>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Total Appointments</CardTitle>
@@ -269,8 +269,8 @@ data.forEach(appointment => {
             </Card>
           </div>
           
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
-            <Card className="col-span-4">
+          <div className="grid gap-4 grid-cols-1 lg:grid-cols-7">
+            <Card className="col-span-1 lg:col-span-4">
               <CardHeader>
                 <CardTitle>Daily Appointments</CardTitle>
                 <CardDescription>
@@ -278,24 +278,26 @@ data.forEach(appointment => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={dailyStats}>
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="date" />
-                      <YAxis allowDecimals={false} />
-                      <Tooltip 
-                        formatter={(value) => [`${value} appointments`, 'Count']}
-                        labelFormatter={(label) => `Date: ${label}`}
-                      />
-                      <Bar dataKey="count" fill="hsl(var(--primary))" />
-                    </BarChart>
-                  </ResponsiveContainer>
+                <div className="h-[300px] w-full overflow-x-auto">
+                  <div className="min-w-[500px] h-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart data={dailyStats}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" />
+                        <YAxis allowDecimals={false} />
+                        <Tooltip 
+                          formatter={(value) => [`${value} appointments`, 'Count']}
+                          labelFormatter={(label) => `Date: ${label}`}
+                        />
+                        <Bar dataKey="count" fill="hsl(var(--primary))" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
               </CardContent>
             </Card>
             
-            <Card className="col-span-3">
+            <Card className="col-span-1 lg:col-span-3">
               <CardHeader>
                 <CardTitle>Appointments by Status</CardTitle>
                 <CardDescription>
@@ -303,32 +305,34 @@ data.forEach(appointment => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={statusStats}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={60}
-                        outerRadius={90}
-                        paddingAngle={5}
-                        dataKey="value"
-                        label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
-                      >
-                        {statusStats.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <Tooltip formatter={(value) => [`${value} appointments`, 'Count']} />
-                    </PieChart>
-                  </ResponsiveContainer>
+                <div className="h-[300px] w-full overflow-x-auto">
+                  <div className="min-w-[300px] h-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          data={statusStats}
+                          cx="50%"
+                          cy="50%"
+                          innerRadius={60}
+                          outerRadius={90}
+                          paddingAngle={5}
+                          dataKey="value"
+                          label={({name, percent}) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        >
+                          {statusStats.map((entry, index) => (
+                            <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          ))}
+                        </Pie>
+                        <Tooltip formatter={(value) => [`${value} appointments`, 'Count']} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
               </CardContent>
             </Card>
           </div>
           
-          <div className="grid gap-4 md:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
             <Card>
               <CardHeader>
                 <CardTitle>Department Utilization</CardTitle>
@@ -337,25 +341,27 @@ data.forEach(appointment => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart
-                      layout="vertical"
-                      data={departmentStats}
-                      margin={{
-                        top: 20,
-                        right: 30,
-                        left: 60,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis type="number" />
-                      <YAxis dataKey="name" type="category" width={100} />
-                      <Tooltip formatter={(value) => [`${value} appointments`, 'Count']} />
-                      <Bar dataKey="value" fill="hsl(var(--chart-2))" />
-                    </BarChart>
-                  </ResponsiveContainer>
+                <div className="h-[300px] w-full overflow-x-auto">
+                  <div className="min-w-[400px] h-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <BarChart
+                        layout="vertical"
+                        data={departmentStats}
+                        margin={{
+                          top: 20,
+                          right: 30,
+                          left: 60,
+                          bottom: 5,
+                        }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis type="number" />
+                        <YAxis dataKey="name" type="category" width={100} />
+                        <Tooltip formatter={(value) => [`${value} appointments`, 'Count']} />
+                        <Bar dataKey="value" fill="hsl(var(--chart-2))" />
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -368,24 +374,26 @@ data.forEach(appointment => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="h-[300px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart
-                      data={timeSlotStats}
-                      margin={{
-                        top: 20,
-                        right: 30,
-                        left: 20,
-                        bottom: 5,
-                      }}
-                    >
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="time" />
-                      <YAxis allowDecimals={false} />
-                      <Tooltip formatter={(value) => [`${value} appointments`, 'Count']} />
-                      <Line type="monotone" dataKey="count" stroke="hsl(var(--chart-3))" activeDot={{ r: 8 }} />
-                    </LineChart>
-                  </ResponsiveContainer>
+                <div className="h-[300px] w-full overflow-x-auto">
+                  <div className="min-w-[400px] h-full">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart
+                        data={timeSlotStats}
+                        margin={{
+                          top: 20,
+                          right: 30,
+                          left: 20,
+                          bottom: 5,
+                        }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="time" />
+                        <YAxis allowDecimals={false} />
+                        <Tooltip formatter={(value) => [`${value} appointments`, 'Count']} />
+                        <Line type="monotone" dataKey="count" stroke="hsl(var(--chart-3))" activeDot={{ r: 8 }} />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
                 </div>
               </CardContent>
             </Card>

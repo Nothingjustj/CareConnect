@@ -1,5 +1,4 @@
-// src/components/admin/time-slot-config.tsx - Updated version
-
+// src/components/admin/time-slot-config.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -205,7 +204,7 @@ export default function TimeSlotConfig({ hospitalId, departmentId }: { hospitalI
       <div>
         <h3 className="font-medium mb-2">Generated Time Slots</h3>
         <div className="bg-muted p-4 rounded-md max-h-48 overflow-y-auto">
-          <div className="grid grid-cols-4 sm:grid-cols-6 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-2">
             {timeSlots.map((slot) => (
               <div key={slot} className="bg-background border rounded px-2 py-1 text-center text-sm">
                 {slot}

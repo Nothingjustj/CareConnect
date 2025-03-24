@@ -1,5 +1,3 @@
-// src/app/super-admin/manage-admins/page.tsx (modified)
-
 "use client";
 
 import { createHospitalAdmin } from "@/actions/auth";
@@ -20,7 +18,6 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { createClient } from "@/utils/supabase/client";
@@ -112,6 +109,7 @@ const ManageAdmins = () => {
     formData.set("email", email);
     formData.set("password", password);
     formData.set("hospital", selectedHospital || "");
+    if (phoneNo) formData.set("phone", phoneNo);
 
     try {
       const result = await createHospitalAdmin(formData);
@@ -199,11 +197,11 @@ const ManageAdmins = () => {
 
   return (
     <div className="px-2 py-6">
-      <h1 className="text-2xl font-semibold mb-10">Manage Hospital Admins</h1>
+      <h1 className="text-2xl font-semibold mb-6">Manage Hospital Admins</h1>
 
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-none md:grid-cols-2 gap-6">
-          {error && <p className="text-red-600 font-medium">{error}</p>}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {error && <p className="text-red-600 font-medium col-span-full">{error}</p>}
 
           <div className="grid gap-2">
             <Label htmlFor="name">Name</Label>
@@ -255,7 +253,7 @@ const ManageAdmins = () => {
             />
           </div>
 
-          <div className="grid gap-2">
+          <div className="grid gap-2 col-span-full md:col-span-1">
             <Label>Hospital:</Label>
             <Select
               onValueChange={(value) => setSelectedHospital(value)}
@@ -289,43 +287,64 @@ const ManageAdmins = () => {
 
           <Button
             type="submit"
-            className="w-full col-span-2"
+            className="w-full col-span-full"
             disabled={loading}
           >
-            {loading ? (
-              <div className="flex items-center">
-                <svg
-                  className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
-                  <circle
-                    className="opacity-25"
-                    cx="12"
-                    cy="12"
-                    r="10"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                  ></circle>
-                  <path
-                    className="opacity-75"
-                    fill="currentColor"
-                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                  ></path>
-                </svg>
-                <span>Adding...</span>
-              </div>
-            ) : (
-              "Add Hospital Admin"
-            )}
+            {loading ? "Adding..." : "Add Hospital Admin"}
           </Button>
         </div>
       </form>
 
       <div className="mt-8">
         <h2 className="text-xl font-semibold mb-4">Hospital Admins</h2>
-        <div className="overflow-x-auto w-full">
+        
+        {/* Mobile view - cards */}
+        <div className="md:hidden space-y-4">
+          {admins.map((admin) => {
+            const hospitalName = hospitals.find((h) => h.id === admin.hospital_id)?.name || "Unknown Hospital";
+            
+            return (
+              <div key={admin.id} className="bg-white p-4 rounded-lg border shadow-sm">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h3 className="font-medium">{admin.name ?? "Unnamed Admin"}</h3>
+                    <p className="text-sm text-muted-foreground">{admin.email}</p>
+                    <p className="text-sm mt-1">
+                      <span className="text-muted-foreground">Hospital:</span> {hospitalName}
+                    </p>
+                    <p className="text-sm">
+                      <span className="text-muted-foreground">Phone:</span> {admin.phone_no || "N/A"}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex gap-2 mt-4">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => handleEdit(admin)}
+                  >
+                    <Edit className="h-4 w-4 mr-1" /> Edit
+                  </Button>
+                  <Button 
+                    variant="destructive" 
+                    size="sm" 
+                    className="flex-1"
+                    onClick={() => {
+                      setAdminToDelete(admin.id);
+                      setDeleteConfirmOpen(true);
+                    }}
+                  >
+                    <Trash className="h-4 w-4 mr-1" /> Delete
+                  </Button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        
+        {/* Desktop table view */}
+        <div className="hidden md:block overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-200">
             <thead className="bg-gray-100">
               <tr>
@@ -349,8 +368,7 @@ const ManageAdmins = () => {
             <tbody>
               {admins.map((admin) => {
                 const hospitalName =
-                  hospitals.find((h) => h.id.toString() === admin.hospital_id)
-                    ?.name ?? "Unknown Hospital";
+                  hospitals.find((h) => h.id === admin.hospital_id)?.name ?? "Unknown Hospital";
                 return (
                   <tr key={admin.id} className="hover:bg-gray-50">
                     <td className="px-4 py-2 border-b whitespace-nowrap">
@@ -397,7 +415,7 @@ const ManageAdmins = () => {
       {/* Edit Admin Dialog */}
       {editingAdmin && (
         <Dialog open={!!editingAdmin} onOpenChange={(open) => !open && setEditingAdmin(null)}>
-          <DialogContent>
+          <DialogContent className="sm:max-w-md">
             <DialogHeader>
               <DialogTitle>Edit Hospital Admin</DialogTitle>
               <DialogDescription>
@@ -460,7 +478,7 @@ const ManageAdmins = () => {
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteConfirmOpen} onOpenChange={setDeleteConfirmOpen}>
-        <DialogContent>
+        <DialogContent className="sm:max-w-md">
           <DialogHeader>
             <DialogTitle>Confirm Deletion</DialogTitle>
             <DialogDescription>
