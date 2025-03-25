@@ -33,11 +33,6 @@ export default function NavLinks() {
       active: true,
     },
     {
-      name: "Benefits",
-      url: "/#benefits",
-      active: true,
-    },
-    {
       name: "Track Token",
       url: "/track-token",
       active: true,

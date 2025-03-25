@@ -64,15 +64,89 @@ export async function getDepartmentTokens(
   }
 }
 
-// Update token status (for admin panel)
+// // Update token status (for admin panel)
+// export async function updateTokenStatus(
+//   appointmentId: string,
+//   status: 'waiting' | 'in-progress' | 'completed' | 'cancelled'
+// ) {
+//   try {
+//     const supabase = await createClient()
+    
+//     // First get the appointment details
+//     const { data: appointment, error: fetchError } = await supabase
+//       .from("appointments")
+//       .select("hospital_id, department_id, date, token_number, time_slot")
+//       .eq("id", appointmentId)
+//       .single();
+    
+//     if (fetchError) {
+//       console.error("Error fetching appointment:", fetchError.message, fetchError.code, fetchError.details);
+//       throw fetchError;
+//     }
+//     // Update status directly in appointments table
+//     const updateData: any = { status }
+    
+//     // If status is in-progress, set called_at
+//     if (status === 'in-progress') {
+//       updateData.called_at = new Date().toISOString()
+//     }
+    
+//     // If status is completed, set completed_at
+//     if (status === 'completed') {
+//       updateData.completed_at = new Date().toISOString()
+//     }
+    
+//     const { error: updateError } = await supabase
+//       .from("appointments")
+//       .update(updateData)
+//       .eq("id", appointmentId)
+    
+//     if (updateError) {
+//       console.error("Error updating token status:", updateError.message, updateError.code, updateError.details);
+//       throw updateError;
+//     }
+    
+//     // If status changed to completed or cancelled, update estimated times for remaining tokens
+//     // Note: This will now reset all estimated times to their appointment times (no waiting time)
+//     if (status === 'completed' || status === 'cancelled') {
+//       await updateQueueEstimatedTimes(
+//         appointment.hospital_id,
+//         appointment.department_id,
+//         appointment.date
+//       );
+//     }
+    
+//     revalidatePath(`/admin/manage-tokens`)
+    
+//     return {
+//       status: "success",
+//       message: `Token status updated to ${status}`
+//     }
+//   } catch (error) {
+//     console.error("Error updating token status:", error);
+//     return {
+//       status: "error",
+//       message: error instanceof Error ? `Failed to update token status: ${error.message}` : "Failed to update token status"
+//     }
+//   }
+// }
+
 export async function updateTokenStatus(
   appointmentId: string,
   status: 'waiting' | 'in-progress' | 'completed' | 'cancelled'
 ) {
+  const supabase = await createClient();
+
   try {
-    const supabase = await createClient()
-    
-    // First get the appointment details
+    if (!appointmentId) {
+      console.error('Invalid appointmentId');
+      return {
+        status: "error", 
+        message: "Invalid appointment ID"
+      };
+    }
+
+    // Fetch appointment first with more detailed error handling
     const { data: appointment, error: fetchError } = await supabase
       .from("appointments")
       .select("hospital_id, department_id, date, token_number, time_slot")
@@ -80,55 +154,86 @@ export async function updateTokenStatus(
       .single();
     
     if (fetchError) {
-      console.error("Error fetching appointment:", fetchError.message, fetchError.code, fetchError.details);
-      throw fetchError;
+      console.error("Fetch Error Details:", {
+        message: fetchError.message,
+        code: fetchError.code,
+        details: fetchError.details,
+        hint: fetchError.hint
+      });
+      return {
+        status: "error",
+        message: `Fetch failed: ${fetchError.message}`
+      };
     }
+
+    // Prepare update data with type safety
+    const updateData: Record<string, any> = { status }
     
-    // Update status directly in appointments table
-    const updateData: any = { status }
-    
-    // If status is in-progress, set called_at
-    if (status === 'in-progress') {
-      updateData.called_at = new Date().toISOString()
+    // Timestamp logic
+    const now = new Date().toISOString();
+    switch (status) {
+      case 'in-progress':
+        updateData.called_at = now;
+        break;
+      case 'completed':
+        updateData.completed_at = now;
+        break;
+      case 'cancelled':
+        updateData.cancelled_at = now;
+        break;
     }
-    
-    // If status is completed, set completed_at
-    if (status === 'completed') {
-      updateData.completed_at = new Date().toISOString()
-    }
-    
-    const { error: updateError } = await supabase
+
+    // Perform update with more detailed logging
+    const { data, error: updateError } = await supabase
       .from("appointments")
       .update(updateData)
       .eq("id", appointmentId)
+      .select(); // Add .select() to get returned data
     
     if (updateError) {
-      console.error("Error updating token status:", updateError.message, updateError.code, updateError.details);
-      throw updateError;
+      console.error("Update Error Details:", {
+        message: updateError.message,
+        code: updateError.code,
+        details: updateError.details,
+        hint: updateError.hint,
+        appointmentId,
+        updateData
+      });
+      return {
+        status: "error",
+        message: `Update failed: ${updateError.message}`
+      };
     }
-    
-    // If status changed to completed or cancelled, update estimated times for remaining tokens
-    // Note: This will now reset all estimated times to their appointment times (no waiting time)
+
+    // Conditional queue update
     if (status === 'completed' || status === 'cancelled') {
-      await updateQueueEstimatedTimes(
-        appointment.hospital_id,
-        appointment.department_id,
-        appointment.date
-      );
+      try {
+        await updateQueueEstimatedTimes(
+          appointment.hospital_id,
+          appointment.department_id,
+          appointment.date
+        );
+      } catch (queueUpdateError) {
+        console.error("Queue Update Error:", queueUpdateError);
+      }
     }
-    
-    revalidatePath(`/admin/manage-tokens`)
+
+    revalidatePath(`/admin/manage-tokens`);
     
     return {
       status: "success",
-      message: `Token status updated to ${status}`
-    }
+      message: `Token status updated to ${status}`,
+      updatedData: data
+    };
+
   } catch (error) {
-    console.error("Error updating token status:", error);
+    console.error("Unexpected Error in updateTokenStatus:", error);
     return {
       status: "error",
-      message: error instanceof Error ? `Failed to update token status: ${error.message}` : "Failed to update token status"
-    }
+      message: error instanceof Error 
+        ? `Unexpected error: ${error.message}` 
+        : "An unexpected error occurred"
+    };
   }
 }
 
