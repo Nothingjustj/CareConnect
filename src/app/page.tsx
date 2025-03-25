@@ -70,6 +70,21 @@ export default function Home() {
           </div>
         </section>
 
+        {/* Token Tracking Banner */}
+        <section className="w-full py-12 bg-primary/5 border-t">
+  <div className="container px-4 md:px-6 max-w-5xl mx-auto text-center">
+    <h2 className="text-2xl md:text-3xl font-bold mb-4">Track Your Token Status</h2>
+    <p className="text-muted-foreground mb-6 max-w-3xl mx-auto">
+      Already have an appointment? Easily check your token status by entering your token details.
+      Stay updated on your position in the queue without waiting at the hospital.
+    </p>
+    <Button size="lg" className="mt-2" asChild>
+      <Link href="/track-token">
+        Track Your Token Now
+      </Link>
+    </Button>
+  </div>
+        </section>
         <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
           <div className="container px-4 md:px-6 max-w-7xl mx-auto">
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
@@ -187,92 +202,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Real-time Token Tracking -------------------------------------------------------------*/}          
-        <section id="benefits" className="max-w-6xl mx-auto py-24 px-6">
-          <div className="max-w-5xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-gray-900">Real-time Token Tracking</h2>
-              <p className="text-gray-600 mt-2">
-                Monitor your position in the queue and get live updates about your appointment status.
-              </p>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-10">
-            {/* Left Column (50%) */}
-            <div className="flex flex-col space-y-6">
-              {/* Live Queue Status */}
-              <div className="bg-white shadow-lg rounded-lg p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-primary text-white rounded-lg">
-                    <Clock className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Live Queue Status</h3>
-                </div>
-                <p className="text-gray-600 mt-1">
-                  See real-time updates of your position in the queue
-                </p>
-                <div className="bg-gray-100 p-4 rounded-lg mt-4">
-                  <div className="flex justify-between text-gray-800 font-semibold">
-                    <span>Current Token</span>
-                    <span className="text-blue-700">A-15</span>
-                  </div>
-                  <div className="flex justify-between text-gray-800 font-semibold mt-2">
-                    <span>Your Token</span>
-                    <span className="text-green-700">A-18</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Smart Notifications */}
-              <div className="bg-white shadow-lg rounded-lg p-6">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-primary text-white rounded-lg">
-                    <Bell className="h-6 w-6" />
-                  </div>
-                  <h3 className="text-lg font-semibold">Smart Notifications</h3>
-                </div>
-                <p className="text-gray-600 mt-1">
-                  Get alerts when your turn is approaching
-                </p>
-                <ul className="mt-3 space-y-2 text-green-700">
-                  <li className="flex items-center gap-2">
-                    <Check className="h-5 w-5" /> SMS notifications
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-5 w-5" /> Email updates
-                  </li>
-                  <li className="flex items-center gap-2">
-                    <Check className="h-5 w-5" /> In-app alerts
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            {/* Right Column (50%) */}
-            <div className="bg-muted shadow-lg rounded-lg p-6 items-center">
-              <h3 className="text-3xl font-semibold text-primary mt-10 text-center">Track Your Token</h3>
-              <div className="mt-4">
-                <label className="block text-md font-medium text-gray-600">Token Number</label>
-                <input
-                  type="text"
-                  placeholder="Enter your token number"
-                  className="w-full p-3 mt-1 border border-gray-300 rounded-lg bg-gray-100 text-gray-900"
-                />
-              </div>
-              <div className="mt-4">
-                <label className="block text-md font-medium text-gray-600">Hospital</label>
-                <select className="w-full p-3 mt-1 border border-gray-300 rounded-lg bg-gray-100 text-gray-900">
-                  <option>Select Hospital</option>
-                </select>
-              </div>
-              <Button className="w-full bg-primary text-white font-semibold p-3 rounded-lg mt-4 hover:bg-primary/90" asChild>
-                <Link href="/dashboard/track-opd">Track Now</Link>
-              </Button>
-              <p className="text-gray-500 text-center mt-2">
-                Track your token status anytime, anywhere
-              </p>
-            </div>
-          </div>
-        </section>
-        {/* How it works------------------------------------------------------------------------------------------------- */}
       </div>
       <Footer />
     </>

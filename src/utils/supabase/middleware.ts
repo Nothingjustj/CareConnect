@@ -46,6 +46,7 @@ export async function updateSession(request: NextRequest) {
     '/hospitals',
     '/about',
     '/contact',
+    '/track-token',
   ];
   
   const pathname = request.nextUrl.pathname;
