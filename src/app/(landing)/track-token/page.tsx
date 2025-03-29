@@ -1,6 +1,4 @@
-// src/app/(landing)/track-token/page.tsx
 "use client";
-
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -62,7 +60,7 @@ export default function TrackTokenPage() {
   const [tokenData, setTokenData] = useState<TokenData | null>(null);
   const [searchPerformed, setSearchPerformed] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Fetch hospitals on component mount
   useEffect(() => {
     async function fetchHospitals() {
@@ -72,7 +70,7 @@ export default function TrackTokenPage() {
           .from("hospitals")
           .select("id, name")
           .order("name");
-          
+
         if (error) throw error;
         setHospitals(data || []);
       } catch (error) {
@@ -82,18 +80,23 @@ export default function TrackTokenPage() {
         setLoading(false);
       }
     }
-    
+
     fetchHospitals();
   }, []);
-  
+
   // Fetch departments when hospital changes
   useEffect(() => {
     if (!selectedHospital) {
       setDepartments([]);
+      setSelectedDepartment(null); // Reset department selection
       return;
     }
-    
-    async function fetchDepartments() {
+
+    // --- MODIFICATION START: Add loading state for departments ---
+    // This helps manage UI state while fetching, though not directly related to layout shift
+    const fetchDepartments = async () => {
+      // Optional: Add a specific loading state for departments if needed
+      // setLoadingDepartments(true);
       try {
         const supabase = createClient();
         const { data, error } = await supabase
@@ -103,60 +106,65 @@ export default function TrackTokenPage() {
             department_types:department_type_id(id, name)
           `)
           .eq("hospital_id", selectedHospital);
-          
+
         if (error) throw error;
-        
+
         // Transform the data safely
         const transformedData: Department[] = [];
-        
+
         if (data) {
           for (const dept of data) {
             // Safely access the nested properties with type assertions
             const deptTypeId = dept.department_type_id;
-            
+
             // Access the nested department_types object
             // Use type assertion to tell TypeScript about the structure
             const deptTypes = dept.department_types as any;
             const deptName = deptTypes?.name || 'Unknown Department';
-            
+
             transformedData.push({
               id: deptTypeId,
               name: deptName
             });
           }
         }
-        
+
         setDepartments(transformedData);
+        setSelectedDepartment(null); // Reset department selection when hospital changes
       } catch (error) {
         console.error("Error fetching departments:", error);
         toast.error("Failed to load departments");
+      } finally {
+        // Optional: setLoadingDepartments(false);
       }
-    }
-    
+    };
+    // --- MODIFICATION END ---
+
+
     fetchDepartments();
   }, [selectedHospital]);
-  
+
   // Function to track token
   const handleTrackToken = async () => {
     if (!selectedHospital || !selectedDepartment || !date || !tokenNumber) {
       toast.error("Please fill in all fields");
       return;
     }
-    
+
     setLoading(true);
     setError(null);
     setSearchPerformed(true);
     setDatePickerOpen(false); // Close the date picker when searching
-    
+
     try {
       // Get the hospital code
       const hospital = hospitals.find(h => h.id === selectedHospital);
       if (!hospital) throw new Error("Hospital not found");
-      
+
       // Get the department code
       const department = departments.find(d => d.id.toString() === selectedDepartment);
       if (!department) throw new Error("Department not found");
-      
+
       // Create hospital code from hospital name (first letter of each word)
       const hospitalCode = hospital.name
         .split(/[\s.]+/)
@@ -165,25 +173,25 @@ export default function TrackTokenPage() {
         .join('')
         .substring(0, 3)
         .toUpperCase();
-      
+
       // Create department code (first 3 letters of department name)
       const departmentCode = department.name.substring(0, 3).toUpperCase();
-      
+
       // Format date as YYYYMMDD
       const dateCode = format(date, "yyyyMMdd");
-      
+
       // Construct the full token
       const fullToken = `${hospitalCode}-${departmentCode}-${dateCode}-${tokenNumber.padStart(3, '0')}`;
-      
+
       // Query the database for this token
       const supabase = createClient();
       const { data, error } = await supabase
         .from("appointments")
         .select(`
-          id, 
-          date, 
-          time_slot, 
-          status, 
+          id,
+          date,
+          time_slot,
+          status,
           estimated_time,
           token_number,
           called_at,
@@ -194,7 +202,7 @@ export default function TrackTokenPage() {
         `)
         .eq("token_number", fullToken)
         .single();
-      
+
       if (error) {
         if (error.code === 'PGRST116') {
           // No results found
@@ -206,7 +214,7 @@ export default function TrackTokenPage() {
       } else {
         // Use type assertion to handle the data conversion
         const rawData = data as any;
-        
+
         // Create a properly structured TokenData object
         const tokenDataObject: TokenData = {
           id: rawData.id,
@@ -233,7 +241,7 @@ export default function TrackTokenPage() {
             phone_no: rawData.patients.phone_no
           } : undefined
         };
-        
+
         setTokenData(tokenDataObject);
       }
     } catch (error) {
@@ -243,7 +251,7 @@ export default function TrackTokenPage() {
       setLoading(false);
     }
   };
-  
+
   // Helper function to format date
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
@@ -253,17 +261,17 @@ export default function TrackTokenPage() {
       day: 'numeric'
     });
   };
-  
+
   // Helper function to format time
-  const formatTime = (timeString: string) => {
+  const formatTime = (timeString: string | null) => { // Added null check
     try {
       if (!timeString) return "Not available";
-      
+
       // If it's an ISO date string (contains 'T')
       if (timeString.includes('T')) {
         const date = new Date(timeString);
         if (isNaN(date.getTime())) return "Invalid date";
-        
+
         // Format to 12-hour time with AM/PM
         return date.toLocaleTimeString('en-US', {
           hour: '2-digit',
@@ -271,34 +279,43 @@ export default function TrackTokenPage() {
           hour12: true
         });
       }
-      
-      // If it's a database timestamp like "2025-03-26 09:15:00"
+
+      // If it's a database timestamp like "2025-03-26 09:15:00+00" (with or without timezone)
       if (timeString.includes(' ') && timeString.includes(':')) {
-        // Extract just the time part
-        const timePart = timeString.split(' ')[1];
+        // Try creating a date object directly, handling potential timezone offset
+        const date = new Date(timeString.replace(' ', 'T')); // Replace space with T for better parsing
+        if (!isNaN(date.getTime())) {
+          return date.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+          });
+        }
+        // Fallback for simple time extraction if Date object fails
+        const timePart = timeString.split(' ')[1].split('+')[0]; // Handle potential timezone
         const [hours, minutes] = timePart.split(':').map(Number);
-        
-        // Format to 12-hour time with AM/PM
         const period = hours >= 12 ? 'PM' : 'AM';
         const hours12 = hours % 12 || 12; // Convert 0 to 12
         return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
       }
-      
-      // If it's a simple time string like "09:15"
-      if (timeString.length === 5 && timeString.includes(':')) {
+
+
+      // If it's a simple time string like "09:15" or "9:15"
+      if (timeString.match(/^\d{1,2}:\d{2}$/)) {
         const [hours, minutes] = timeString.split(':').map(Number);
         const period = hours >= 12 ? 'PM' : 'AM';
         const hours12 = hours % 12 || 12; // Convert 0 to 12
         return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
       }
-      
+
       // If it's in an unknown format, return as is
       return timeString;
     } catch (error) {
-      console.error("Error formatting time:", error);
+      console.error("Error formatting time:", error, "Input:", timeString);
       return "Time format error";
     }
   };
+
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">
@@ -306,50 +323,65 @@ export default function TrackTokenPage() {
       <p className="text-muted-foreground mb-8">
         Enter your token details to check the current status
       </p>
-      
+
       {/* Search form - only show if no results or if there's an error */}
       {(!searchPerformed || error) && (
         <div className="grid gap-6 p-6 bg-primary-foreground rounded-lg border shadow-sm">
+          {/* --- MODIFICATION: Wrap grid in another div if needed, but grid itself should be fine --- */}
           <div className="grid gap-4 sm:grid-cols-2">
+            {/* --- MODIFICATION START: Ensure consistent height and prevent content shifts --- */}
+            {/* The `space-y-2` and fixed height `h-10` on inputs/triggers are good.
+                The main cause of shifts is often text length changes in SelectValue/placeholders.
+                Adding `truncate` to SelectTrigger prevents width changes. */}
             <div className="space-y-2">
               <Label htmlFor="hospital">Hospital</Label>
-              <Select 
-                value={selectedHospital || ""} 
+              <Select
+                value={selectedHospital || ""}
                 onValueChange={setSelectedHospital}
               >
-                <SelectTrigger className="h-10 w-full">
+                {/* Added `truncate` to prevent width changes due to long selected names or placeholder */}
+                <SelectTrigger className="h-10 w-full truncate max-w-[18rem] sm:max-w-full">
                   <SelectValue placeholder="Select hospital" />
                 </SelectTrigger>
                 <SelectContent className="max-h-80">
                   {hospitals.map(hospital => (
-                    <SelectItem key={hospital.id} value={hospital.id}>
+                    // Added `truncate` here too for consistency in the dropdown list
+                    <SelectItem key={hospital.id} value={hospital.id} className="truncate max-w-[calc(var(--radix-select-trigger-width)-2rem)]">
                       {hospital.name}
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="department">Department</Label>
-              <Select 
-                value={selectedDepartment || ""} 
+              <Select
+                value={selectedDepartment || ""}
                 onValueChange={setSelectedDepartment}
                 disabled={!selectedHospital || departments.length === 0}
               >
-                <SelectTrigger className="h-10 w-full">
-                  <SelectValue placeholder={selectedHospital ? "Select department" : "Select hospital first"} />
+                 {/* Added `truncate` to prevent width changes due to long selected names or placeholder variations */}
+                <SelectTrigger className="h-10 w-full truncate max-w-[18rem] sm:max-w-full">
+                  <SelectValue placeholder={selectedHospital ? (departments.length > 0 ? "Select department" : "No departments found") : "Select hospital first"} />
                 </SelectTrigger>
                 <SelectContent>
+                   {/* Added placeholder logic directly into SelectValue above */}
                   {departments.map(department => (
-                    <SelectItem key={department.id} value={department.id.toString()}>
+                    // Added `truncate` here too
+                    <SelectItem key={department.id} value={department.id.toString()} className="truncate max-w-[calc(var(--radix-select-trigger-width)-2rem)]">
                       {department.name}
                     </SelectItem>
                   ))}
+                  {/* Keep disabled items for clarity if needed, though placeholder handles the main message */}
+                  {!selectedHospital && <SelectItem value="placeholder-no-hospital" disabled>Select hospital first</SelectItem>}
+                  {selectedHospital && departments.length === 0 && <SelectItem value="placeholder-no-dept" disabled>No departments found</SelectItem>}
                 </SelectContent>
               </Select>
             </div>
-            
+            {/* --- MODIFICATION END --- */}
+
+
             <div className="space-y-2">
               <Label>Date</Label>
               <Popover open={datePickerOpen} onOpenChange={setDatePickerOpen}>
@@ -357,7 +389,7 @@ export default function TrackTokenPage() {
                   <Button
                     variant={"outline"}
                     className={cn(
-                      "h-10 w-full justify-start text-left font-normal",
+                      "h-10 w-full justify-start text-left font-normal", // h-10 ensures fixed height
                       !date && "text-muted-foreground"
                     )}
                   >
@@ -374,18 +406,20 @@ export default function TrackTokenPage() {
                       setDatePickerOpen(false); // Close the popover when a date is selected
                     }}
                     initialFocus
+                    // Optional: Disable past dates if applicable
+                    // disabled={(day) => day < new Date(new Date().setHours(0, 0, 0, 0))}
                   />
                 </PopoverContent>
               </Popover>
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="token">Token Number (last 3 digits)</Label>
-              <Input 
-                id="token" 
-                placeholder="e.g. 001" 
+              <Input
+                id="token"
+                placeholder="e.g. 001"
                 value={tokenNumber}
-                className="h-10"
+                className="h-10" // Fixed height
                 onChange={(e) => {
                   // Only allow up to 3 digits
                   const value = e.target.value.replace(/\D/g, '');
@@ -400,9 +434,9 @@ export default function TrackTokenPage() {
               </p>
             </div>
           </div>
-          
-          <Button 
-            onClick={handleTrackToken} 
+
+          <Button
+            onClick={handleTrackToken}
             disabled={!selectedHospital || !selectedDepartment || !date || !tokenNumber || loading}
             className="w-full"
           >
@@ -410,15 +444,31 @@ export default function TrackTokenPage() {
           </Button>
         </div>
       )}
-      
+
       {/* Error message */}
       {searchPerformed && error && (
         <div className="mt-8 p-6 bg-red-50 border border-red-200 rounded-lg text-red-800">
           <p className="font-medium">{error}</p>
           <p className="mt-2">Please check your token details and try again.</p>
+          {/* Add button to try again */}
+           <Button
+              onClick={() => {
+                setSearchPerformed(false);
+                setError(null); // Clear error when trying again
+                // Optionally reset fields if desired, or keep them
+                // setSelectedHospital(null);
+                // setSelectedDepartment(null);
+                // setTokenNumber("");
+                // setDate(new Date());
+              }}
+              variant="outline"
+              className="mt-4 border-red-300 text-red-800 hover:bg-red-100"
+            >
+              Try Again
+            </Button>
         </div>
       )}
-      
+
       {/* Token data results */}
       {searchPerformed && !error && tokenData && (
         <div className="mt-8 bg-white border rounded-lg p-6 shadow-sm">
@@ -436,13 +486,15 @@ export default function TrackTokenPage() {
             <div className="space-y-4">
               <div>
                 <p className="text-sm text-muted-foreground">Hospital</p>
-                <p className="font-medium break-words max-w-full">
+                {/* --- Ensure truncate is applied here too --- */}
+                <p className="font-medium truncate max-w-sm">
                   {tokenData.hospitals.name}
                 </p>
               </div>
               <div>
                 <p className="text-sm text-muted-foreground">Department</p>
-                <p className="font-medium">{tokenData.departments.name}</p>
+                 {/* --- Ensure truncate is applied here too --- */}
+                <p className="font-medium truncate max-w-sm">{tokenData.departments.name}</p>
               </div>
               <div className="flex flex-wrap gap-6">
                 <div>
@@ -463,7 +515,7 @@ export default function TrackTokenPage() {
               <div>
                 <p className="text-sm text-muted-foreground">Estimated Time</p>
                 <p className="font-medium">
-                  {tokenData.estimated_time ? formatTime(tokenData.estimated_time) : "Not available"}
+                  {formatTime(tokenData.estimated_time)}
                 </p>
               </div>
             </div>
@@ -476,17 +528,17 @@ export default function TrackTokenPage() {
                    tokenData.status === 'in-progress' ? 'Currently being served' :
                    tokenData.status === 'completed' ? 'Appointment completed' :
                    tokenData.status === 'cancelled' ? 'Appointment cancelled' :
-                   'Unknown status'}
+                   tokenData.status.charAt(0).toUpperCase() + tokenData.status.slice(1)} {/* Fallback */}
                 </p>
               </div>
-              
+
               {tokenData.called_at && (
                 <div>
                   <p className="text-sm text-muted-foreground">Called At</p>
                   <p className="font-medium">{formatTime(tokenData.called_at)}</p>
                 </div>
               )}
-              
+
               {tokenData.completed_at && (
                 <div>
                   <p className="text-sm text-muted-foreground">Completed At</p>
@@ -496,29 +548,45 @@ export default function TrackTokenPage() {
             </div>
           </div>
 
+          {/* Patient Details Section (Optional) */}
+          {tokenData.patients && (
+            <div className="mt-6 border-t pt-6">
+              <h3 className="text-lg font-semibold mb-3">Patient Details</h3>
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div><span className="text-muted-foreground">Name:</span> {tokenData.patients.name}</div>
+                <div><span className="text-muted-foreground">Age:</span> {tokenData.patients.age}</div>
+                <div><span className="text-muted-foreground">Gender:</span> {tokenData.patients.gender}</div>
+                <div><span className="text-muted-foreground">Phone:</span> {tokenData.patients.phone_no}</div>
+              </div>
+            </div>
+          )}
+
+
           <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-md">
             <p className="text-blue-800">
-              <span className="font-semibold">Important:</span> Please arrive at the hospital 15 minutes 
+              <span className="font-semibold">Important:</span> Please arrive at the hospital 15 minutes
               before your estimated time. Bring this token and any relevant medical records.
             </p>
           </div>
 
           <div className="mt-6 flex flex-col sm:flex-row gap-4">
-            <Button 
+            <Button
               onClick={() => {
-                setSelectedHospital(null);
-                setSelectedDepartment(null);
-                setTokenNumber("");
-                setTokenData(null);
+                // Reset state to show the search form again
                 setSearchPerformed(false);
+                setTokenData(null);
                 setError(null);
+                // Reset form fields
+                setSelectedHospital(null); // This will trigger department reset via useEffect
+                setTokenNumber("");
+                setDate(new Date()); // Reset date to today
               }}
               variant="outline"
               className="flex-1"
             >
               Track Another Token
             </Button>
-            
+
             <Button asChild className="flex-1">
               <Link href="/">
                 Back to Home
@@ -527,6 +595,33 @@ export default function TrackTokenPage() {
           </div>
         </div>
       )}
+
+       {/* Loading indicator for initial load */}
+       {loading && !searchPerformed && (
+          <div className="flex justify-center items-center p-10">
+              {/* You can use a spinner component here */}
+              <p>Loading hospitals...</p>
+          </div>
+       )}
+
+       {/* Message when no token found after search */}
+       {searchPerformed && !loading && !tokenData && !error && (
+         <div className="mt-8 p-6 bg-yellow-50 border border-yellow-200 rounded-lg text-yellow-800">
+            <p className="font-medium">No token found matching the provided details.</p>
+            <p className="mt-2">Please double-check the hospital, department, date, and token number.</p>
+            <Button
+              onClick={() => {
+                setSearchPerformed(false); // Go back to the form
+                // Keep entered values or reset as desired
+              }}
+              variant="outline"
+              className="mt-4 border-yellow-300 text-yellow-800 hover:bg-yellow-100"
+            >
+              Try Again
+            </Button>
+         </div>
+       )}
+
     </div>
   );
 }

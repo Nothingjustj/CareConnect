@@ -117,13 +117,13 @@ export default function DepartmentUtilizationChart({
         <CardTitle>Department Utilization (Last 30 Days)</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="h-[300px] w-full overflow-x-auto">
+        <div className="h-[300px] w-full">
           {data.length === 0 ? (
             <div className="flex items-center justify-center h-full">
               <p className="text-muted-foreground">No data available</p>
             </div>
           ) : (
-            <div className="min-w-[400px] h-full">
+            <div className="w-full h-full">
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart
                   layout="vertical"

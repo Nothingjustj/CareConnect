@@ -1,3 +1,4 @@
+// src/app/hospital-admin/departments/page.tsx
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -27,11 +28,9 @@ export default function DepartmentsPage() {
 
     const userId = useSelector((state: RootState) => state.user.id);
 
-    // Combined fetch function to ensure proper sequencing
     const fetchAllData = async () => {
         setLoading(true);
         try {
-            // Step 1: Fetch hospital details
             const supabase = createClient();
             const { data: admin, error } = await supabase
                 .from("admins")
@@ -42,13 +41,13 @@ export default function DepartmentsPage() {
             if (error) {
                 console.error("Error fetching hospital ID:", error);
                 toast.error("Failed to fetch hospital data.");
+                setLoading(false);
                 return;
             }
 
             if (admin?.hospital_id) {
                 setHospitalId(admin.hospital_id);
-                
-                // Step 2: Fetch hospital name
+
                 const { data: hospitalData, error: hospitalError } = await supabase
                     .from("hospitals")
                     .select("name")
@@ -61,20 +60,20 @@ export default function DepartmentsPage() {
                     setHospital(hospitalData?.name || "Unknown Hospital");
                 }
 
-                // Step 3: Fetch all department types
                 const { data: deptData, error: deptError } = await supabase
                     .from("department_types")
-                    .select("id, name");
+                    .select("id, name")
+                    .order('name');
 
                 if (deptError) {
                     console.error("Error fetching department types:", deptError);
                     toast.error("Failed to fetch department types.");
+                    setLoading(false);
                     return;
                 }
 
                 setDepartments(deptData || []);
 
-                // Step 4: Fetch departments added to this hospital
                 const { data: hospitalDepts, error: hospitalDeptError } = await supabase
                     .from("hospital_departments")
                     .select("department_type_id")
@@ -83,13 +82,15 @@ export default function DepartmentsPage() {
                 if (hospitalDeptError) {
                     console.error("Error fetching hospital departments:", hospitalDeptError);
                     toast.error("Failed to fetch added departments.");
+                    setLoading(false);
                     return;
                 }
 
-                // Step 5: Filter departments to get added ones
                 const addedDeptIds = hospitalDepts.map((item: any) => item.department_type_id);
-                const addedDeptDetails = deptData.filter((d) => addedDeptIds.includes(d.id));
+                const addedDeptDetails = (deptData || []).filter((d) => addedDeptIds.includes(d.id));
                 setAddedDepartments(addedDeptDetails);
+            } else {
+                toast.error("No hospital assigned to this admin.");
             }
         } catch (error) {
             console.error("Error fetching data:", error);
@@ -99,14 +100,14 @@ export default function DepartmentsPage() {
         }
     };
 
-    // Single useEffect to trigger the data fetch
     useEffect(() => {
         if (userId) {
             fetchAllData();
+        } else {
+            setLoading(false);
         }
     }, [userId]);
 
-    // Get unadded departments
     const unaddedDepartments = departments.filter(
         (dept) => !addedDepartments.some((added) => added.id === dept.id)
     );
@@ -116,35 +117,39 @@ export default function DepartmentsPage() {
             toast.error("Please select a department");
             return;
         }
-        
+
         try {
             const supabase = createClient();
             const { error } = await supabase
                 .from("hospital_departments")
-                .insert([{ 
-                    hospital_id: hospitalId, 
-                    department_type_id: selectedDepartment, 
+                .insert([{
+                    hospital_id: hospitalId,
+                    department_type_id: selectedDepartment,
                     daily_token_limit: dailyTokenLimit || "50",
                     status: true,
                     created_at: new Date().toISOString()
                 }]);
 
-            if (error) throw error;
+            if (error) {
+                if (error.code === '23505') {
+                     toast.error("This department is already added to the hospital.");
+                } else {
+                    throw error;
+                }
+            } else {
+                const addedDept = departments.find((d) => d.id === selectedDepartment);
+                if (addedDept) {
+                    setAddedDepartments([...addedDepartments, addedDept]);
+                }
 
-            const addedDept = departments.find((d) => d.id === selectedDepartment);
-            if (addedDept) {
-                setAddedDepartments([...addedDepartments, addedDept]);
+                setSelectedDepartment(null);
+                setDailyTokenLimit("");
+                toast.success("Department added successfully!");
+                fetchAllData();
             }
-
-            setSelectedDepartment(null);
-            setDailyTokenLimit("");
-            toast.success("Department added successfully!");
-            
-            // Refresh data to ensure UI is up to date
-            fetchAllData();
         } catch (error) {
             console.error("Error adding department:", error);
-            toast.error("Failed to add department.");
+            toast.error(`Failed to add department: ${error instanceof Error ? error.message : 'Unknown error'}`);
         }
     };
 
@@ -167,97 +172,130 @@ export default function DepartmentsPage() {
         }
     };
 
+    // FIXED VERSION WITH RESPONSIVE LAYOUT
     return (
-        <div className="px-2 py-6">
-            <h1 className="text-2xl font-semibold">Manage Departments</h1>
-            <div className="mt-4">
-                <h2>
-                    <strong>Hospital Name:</strong> {hospital || "Loading..."}
-                </h2>
-            </div>
-            
-            {loading ? (
-                <div className="flex items-center justify-center h-40">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+        <div className="p-4 pb-20 w-full mx-auto">
+            <div className="space-y-6 max-w-[100%]">
+                <div className="flex flex-col gap-2">
+                    <h1 className="text-2xl font-semibold">Manage Departments</h1>
+                    <h2 className="text-lg">
+                        <strong>Hospital Name:</strong> {hospital || "Loading..."}
+                    </h2>
                 </div>
-            ) : (
-                <>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 my-8">
-                        <div className="flex flex-col gap-2">
-                            <Label>Department:</Label>
-                            <Select 
-                                onValueChange={(value) => setSelectedDepartment(Number(value))} 
-                                value={selectedDepartment?.toString() || ""}
-                            >
-                                <SelectTrigger className="bg-white">
-                                    <SelectValue placeholder="Select department" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectGroup>
-                                        {unaddedDepartments.length > 0 ? (
-                                            unaddedDepartments.map((department) => (
-                                                <SelectItem key={department.id} value={department.id.toString()} className="truncate">
-                                                    {department.name}
-                                                </SelectItem>
-                                            ))
-                                        ) : (
-                                            <SelectItem value={"No departments available"} disabled>
-                                                No departments available
-                                            </SelectItem>
-                                        )}
-                                    </SelectGroup>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <Label>Daily Token Limit</Label>
-                            <Input 
-                                className="" 
-                                placeholder="Default: 50" 
-                                type="number" 
-                                value={dailyTokenLimit} 
-                                onChange={(e) => setDailyTokenLimit(e.target.value)} 
-                            />
-                        </div>
-                        <Button 
-                            className="mt-4 col-span-1 md:col-span-2" 
-                            onClick={handleAddDepartment} 
-                            disabled={!selectedDepartment}
-                        >
-                            Add Department
-                        </Button>
-                    </div>
 
-                    {/* Added Departments List */}
-                    <div className="mt-6">
-                        <h2 className="text-xl font-semibold">Added Departments</h2>
-                        {addedDepartments.length > 0 ? (
-                            <div className="mt-4 space-y-3">
-                                {addedDepartments.map((department) => (
-                                    <div key={department.id} className="flex flex-col md:flex-row justify-between items-start md:items-center p-4 border rounded-lg">
-                                        <span className="font-medium mb-2 md:mb-0">{department.name}</span>
-                                        <Button
-                                            className="bg-red-500 hover:bg-red-600 w-full md:w-auto"
-                                            onClick={() => handleRemoveDepartment(department.id)}
+                {loading ? (
+                    <div className="flex items-center justify-center h-40">
+                        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                    </div>
+                ) : (
+                    <>
+                        {/* Add Department Form */}
+                        <div className="bg-white p-6 rounded-lg border shadow-sm max-w-2xl w-full">
+                            <h2 className="text-lg font-medium mb-4">Add Department to Hospital</h2>
+                            <div className="space-y-4">
+                                <div>
+                                    <Label>Department:</Label>
+                                    <Select
+                                        onValueChange={(value) => setSelectedDepartment(Number(value))}
+                                        value={selectedDepartment?.toString() || ""}
+                                    >
+                                        <SelectTrigger className="w-full mt-1">
+                                            <SelectValue placeholder="Select department" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectGroup>
+                                                {unaddedDepartments.length > 0 ? (
+                                                    unaddedDepartments.map((department) => (
+                                                        <SelectItem 
+                                                            key={department.id} 
+                                                            value={department.id.toString()}
+                                                        >
+                                                            {department.name}
+                                                        </SelectItem>
+                                                    ))
+                                                ) : (
+                                                    <SelectItem value="none" disabled>
+                                                        No more departments to add
+                                                    </SelectItem>
+                                                )}
+                                            </SelectGroup>
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                                
+                                <div>
+                                    <Label>Daily Token Limit</Label>
+                                    <Input
+                                        className="w-full mt-1"
+                                        placeholder="Default: 50"
+                                        type="number"
+                                        value={dailyTokenLimit}
+                                        onChange={(e) => setDailyTokenLimit(e.target.value)}
+                                    />
+                                </div>
+                                
+                                <Button
+                                    onClick={handleAddDepartment}
+                                    disabled={!selectedDepartment}
+                                    className="w-full"
+                                >
+                                    Add Department
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* Added Departments List */}
+                        <div className="space-y-4">
+                            <h2 className="text-xl font-semibold">Added Departments</h2>
+                            {addedDepartments.length > 0 ? (
+                                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+                                    {addedDepartments.map((department) => (
+                                        <div 
+                                            key={department.id} 
+                                            className="bg-white p-4 rounded-lg border shadow-sm"
                                         >
-                                            Remove
-                                        </Button>
-                                    </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <p className="text-gray-500 mt-2">No departments added.</p>
-                        )}
-                    </div>
-                    <div className="mt-8">
+                                            <div className="flex justify-between items-start">
+                                                <h3 className="font-medium">{department.name}</h3>
+                                            </div>
+                                            <div className="mt-4">
+                                                <Button
+                                                    variant="destructive"
+                                                    size="sm"
+                                                    onClick={() => handleRemoveDepartment(department.id)}
+                                                    className="w-full"
+                                                >
+                                                    Remove
+                                                </Button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-gray-500">No departments added to this hospital yet.</p>
+                            )}
+                        </div>
+
+                        {/* Utilization Chart - Now with responsive wrapper */}
                         {hospitalId && (
-                            <div className="overflow-hidden">
-                                <DepartmentUtilizationChart hospitalId={hospitalId} />
+                            <div className="mt-8">
+                                {/* Mobile view - hide chart */}
+                                <div className="block sm:hidden">
+                                    <p className="text-muted-foreground text-center p-4 bg-muted rounded-lg">
+                                        Department utilization chart is available on larger screens
+                                    </p>
+                                </div>
+                                
+                                {/* Desktop view - show chart */}
+                                <div className="hidden sm:block overflow-hidden">
+                                    <div className="border rounded-lg shadow-sm p-4">
+                                        <DepartmentUtilizationChart hospitalId={hospitalId} />
+                                    </div>
+                                </div>
                             </div>
                         )}
-                    </div>
-                </>
-            )}
+                    </>
+                )}
+            </div>
         </div>
     );
 }

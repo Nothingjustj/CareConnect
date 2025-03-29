@@ -263,7 +263,7 @@ export default function ManageStaffs() {
   };
 
   return (
-    <div className="px-2 py-6">
+    <div className="p-4 pb-20 w-full overflow-y-auto overflow-x-hidden">
       <h1 className="text-2xl font-semibold mb-6">Manage Department Staffs</h1>
 
       <form onSubmit={handleSubmit}>
@@ -323,7 +323,7 @@ export default function ManageStaffs() {
               value={selectedDepartment || ""} 
               required
             >
-              <SelectTrigger className="bg-white">
+              <SelectTrigger className="bg-white w-full">
                 <SelectValue placeholder="Select department" />
               </SelectTrigger>
               <SelectContent>
@@ -350,7 +350,7 @@ export default function ManageStaffs() {
 
           <Button 
             type="submit" 
-            className="w-full md:col-span-2" 
+            className="w-full md:col-span-2 text-sm py-1.5 h-auto" 
             disabled={loading}
           >
             {loading ? "Adding..." : "Add Department Admin"}
@@ -386,21 +386,21 @@ export default function ManageStaffs() {
                   <Button 
                     variant="outline" 
                     size="sm" 
-                    className="flex-1"
+                    className="flex-1 text-xs py-1 h-8"
                     onClick={() => handleEdit(admin)}
                   >
-                    <Edit className="h-4 w-4 mr-1" /> Edit
+                    <Edit className="h-3 w-3 mr-1" /> Edit
                   </Button>
                   <Button 
                     variant="destructive" 
                     size="sm" 
-                    className="flex-1"
+                    className="flex-1 text-xs py-1 h-8"
                     onClick={() => {
                       setAdminToDelete(admin.id);
                       setDeleteConfirmOpen(true);
                     }}
                   >
-                    <Trash className="h-4 w-4 mr-1" /> Delete
+                    <Trash className="h-3 w-3 mr-1" /> Delete
                   </Button>
                 </div>
               </div>
