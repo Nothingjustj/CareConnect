@@ -93,7 +93,7 @@ export function RegisterForm({
                   <Label htmlFor="password">Password</Label>
                   <Link
                     href="#"
-                    className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
+                    className="ml-auto inline-block text-xs underline-offset-4 hover:underline"
                   >
                     Forgot your password?
                   </Link>
@@ -140,7 +140,7 @@ export function RegisterForm({
             </div>
             <div className="mt-4 text-center text-sm">
               Already have an account?{" "}
-              <Link href="/login" className="underline underline-offset-4">
+              <Link href="/login" className="underline underline-offset-4 text-primary">
                 Login
               </Link>
             </div>

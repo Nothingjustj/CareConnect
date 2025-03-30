@@ -318,7 +318,7 @@ export default function TrackTokenPage() {
 
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-12">
+    <div className="max-w-4xl mx-auto px-4">
       <h1 className="text-3xl font-bold mb-2">Track Your Token</h1>
       <p className="text-muted-foreground mb-8">
         Enter your token details to check the current status
@@ -340,7 +340,7 @@ export default function TrackTokenPage() {
                 onValueChange={setSelectedHospital}
               >
                 {/* Added `truncate` to prevent width changes due to long selected names or placeholder */}
-                <SelectTrigger className="h-10 w-full truncate max-w-[18rem] sm:max-w-full">
+                <SelectTrigger className="h-10 w-full truncate max-w-[18rem] sm:max-w-full bg-background">
                   <SelectValue placeholder="Select hospital" />
                 </SelectTrigger>
                 <SelectContent className="max-h-80">
@@ -362,7 +362,7 @@ export default function TrackTokenPage() {
                 disabled={!selectedHospital || departments.length === 0}
               >
                  {/* Added `truncate` to prevent width changes due to long selected names or placeholder variations */}
-                <SelectTrigger className="h-10 w-full truncate max-w-[18rem] sm:max-w-full">
+                <SelectTrigger className="h-10 w-full truncate max-w-[18rem] sm:max-w-full bg-background">
                   <SelectValue placeholder={selectedHospital ? (departments.length > 0 ? "Select department" : "No departments found") : "Select hospital first"} />
                 </SelectTrigger>
                 <SelectContent>
@@ -419,7 +419,7 @@ export default function TrackTokenPage() {
                 id="token"
                 placeholder="e.g. 001"
                 value={tokenNumber}
-                className="h-10" // Fixed height
+                className="h-10 bg-background" // Fixed height
                 onChange={(e) => {
                   // Only allow up to 3 digits
                   const value = e.target.value.replace(/\D/g, '');
