@@ -78,7 +78,7 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
       });
   
       dispatch(clearUser());
-      router.push("/");
+      router.push("/login");
     } catch (error) {
       console.error("Logout error:", error);
     }
