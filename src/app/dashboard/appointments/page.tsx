@@ -77,7 +77,7 @@ export default function Appointments() {
     <div className="px-2 py-8">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">My Appointments</h1>
-        <Button asChild>
+        <Button className="hidden md:block" asChild>
           <Link href="/dashboard/book-opd">Book New Appointment</Link>
         </Button>
       </div>

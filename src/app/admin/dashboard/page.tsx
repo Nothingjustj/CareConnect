@@ -6,6 +6,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { createClient } from '@/utils/supabase/client';
 import AnalyticsSummaryCard from '@/components/analytics/summary-card';
+import { Separator } from '@/components/ui/separator';
 
 const AdminDashboard = () => {
   // --- MODIFICATION START ---
@@ -66,11 +67,14 @@ const AdminDashboard = () => {
 
   return (
     <div className='py-6 px-2'>
-      <h1 className="text-xl md:text-3xl font-semibold mb-1 md:mb-2">Welcome, <span className="font-bold">{user?.name} 👋</span></h1>
+      <h1 className="text-2xl md:text-3xl font-semibold mb-1 md:mb-2">Welcome, <span className="font-bold">{user?.name} 👋</span></h1>
       {/* --- MODIFICATION START: Display Hospital and Dept Name --- */}
-      <h2 className="md:text-xl text-muted-foreground">
+      <h2 className="text-muted-foreground">
         {loading ? "Loading details..." : 
-          `${departmentName ? departmentName + ' Department' : 'Department Admin'} ${hospitalName ? 'at ' + hospitalName : ''}`
+          <div className='flex gap-4'>
+            <p>Department: <span className='font-medium'>{departmentName}</span></p>
+            <p>Hospital: <span className='font-medium'>{hospitalName}</span></p>
+          </div>
         }
       </h2>
       {/* --- MODIFICATION END --- */}
