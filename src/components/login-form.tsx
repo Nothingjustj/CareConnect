@@ -37,7 +37,6 @@ export function LoginForm({
     testCredentials.append("password", "123456789");
 
     const result = await signIn(testCredentials);
-    console.log(result)
 
     if (result.status == "success") {
       router.prefetch("/dashboard");
@@ -67,7 +66,6 @@ export function LoginForm({
 
     const formData = new FormData(event.currentTarget);
     const result = await signIn(formData);
-    console.log(result)
 
     if (result.status == "success") {
       router.prefetch("/dashboard");
