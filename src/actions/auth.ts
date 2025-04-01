@@ -82,10 +82,10 @@ export async function signUp (formData: FormData) {
         }
     }
 
-    redirect("/dashboard")
-
     revalidatePath("/", "layout")
+    // redirect("/dashboard")
     return { status: "success", user: data.user };
+
 }
 
 export async function signIn (formData: FormData) {
@@ -112,22 +112,10 @@ export async function signIn (formData: FormData) {
 
     revalidatePath("/", "layout")
 
-    const role = data.user.user_metadata.role;
-
-    if (role === "patient") {
-        redirect("/dashboard")
-    } else if (role === "department_admin") {
-        redirect("/admin/dashboard")
-    } else if (role === "hospital_admin") {
-        redirect("/hospital-admin/dashboard")
-    } else if (role === "super_admin") {
-        redirect("/super-admin/dashboard")
-    }
-
     return { 
         status: "success", 
         user: data.user, 
-        role: role, 
+        role: data.user.user_metadata.role, 
         email: data.user.email, 
         name: data.user.user_metadata.name, 
         userId: data.user.id 
@@ -141,14 +129,11 @@ export async function signOut () {
 
     if (error) {
         console.error("Error logging out:", error.message);
-        return (
-            console.error("Error logging out...", error),
-            redirect("/error")
-        );
+        throw new Error(error.message);
     }
 
     revalidatePath("/", "layout");
-    redirect("/");
+    return "success";
 }
 
 

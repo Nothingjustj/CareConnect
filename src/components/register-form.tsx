@@ -39,6 +39,7 @@ export function RegisterForm({
 
     if (result.status === "success") {
       toast.success("Account created successfully");
+      router.push("/dashboard");
       dispatch(
         setUser({
           id: result.user?.id,

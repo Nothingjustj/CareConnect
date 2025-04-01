@@ -23,7 +23,7 @@ import { signOut } from "@/actions/auth"
 import { toast } from "sonner"
 import { useDispatch } from "react-redux"
 import { clearUser } from "@/store/userSlice"
-import { usePathname } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 
 // In src/components/dashboard-sidebar.tsx
 
@@ -67,12 +67,21 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
   const { setOpenMobile } = useSidebar();
   const dispatch = useDispatch();
   const pathname = usePathname();
+  const router = useRouter();
 
   const handleLogout = () => {
-    toast.promise(signOut(), {
-      loading: "Logging out..."
-    })
-    dispatch(clearUser());
+    try {
+      toast.promise(signOut(), {
+        loading: "Logging out...",
+        success: "Logged out successfully",
+        error: "Logout failed",
+      });
+  
+      dispatch(clearUser());
+      router.push("/");
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
   }
   
 
