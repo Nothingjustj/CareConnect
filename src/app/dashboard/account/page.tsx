@@ -5,13 +5,14 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { createClient } from "@/utils/supabase/client";
 import { toast } from "sonner";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import LoadingSpinner from "@/components/loading-screen";
 import Link from "next/link";
+import { setUser } from "@/store/userSlice";
 
 export default function AccountPage() {
   const user = useSelector((state: RootState) => state.user);
@@ -25,6 +26,7 @@ export default function AccountPage() {
     age: "",
     gender: "",
   });
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -92,6 +94,22 @@ export default function AccountPage() {
         .eq("id", user.id);
         
       if (error) throw error;
+
+      const { error: AuthUpdateError } = await supabase.auth.updateUser({
+        data: {
+          name: formData.name,
+          phoneNo: formData.phone_no
+        }
+      })
+
+      if (AuthUpdateError) console.log("Error updating data in auth table")
+
+      dispatch(
+        setUser({
+          ...user,
+          name: formData.name
+        })
+      )
       
       toast.success("Account details updated successfully");
     } catch (error) {
