@@ -25,12 +25,16 @@ export function LoginForm({
 }: React.ComponentPropsWithoutRef<"div">) {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
   const dispatch = useDispatch();
 
   const handleTestLogin = async () => {
     setLoading(true);
     setError("");
+    setEmail("test@test.com");
+    setPassword("123456789");
 
     const testCredentials = new FormData();
     testCredentials.append("email", "test@test.com");
@@ -122,6 +126,8 @@ export function LoginForm({
                   type="email"
                   name="email"
                   placeholder="m@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
@@ -135,7 +141,14 @@ export function LoginForm({
                     Forgot your password?
                   </Link>
                 </div>
-                <Input id="password" type="password" name="password" required />
+                <Input 
+                  id="password" 
+                  type="password" 
+                  name="password" 
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required />
               </div>
               <div className="space-y-2">
 
