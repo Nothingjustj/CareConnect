@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "RogiSetu - Simplifying Hospital OPD Management Systems",
-  description: "Developed by Aditya Sharma",
+  title: "RogiSetu",
+  description: "Simplifying Hospital OPD Management Systems",
 };
 
 export default function RootLayout({
