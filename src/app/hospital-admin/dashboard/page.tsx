@@ -52,9 +52,9 @@ export default function HospitalAdminDashboard () {
         <div className="py-6 px-2">
             {/* --- MODIFICATION START: Display Hospital Name --- */}
             <h1 className="text-xl md:text-3xl font-semibold mb-1 md:mb-2">Welcome, <span className="font-bold">{user.name} 👋</span></h1>
-            <h2 className="md:text-xl text-muted-foreground">
+            <h2 className="text-sm md:text-lg text-muted-foreground">
                 {loading ? "Loading hospital..." : 
-                 hospitalName ? `Admin for ${hospitalName}` : "Hospital Admin Dashboard"}
+                 hospitalName ? <p>Hospital: <span className="font-medium">{hospitalName}</span></p> : "Hospital Admin Dashboard"}
             </h2>
             {/* --- MODIFICATION END --- */}
             
