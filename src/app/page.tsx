@@ -1,5 +1,6 @@
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
+import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { Button } from "@/components/ui/button";
 import {
   Bell,
@@ -62,6 +63,7 @@ const features: {
 export default function Home() {
   return (
     <>
+      <PWAInstallPrompt />
       <Header />
       <div className="w-full">
         <section

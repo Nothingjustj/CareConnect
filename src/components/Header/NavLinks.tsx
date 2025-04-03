@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
+import { PWAInstallButton } from "../pwa-install-button";
 
 export default function NavLinks() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -99,6 +100,7 @@ export default function NavLinks() {
 
           {/* Mobile Auth Buttons */}
           <div className="pt-4 border-t border-gray-200 flex flex-col gap-2 px-3">
+            <PWAInstallButton />
             <Button variant="outline" asChild>
               <Link href="/login" onClick={() => setIsMenuOpen(false)}>
                 Login
