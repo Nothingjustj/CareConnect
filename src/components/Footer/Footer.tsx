@@ -16,16 +16,16 @@ export default function Footer () {
               Simplifying Hospital OPD Management System for better healthcare delivery.
             </p>
             <div className="flex items-center gap-4 mt-8">
-                <Link href="">
+                <Link href="" aria-label="Twitter">
                     <Twitter className="w-5 h-5 text-muted-foreground hover:text-muted transition ease-linear duration-200" />
                 </Link>
-                <Link href="">
+                <Link href="" aria-label="Instagram">
                     <Instagram className="w-5 h-5 text-muted-foreground hover:text-muted transition ease-linear duration-200" />
                 </Link>
-                <Link href="">
+                <Link href="" aria-label="Linkedin">
                     <Linkedin className="w-5 h-5 text-muted-foreground hover:text-muted transition ease-linear duration-200" />
                 </Link>
-                <Link href="">
+                <Link href="" aria-label="Github">
                     <Github className="w-5 h-5 text-muted-foreground hover:text-muted transition ease-linear duration-200" />
                 </Link>
             </div>

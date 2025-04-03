@@ -98,7 +98,7 @@ export default function Home() {
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
               <div className="flex flex-col items-center space-y-4 text-center">
                 <Clock className="h-10 w-10 text-primary" />
-                <h3 className="text-xl font-bold">Real-time Token Updates</h3>
+                <h2 className="text-xl font-bold">Real-time Token Updates</h2>
                 <p className="text-muted-foreground">
                   Track your token status in real-time and get notified when
                   it&apos;s your turn.
@@ -106,7 +106,7 @@ export default function Home() {
               </div>
               <div className="flex flex-col items-center space-y-4 text-center">
                 <Calendar className="h-10 w-10 text-primary" />
-                <h3 className="text-xl font-bold">Easy Appointment Booking</h3>
+                <h2 className="text-xl font-bold">Easy Appointment Booking</h2>
                 <p className="text-muted-foreground">
                   Book appointments with your preferred department quickly and
                   easily.
@@ -114,7 +114,7 @@ export default function Home() {
               </div>
               <div className="flex flex-col items-center space-y-4 text-center">
                 <Bell className="h-10 w-10 text-primary" />
-                <h3 className="text-xl font-bold">SMS Notifications</h3>
+                <h2 className="text-xl font-bold">SMS Notifications</h2>
                 <p className="text-muted-foreground">
                   Receive SMS updates about your appointment status and token
                   number.

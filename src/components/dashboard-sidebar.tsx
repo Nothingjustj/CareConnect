@@ -89,7 +89,7 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
     <Sidebar> 
       <SidebarHeader>
         <Link href="/" className="p-2">
-          <Image src="/logo.png" width={125} height={135} alt="logo" />
+          <Image src="/logo.png" width={135} height={135} alt="logo" />
         </Link>
       </SidebarHeader>
       <SidebarSeparator />
