@@ -59,7 +59,6 @@ export default function RootLayout({
       >
         <StoreProvider>
           {children}
-          <PWAInstallPrompt />
         </StoreProvider>
         <Toaster richColors />
       </body>
