@@ -3,7 +3,6 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "sonner";
 import StoreProvider from "@/components/store-provider";
-import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,7 +20,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
-  themeColor: "#ffffff",
+  themeColor: "#F1F5F9",
 };
 
 export const metadata: Metadata = {
@@ -52,6 +51,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="theme-color" content="#F1F5F9" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <meta name="apple-mobile-web-app-title" content="RogiSetu" />
+        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
         <link rel="icon" href="/favicon.png" sizes="any" />
       </head>
       <body
