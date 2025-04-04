@@ -24,7 +24,6 @@ import { toast } from "sonner"
 import { useDispatch } from "react-redux"
 import { clearUser } from "@/store/userSlice"
 import { usePathname, useRouter } from "next/navigation"
-import { NotificationPermission } from '@/components/notification-permission'
 
 // In src/components/dashboard-sidebar.tsx
 
@@ -153,9 +152,6 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
             </DropdownMenu>
           </SidebarMenuItem>
         </SidebarMenu>
-        <div className="mt-auto pt-4 border-t">
-          <NotificationPermission />
-        </div>
       </SidebarFooter>
     </Sidebar>
   )
