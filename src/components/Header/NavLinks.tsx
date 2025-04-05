@@ -58,8 +58,8 @@ export default function NavLinks() {
           <Link
             key={navlink.name}
             href={navlink.url}
-            className={`transition duration-300 text-foreground/60 hover:text-foreground ${
-              pathname === navlink.url ? "text-foreground font-medium" : ""
+            className={`transition duration-300 text-foreground/60 font-medium hover:text-foreground text-sm ${
+              pathname === navlink.url ? "text-gray-700 font-medium" : ""
             }`}
           >
             {navlink.name}
