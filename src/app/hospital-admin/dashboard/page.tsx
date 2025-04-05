@@ -5,6 +5,8 @@ import { useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import { createClient } from "@/utils/supabase/client"
 import AnalyticsSummaryCard from "@/components/analytics/summary-card"
+import Link from "next/link"
+import { Coins, Hospital, Users } from "lucide-react"
 
 export default function HospitalAdminDashboard () {
     const user = useSelector((state: RootState) => state.user);
@@ -66,6 +68,16 @@ export default function HospitalAdminDashboard () {
                     />
                 )}
                 {/* Other dashboard cards can go here */}
+                <Link href="departments" className="bg-muted p-4 rounded-xl border hover:border-primary">
+                    <Hospital className="text-primary w-10 h-10" />
+                    <h3 className="text-xl font-semibold mt-4">Manage Departments</h3>
+                    <p>Manage all your hospital departments</p>
+                </Link>
+                <Link href="manage-staffs" className="bg-muted p-4 rounded-xl border hover:border-primary">
+                    <Users className="text-primary w-10 h-10" />
+                    <h3 className="text-xl font-semibold mt-4">Manage Staffs</h3>
+                    <p>Manage all your department admins in your hospital</p>
+                </Link>
             </div>
         </div>
     )

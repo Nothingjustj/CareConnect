@@ -67,35 +67,37 @@ export default function Home() {
       <Header />
       <div className="w-full">
         <section
-          className="bg-background flex flex-col items-center justify-center py-28 w-full"
+          className="relative bg-background flex flex-col items-center justify-center py-20 md:py-28 w-full"
           style={{
             backgroundImage: `radial-gradient(circle at 0.5px 0.5px, rgba(6,182,212,0.3) 0.5px, transparent 0)`,
             backgroundSize: "8px 8px",
             backgroundRepeat: "repeat",
           }}
         >
-          <div className="w-full max-w-2xl px-4 md:px-0 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-balance md:leading-tight">
+          <div className="absolute top-0 left-0 w-[15rem] h-[15rem] rounded-full blur-[150px] bg-primary/40"></div>
+          <div className="absolute bottom-0 right-0 w-[15rem] h-[15rem] rounded-full blur-[150px] bg-primary/40"></div>
+          <div className="w-full max-w-3xl px-4 md:px-0 text-center">
+            <h1 className="text-4xl md:text-[3.5rem] font-bold text-balance md:leading-[1.2]">
               Simplifying Hospital{" "}
               <span className="text-primary">OPD Management</span> System
             </h1>
-            <p className="text-balance mt-6 text-lg text-secondary-foreground">
+            <p className="text-balance mt-6 text-base md:text-lg text-secondary-foreground">
               A one stop solution for managing all your hospital OPD needs like
               book and track OPDs, check bed availability, patient admission and
               check medicine inventory.
             </p>
             <div className="mt-8 flex justify-center gap-4">
-              <Button className="text-base py-6 px-6" asChild>
+              <Button className="md:text-base md:py-6 md:px-6" asChild>
                 <Link href="/login">Get started</Link>
               </Button>
-              <Button className="text-base py-6 px-6" variant="outline" asChild>
+              <Button className="md:text-base md:py-6 md:px-6" variant="outline" asChild>
                 <Link href="/hospitals">View Hospitals</Link>
               </Button>
             </div>
           </div>
         </section>
 
-        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted">
+        <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/70">
           <div className="container px-4 md:px-6 max-w-7xl mx-auto">
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
               <div className="flex flex-col items-center space-y-4 text-center">
@@ -143,9 +145,9 @@ export default function Home() {
             {features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-white p-6 rounded-2xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] flex flex-col space-y-3 cursor-pointer"
+                className="bg-white group p-6 rounded-2xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] flex flex-col space-y-3 cursor-pointer"
               >
-                <div className="p-3 rounded-lg bg-gray-100 w-fit">
+                <div className="p-3 rounded-lg bg-gray-100 w-fit group-hover:bg-primary/10 transition duration-300 group-hover:-translate-y-2">
                   {feature.icon}
                 </div>
                 <h3 className="text-lg font-semibold text-gray-900">
@@ -158,12 +160,12 @@ export default function Home() {
         </section>
 
         {/* --------------------Solutions-------------------- */}
-        <section id="solutions" className="bg-muted py-24 px-6">
+        <section id="solutions" className="bg-muted/70 py-24 px-6">
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900">
               Simple OPD Booking Process
             </h2>
-            <p className="text-gray-600 mt-2">
+            <p className="text-muted-foreground mt-2">
               Follow these easy steps to book your OPD appointment.
             </p>
           </div>
@@ -227,7 +229,7 @@ export default function Home() {
             >
               <Link href="/dashboard/book-opd">Book Appointment Now</Link>
             </Button>
-            <p className="text-gray-500 mt-2">
+            <p className="text-muted-foreground mt-2">
               Need help? Contact our support team 24/7
             </p>
           </div>

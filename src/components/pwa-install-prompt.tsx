@@ -27,7 +27,7 @@ export function PWAInstallPrompt() {
       <div className="max-w-7xl mx-auto p-2 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Download className="h-4 w-4 text-primary" />
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-foreground">
             Install RogiSetu for a better experience
           </p>
         </div>

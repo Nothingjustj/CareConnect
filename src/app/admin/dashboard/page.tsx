@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux';
 import { createClient } from '@/utils/supabase/client';
 import AnalyticsSummaryCard from '@/components/analytics/summary-card';
 import { Separator } from '@/components/ui/separator';
+import Link from 'next/link';
+import { Coins, Hospital } from 'lucide-react';
 
 const AdminDashboard = () => {
   // --- MODIFICATION START ---
@@ -71,7 +73,7 @@ const AdminDashboard = () => {
       {/* --- MODIFICATION START: Display Hospital and Dept Name --- */}
       <h2 className="text-muted-foreground">
         {loading ? "Loading details..." : 
-          <div className='flex gap-4'>
+          <div className='flex flex-col md:flex-row md:gap-4'>
             <p>Department: <span className='font-medium'>{departmentName}</span></p>
             <p>Hospital: <span className='font-medium'>{hospitalName}</span></p>
           </div>
@@ -88,6 +90,16 @@ const AdminDashboard = () => {
           />
         )}
         {/* Other dashboard cards can go here */}
+        <Link href="/admin/manage-tokens" className="bg-muted p-4 rounded-xl border hover:border-primary">
+            <Coins className="text-primary w-10 h-10" />
+            <h3 className="text-xl font-semibold mt-4">Manage Tokens</h3>
+            <p>Manage all your patients token</p>
+        </Link>
+        <Link href="/admin/queue-status" className="bg-muted p-4 rounded-xl border hover:border-primary">
+            <Hospital className="text-primary w-10 h-10" />
+            <h3 className="text-xl font-semibold mt-4">Queue Status</h3>
+            <p>View patients queue status</p>
+        </Link>
       </div>
     </div>
   )

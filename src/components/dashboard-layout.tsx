@@ -8,7 +8,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setUser } from "@/store/userSlice";
 import LoadingSpinner from "./loading-screen";
-import { User } from "lucide-react";
+import { ChevronLeft, User } from "lucide-react";
+import { Button } from "./ui/button";
+import Link from "next/link";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
 
@@ -55,8 +57,20 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <AppSidebar user={user} role={user.role} />
         <main className="flex-1 p-3">
             <div className="flex items-center justify-between py-2">
+              <div className="flex items-center gap-2">
               <SidebarTrigger />
+              <Button variant="secondary" className="md:hidden h-4 w-4 p-4 rounded-full" asChild>
+                <Link href="dashboard">
+                  <ChevronLeft />
+                </Link>
+              </Button>
+              </div>
+              <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm">
+                <Link href="account">My Account</Link>
+              </Button>
               <span className="capitalize bg-secondary border border-primary/20 py-1 px-2 rounded-md text-primary text-sm flex items-center gap-1"><User className="w-4 h-4" />{user?.role}</span>
+              </div>
             </div>
             {children}
         </main>
