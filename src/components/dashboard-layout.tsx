@@ -65,12 +65,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                 </Link>
               </Button>
               </div>
-              <div className="flex items-center gap-2">
-              <Button variant="ghost" size="sm">
-                <Link href="account">My Account</Link>
-              </Button>
               <span className="capitalize bg-secondary border border-primary/20 py-1 px-2 rounded-md text-primary text-sm flex items-center gap-1"><User className="w-4 h-4" />{user?.role}</span>
-              </div>
             </div>
             {children}
         </main>

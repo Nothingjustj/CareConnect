@@ -73,7 +73,7 @@ export default function HospitalAdminDashboard () {
                     <h3 className="text-xl font-semibold mt-4">Manage Departments</h3>
                     <p>Manage all your hospital departments</p>
                 </Link>
-                <Link href="manage-staffs" className="bg-muted p-4 rounded-xl border hover:border-primary">
+                <Link href="staffs" className="bg-muted p-4 rounded-xl border hover:border-primary">
                     <Users className="text-primary w-10 h-10" />
                     <h3 className="text-xl font-semibold mt-4">Manage Staffs</h3>
                     <p>Manage all your department admins in your hospital</p>
