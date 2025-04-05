@@ -60,7 +60,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               <div className="flex items-center gap-2">
               <SidebarTrigger />
               <Button variant="secondary" className="md:hidden h-4 w-4 p-4 rounded-full" asChild>
-                <Link href="dashboard">
+                <Link href="/">
                   <ChevronLeft />
                 </Link>
               </Button>

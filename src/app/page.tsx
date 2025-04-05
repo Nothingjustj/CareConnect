@@ -74,9 +74,9 @@ export default function Home() {
             backgroundRepeat: "repeat",
           }}
         >
-          <div className="absolute top-0 left-0 w-[15rem] h-[15rem] rounded-full blur-[150px] bg-primary/40"></div>
-          <div className="absolute bottom-0 right-0 w-[15rem] h-[15rem] rounded-full blur-[150px] bg-primary/40"></div>
-          <div className="w-full max-w-3xl px-4 md:px-0 text-center">
+          <div className="absolute top-0 left-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[150px] bg-primary/40"></div>
+          <div className="absolute bottom-0 right-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[150px] bg-primary/40"></div>
+          <div className="w-full max-w-3xl px-4 md:px-0 text-center z-10">
             <h1 className="text-4xl md:text-[3.5rem] font-bold text-balance md:leading-[1.2]">
               Simplifying Hospital{" "}
               <span className="text-primary">OPD Management</span> System
