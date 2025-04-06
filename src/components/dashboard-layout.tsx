@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store/store";
 import { setUser } from "@/store/userSlice";
 import LoadingSpinner from "./loading-screen";
-import { ChevronLeft, User } from "lucide-react";
+import { House, User } from "lucide-react";
 import { Button } from "./ui/button";
 import Link from "next/link";
 
@@ -59,9 +59,9 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <div className="flex items-center justify-between py-2">
               <div className="flex items-center gap-2">
               <SidebarTrigger />
-              <Button variant="secondary" className="md:hidden h-4 w-4 p-4 rounded-full" asChild>
+              <Button variant="secondary" className="md:hidden h-5 w-5 p-4 rounded-full" asChild>
                 <Link href="/">
-                  <ChevronLeft />
+                  <House />
                 </Link>
               </Button>
               </div>

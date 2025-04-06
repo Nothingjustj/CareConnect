@@ -76,17 +76,15 @@ export default function Home() {
         >
           <div className="absolute top-0 left-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[150px] bg-primary/40"></div>
           <div className="absolute bottom-0 right-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[150px] bg-primary/40"></div>
-          <div className="w-full max-w-3xl px-4 md:px-0 text-center z-10">
+          <div className="w-full max-w-3xl px-6 md:px-0 md:text-center z-10">
             <h1 className="text-4xl md:text-[3.5rem] font-bold text-balance md:leading-[1.2]">
               Simplifying Hospital{" "}
               <span className="text-primary">OPD Management</span> System
             </h1>
             <p className="text-balance mt-6 text-base md:text-lg text-secondary-foreground">
-              A one stop solution for managing all your hospital OPD needs like
-              book and track OPDs, check bed availability, patient admission and
-              check medicine inventory.
+            One-stop solution for managing all your hospital OPD needs. Streamline patient care with our comprehensive digital platform.
             </p>
-            <div className="mt-8 flex justify-center gap-4">
+            <div className="mt-8 flex md:justify-center gap-4">
               <Button className="md:text-base md:py-6 md:px-6" asChild>
                 <Link href="/login">Get started</Link>
               </Button>
@@ -98,9 +96,9 @@ export default function Home() {
         </section>
 
         <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/70">
-          <div className="container px-4 md:px-6 max-w-7xl mx-auto">
+          <div className="container px-6 max-w-7xl mx-auto">
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="flex flex-col md:items-center space-y-4 md:text-center">
                 <Clock className="h-10 w-10 text-primary" />
                 <h2 className="text-xl font-bold">Real-time Token Updates</h2>
                 <p className="text-muted-foreground">
@@ -108,7 +106,7 @@ export default function Home() {
                   it&apos;s your turn.
                 </p>
               </div>
-              <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="flex flex-col md:items-center space-y-4 md:text-center">
                 <Calendar className="h-10 w-10 text-primary" />
                 <h2 className="text-xl font-bold">Easy Appointment Booking</h2>
                 <p className="text-muted-foreground">
@@ -116,7 +114,7 @@ export default function Home() {
                   easily.
                 </p>
               </div>
-              <div className="flex flex-col items-center space-y-4 text-center">
+              <div className="flex flex-col md:items-center space-y-4 md:text-center">
                 <Bell className="h-10 w-10 text-primary" />
                 <h2 className="text-xl font-bold">SMS Notifications</h2>
                 <p className="text-muted-foreground">
@@ -129,7 +127,7 @@ export default function Home() {
         </section>
 
         {/* ----------------Features Section ---------------*/}
-        <section id="features" className="bg-white py-24 px-10">
+        <section id="features" className="bg-white py-24 px-6">
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900">
               Comprehensive <span className="text-primary">ROGISETU</span>{" "}
