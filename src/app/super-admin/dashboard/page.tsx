@@ -14,8 +14,8 @@ const SuperAdminDashboard = () => {
   return (
     <main className='py-6 px-2'>
       <div className="text-xl md:text-3xl">
-        <h1>Welcome, <span className="font-bold">{user?.name}</span> 👋</h1>
-        <h2 className='text-base md:text-xl mt-1'>Super Admin Dashboard</h2>
+        <h1 className='mb-1 md:mb-2 font-semibold'>Welcome, <span className="font-bold">{user?.name}</span> 👋</h1>
+        <h2 className='text-sm md:text-lg'>Super Admin Dashboard</h2>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">

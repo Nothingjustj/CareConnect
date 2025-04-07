@@ -74,10 +74,10 @@ export default function Home() {
             backgroundRepeat: "repeat",
           }}
         >
-          <div className="absolute top-0 left-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[150px] bg-primary/40"></div>
-          <div className="absolute bottom-0 right-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[150px] bg-primary/40"></div>
+          <div className="absolute top-0 left-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[70px] md:blur-[150px] bg-primary/40"></div>
+          <div className="absolute bottom-0 right-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[70px] md:blur-[150px] bg-primary/40"></div>
           <div className="w-full max-w-3xl px-6 md:px-0 md:text-center z-10">
-            <h1 className="text-4xl md:text-[3.5rem] font-bold text-balance md:leading-[1.2]">
+            <h1 className="text-4xl md:text-[3.5rem] font-bold text-balance md:leading-[1.2] tracking-tight">
               Simplifying Hospital{" "}
               <span className="text-primary">OPD Management</span> System
             </h1>
@@ -98,26 +98,26 @@ export default function Home() {
         <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/70">
           <div className="container px-6 max-w-7xl mx-auto">
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="flex flex-col md:items-center space-y-4 md:text-center">
-                <Clock className="h-10 w-10 text-primary" />
-                <h2 className="text-xl font-bold">Real-time Token Updates</h2>
-                <p className="text-muted-foreground">
+              <div className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center">
+                <Clock className="h-10 w-10 text-primary mb-2" />
+                <h2 className="text-lg md:text-xl font-bold">Real-time Token Updates</h2>
+                <p className="text-sm md:text-base text-muted-foreground">
                   Track your token status in real-time and get notified when
                   it&apos;s your turn.
                 </p>
               </div>
-              <div className="flex flex-col md:items-center space-y-4 md:text-center">
-                <Calendar className="h-10 w-10 text-primary" />
-                <h2 className="text-xl font-bold">Easy Appointment Booking</h2>
-                <p className="text-muted-foreground">
+              <div className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center">
+                <Calendar className="h-10 w-10 text-primary mb-2" />
+                <h2 className="text-lg md:text-xl font-bold">Easy Appointment Booking</h2>
+                <p className="text-sm md:text-base text-muted-foreground">
                   Book appointments with your preferred department quickly and
                   easily.
                 </p>
               </div>
-              <div className="flex flex-col md:items-center space-y-4 md:text-center">
-                <Bell className="h-10 w-10 text-primary" />
-                <h2 className="text-xl font-bold">SMS Notifications</h2>
-                <p className="text-muted-foreground">
+              <div className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center">
+                <Bell className="h-10 w-10 text-primary mb-2" />
+                <h2 className="text-lg md:text-xl font-bold">SMS Notifications</h2>
+                <p className="text-sm md:text-base text-muted-foreground">
                   Receive SMS updates about your appointment status and token
                   number.
                 </p>
@@ -222,12 +222,12 @@ export default function Home() {
 
           <div className="text-center mt-10">
             <Button
-              className="bg-[hsl(196,98%,33%)] text-white p-6 rounded-lg font-bold text-lg hover:bg-[#1B87AF] transition"
+              className="bg-primary text-white py-6 px-8 rounded-lg text-base hover:bg-primary/90 transition"
               asChild
             >
               <Link href="/dashboard/book-opd">Book Appointment Now</Link>
             </Button>
-            <p className="text-muted-foreground mt-2">
+            <p className="text-muted-foreground text-sm mt-2">
               Need help? Contact our support team 24/7
             </p>
           </div>

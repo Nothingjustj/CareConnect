@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { RootState } from "@/store/store";
 import { createClient } from "@/utils/supabase/client";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 
@@ -45,13 +45,7 @@ const ManageTokens = () => {
     fetchAdminDetails();
   }, [user.id]);
   
-  useEffect(() => {
-    if (hospitalId && departmentId && date) {
-      fetchTokens();
-    }
-  }, [hospitalId, departmentId, date]);
-  
-  const fetchTokens = async () => {
+  const fetchTokens = useCallback(async () => {
     if (!hospitalId || !departmentId) return;
     
     setLoading(true);
@@ -69,7 +63,13 @@ const ManageTokens = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [hospitalId, departmentId, date]);
+
+  useEffect(() => {
+    if (hospitalId && departmentId && date) {
+      fetchTokens();
+    }
+  }, [hospitalId, departmentId, date, fetchTokens]);
   
   const handleStatusChange = async (tokenId: string, newStatus: 'waiting' | 'in-progress' | 'completed' | 'cancelled') => {
     try {
@@ -91,6 +91,7 @@ const ManageTokens = () => {
   const formatTime = (time: string) => {
     return time;
   };
+  
 
   return (
     <div className="px-2 py-6">

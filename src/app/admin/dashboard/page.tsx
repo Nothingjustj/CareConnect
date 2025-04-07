@@ -69,9 +69,9 @@ const AdminDashboard = () => {
 
   return (
     <div className='py-6 px-2'>
-      <h1 className="text-2xl md:text-3xl font-semibold mb-1 md:mb-2">Welcome, <span className="font-bold">{user?.name} 👋</span></h1>
+      <h1 className="text-xl md:text-3xl font-semibold mb-1 md:mb-2">Welcome, <span className="font-bold">{user?.name} 👋</span></h1>
       {/* --- MODIFICATION START: Display Hospital and Dept Name --- */}
-      <h2 className="text-muted-foreground">
+      <h2 className="text-sm md:text-lg text-muted-foreground">
         {loading ? "Loading details..." : 
           <div className='flex flex-col md:flex-row md:gap-4'>
             <p>Department: <span className='font-medium'>{departmentName}</span></p>

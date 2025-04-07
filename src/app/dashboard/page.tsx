@@ -20,8 +20,8 @@ export default function DashboardPage() {
 
     return (
             <main className="py-6 px-2">
-                <h1 className="text-2xl md:text-3xl font-semibold">Welcome, <span className="font-bold">{user?.name}</span>👋</h1>
-                <h2 className="text-muted-foreground mt-1 text-lg">Book your appointment and track your opds.</h2>
+                <h1 className="text-xl md:text-3xl font-semibold mb-1 md:mb-2">Welcome, <span className="font-bold">{user?.name}</span> 👋</h1>
+                <h2 className="text-muted-foreground text-sm md:text-lg">Book your appointment and track your opds.</h2>
                 <div className="grid sm:grid-cols-2 gap-4 my-6">
                     <Link href="/dashboard/book-opd" className="bg-muted p-4 rounded-xl border hover:border-primary">
                         <Hospital className="text-primary w-8 h-8" />

@@ -13,8 +13,6 @@ export default function Header() {
           <Image 
             src={Logo} 
             alt="RogiSetu Header Logo Image" 
-            width={150} 
-            height={50} 
             className="w-[110px] md:w-[150px] h-auto"
             priority
           />

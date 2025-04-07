@@ -1,7 +1,7 @@
 // src/components/dashboard-sidebar.tsx
 "use client"
 
-import { Building, Calendar, ChartPie, ChevronUp, Home, LogOut, User, User2, Users } from "lucide-react"
+import { Building, Calendar, ChartPie, Home, User, Users } from "lucide-react"
 
 import {
   Sidebar,
@@ -18,12 +18,8 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import Image from "next/image"
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./ui/dropdown-menu"
-import { signOut } from "@/actions/auth"
-import { toast } from "sonner"
-import { useDispatch } from "react-redux"
-import { clearUser } from "@/store/userSlice"
-import { usePathname, useRouter } from "next/navigation"
+import { usePathname } from "next/navigation"
+import { NavUser } from "./nav-menu"
 
 // In src/components/dashboard-sidebar.tsx
 
@@ -65,26 +61,8 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
   
   const items = navItems[role as keyof typeof navItems] || [];
   const { setOpenMobile } = useSidebar();
-  const dispatch = useDispatch();
   const pathname = usePathname();
-  const router = useRouter();
-
-  const handleLogout = () => {
-    try {
-      toast.promise(signOut(), {
-        loading: "Logging out...",
-        success: "Logged out successfully",
-        error: "Logout failed",
-      });
   
-      dispatch(clearUser());
-      router.push("/login");
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  }
-  
-
   return (
     <Sidebar> 
       <SidebarHeader>
@@ -115,43 +93,7 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
       </SidebarContent>
       <SidebarSeparator />
       <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <SidebarMenuButton>
-                  <User2 /> <span className="truncate">{user?.email || "Loading..."}</span>
-                  <ChevronUp className="ml-auto" />
-                </SidebarMenuButton>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                side="top"
-                className="w-[--radix-popper-anchor-width]"
-              >
-                <DropdownMenuItem asChild className="flex items-center">
-                  <Link href={
-                    !user?.role 
-                      ? '/login'
-                      : user.role === 'patient'
-                        ? '/dashboard/account'
-                        : user.role === 'department_admin'
-                          ? '/admin/account'
-                          : user.role === 'hospital_admin'
-                            ? '/hospital-admin/account'
-                            : user.role === 'super_admin'
-                              ? '/super-admin/account'
-                              : '/login'
-                  }>
-                    <User className="mr-2 h-4 w-4" /> <span>My Account</span>
-                  </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout} className="flex items-center">
-                  <LogOut className="mr-2 h-4 w-4" /> <span>Logout</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   )
