@@ -196,8 +196,8 @@ const ManageAdmins = () => {
   };
 
   return (
-    <div className="px-2 py-6">
-      <h1 className="text-2xl font-semibold mb-6">Manage Hospital Admins</h1>
+    <div className="px-2 pt-6 pb-12">
+      <h1 className="text-xl md:text-2xl font-bold mb-6">Manage Hospital Admins</h1>
 
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

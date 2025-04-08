@@ -69,14 +69,14 @@ export default function HospitalAdminDashboard () {
                 )}
                 {/* Other dashboard cards can go here */}
                 <Link href="departments" className="bg-muted p-4 rounded-xl border hover:border-primary">
-                    <Hospital className="text-primary w-10 h-10" />
-                    <h3 className="text-xl font-semibold mt-4">Manage Departments</h3>
-                    <p>Manage all your hospital departments</p>
+                    <Hospital className="text-primary w-8 h-8 md:w-10 md:h-10" />
+                    <h3 className="text-lg md:text-xl font-semibold mt-2 md:mt-4">Manage Departments</h3>
+                    <p className="text-sm md:text-base">Manage all your hospital departments</p>
                 </Link>
                 <Link href="staffs" className="bg-muted p-4 rounded-xl border hover:border-primary">
-                    <Users className="text-primary w-10 h-10" />
-                    <h3 className="text-xl font-semibold mt-4">Manage Staffs</h3>
-                    <p>Manage all your department admins in your hospital</p>
+                    <Users className="text-primary w-8 h-8 md:w-10 md:h-10" />
+                    <h3 className="text-lg md:text-xl font-semibold mt-2 md:mt-4">Manage Staffs</h3>
+                    <p className="text-sm md:text-base">Manage all your department admins in your hospital</p>
                 </Link>
             </div>
         </div>

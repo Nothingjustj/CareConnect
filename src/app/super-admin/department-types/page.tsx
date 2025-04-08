@@ -126,7 +126,7 @@ export default function DepartmentTypesPage() {
 
   return (
     <div className="space-y-6 px-2">
-      <h1 className="text-2xl font-semibold mt-4">Department Types Management</h1>
+      <h1 className="text-xl md:text-2xl font-bold mt-4">Manage Department Types</h1>
 
       {/* Add Department Type Form */}
       <div className="bg-white p-6 rounded-lg shadow">

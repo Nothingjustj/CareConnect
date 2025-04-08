@@ -137,7 +137,7 @@ const getEstimatedWaitingTime = () => {
     return (
         <div className="px-2 py-6 mx-auto w-full max-w-4xl">
             <h1 className="font-bold text-2xl md:text-3xl">Track Your OPD Status</h1>
-            <p className="text-muted-foreground mt-2 mb-6">
+            <p className="text-muted-foreground text-sm md:text-base mt-1 md:mt-2 mb-6">
                 Enter your token number to check your position in the queue and estimated waiting time.
             </p>
             

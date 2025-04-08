@@ -51,7 +51,7 @@ export default function DepartmentAnalyticsPage() {
 
   return (
     <div className="p-4 space-y-6">
-      <h1 className="text-2xl font-bold">Department Analytics</h1>
+      <h1 className="text-xl md:text-2xl font-bold">Department Analytics</h1>
       
       <div className="overflow-hidden">
         <AnalyticsDashboard 

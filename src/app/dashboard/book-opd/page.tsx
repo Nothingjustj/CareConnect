@@ -60,7 +60,7 @@ export default function BookOpd() {
     return (
         <div className="px-2 py-6 w-full max-w-4xl mx-auto">
             <h1 className="text-2xl md:text-3xl font-bold">Book OPD</h1>
-            <p className="text-muted-foreground mt-1 text-lg">Fill in your details to get an appointment token</p>
+            <p className="text-muted-foreground md:mt-1 text-sm md:text-lg">Fill in your details to get an appointment token</p>
             <div className="my-6">
                 <BookOpdForm hospitals={hospitals} />
             </div>

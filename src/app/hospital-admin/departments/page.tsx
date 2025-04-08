@@ -11,6 +11,8 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "sonner";
 import DepartmentUtilizationChart from "@/components/analytics/department-utilization";
+import { Plus, Trash } from "lucide-react";
+import { AddHospitalBtn } from "@/components/add-hospital-form";
 
 type Department = {
     id: number;
@@ -118,6 +120,11 @@ export default function DepartmentsPage() {
             return;
         }
 
+        if (!dailyTokenLimit) {
+            toast.error("Please enter a daily token limit");
+            return;
+        }
+
         try {
             const supabase = createClient();
             const { error } = await supabase
@@ -174,12 +181,12 @@ export default function DepartmentsPage() {
 
     // FIXED VERSION WITH RESPONSIVE LAYOUT
     return (
-        <div className="p-4 pb-20 w-full mx-auto">
+        <div className="px-2 pb-10 pt-5 w-full mx-auto">
             <div className="space-y-6 max-w-[100%]">
                 <div className="flex flex-col gap-2">
-                    <h1 className="text-2xl font-semibold">Manage Departments</h1>
-                    <h2 className="text-lg">
-                        <strong>Hospital Name:</strong> {hospital || "Loading..."}
+                    <h1 className="text-xl md:text-2xl font-bold">Manage Departments</h1>
+                    <h2 className="text-sm md:text-lg">
+                        <span className="font-semibold">Hospital Name:</span> {hospital || "Loading..."}
                     </h2>
                 </div>
 
@@ -191,7 +198,7 @@ export default function DepartmentsPage() {
                     <>
                         {/* Add Department Form */}
                         <div className="bg-white p-6 rounded-lg border shadow-sm max-w-2xl w-full">
-                            <h2 className="text-lg font-medium mb-4">Add Department to Hospital</h2>
+                            <h2 className="text-lg font-semibold mb-4">Add Department to Hospital</h2>
                             <div className="space-y-4">
                                 <div>
                                     <Label>Department:</Label>
@@ -246,25 +253,26 @@ export default function DepartmentsPage() {
 
                         {/* Added Departments List */}
                         <div className="space-y-4">
-                            <h2 className="text-xl font-semibold">Added Departments</h2>
+                            <h2 className="text-lg md:text-xl font-bold">Added Departments</h2>
                             {addedDepartments.length > 0 ? (
                                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
                                     {addedDepartments.map((department) => (
                                         <div 
                                             key={department.id} 
-                                            className="bg-white p-4 rounded-lg border shadow-sm"
+                                            className="bg-white p-3 rounded-lg border flex items-center justify-between shadow-sm"
                                         >
                                             <div className="flex justify-between items-start">
                                                 <h3 className="font-medium">{department.name}</h3>
                                             </div>
-                                            <div className="mt-4">
+                                            <div className="">
                                                 <Button
                                                     variant="destructive"
                                                     size="sm"
                                                     onClick={() => handleRemoveDepartment(department.id)}
-                                                    className="w-full"
+                                                    className="w-full flex items-center"
                                                 >
-                                                    Remove
+                                                    <Trash />
+                                                    <span>Remove</span>
                                                 </Button>
                                             </div>
                                         </div>

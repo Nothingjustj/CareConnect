@@ -22,19 +22,19 @@ const SuperAdminDashboard = () => {
         <AnalyticsSummaryCard linkTo="/super-admin/analytics" />
         {/* Other dashboard cards can go here */}
         <Link href="manage-hospitals" className="bg-muted p-4 rounded-xl border hover:border-primary">
-            <Hospital className="text-primary w-10 h-10" />
-            <h3 className="text-xl font-semibold mt-4">Manage Hospitals</h3>
-            <p>Manage all hospitals in Mumbai</p>
+            <Hospital className="text-primary w-8 h-8" />
+            <h3 className="text-lg md:text-xl font-semibold mt-2">Manage Hospitals</h3>
+            <p className='text-sm md:text-base'>Manage all hospitals in Mumbai</p>
         </Link>
         <Link href="manage-admins" className="bg-muted p-4 rounded-xl border hover:border-primary">
-            <Users className="text-primary w-10 h-10" />
-            <h3 className="text-xl font-semibold mt-4">Manage Hospital Admins</h3>
-            <p>Manage hospital admins across all the hospitals</p>
+            <Users className="text-primary w-8 h-8" />
+            <h3 className="text-lg md:text-xl font-semibold mt-2">Manage Hospital Admins</h3>
+            <p className='text-sm md:text-base'>Manage hospital admins across all the hospitals</p>
         </Link>
         <Link href="department-types" className="bg-muted p-4 rounded-xl border hover:border-primary">
-            <Hospital className="text-primary w-10 h-10" />
-            <h3 className="text-xl font-semibold mt-4">Manage Department Types</h3>
-            <p>Manage department types across all the hospitals</p>
+            <Hospital className="text-primary w-8 h-8" />
+            <h3 className="text-lg md:text-xl font-semibold mt-2">Manage Department Types</h3>
+            <p className='text-sm md:text-base'>Manage department types across all the hospitals</p>
         </Link>
       </div>
     </main>

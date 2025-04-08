@@ -91,14 +91,14 @@ const AdminDashboard = () => {
         )}
         {/* Other dashboard cards can go here */}
         <Link href="/admin/manage-tokens" className="bg-muted p-4 rounded-xl border hover:border-primary">
-            <Coins className="text-primary w-10 h-10" />
-            <h3 className="text-xl font-semibold mt-4">Manage Tokens</h3>
-            <p>Manage all your patients token</p>
+            <Coins className="text-primary w-8 h-8 md:w-10 md:h-10" />
+            <h3 className="text-lg md:text-xl font-semibold mt-2 md:mt-4">Manage Tokens</h3>
+            <p className='text-sm md:text-base'>Manage all your patients token</p>
         </Link>
         <Link href="/admin/queue-status" className="bg-muted p-4 rounded-xl border hover:border-primary">
-            <Hospital className="text-primary w-10 h-10" />
-            <h3 className="text-xl font-semibold mt-4">Queue Status</h3>
-            <p>View patients queue status</p>
+            <Hospital className="text-primary w-8 h-8 md:w-10 md:h-10" />
+            <h3 className="text-lg md:text-xl font-semibold mt-2 md:mt-4">Queue Status</h3>
+            <p className='text-sm md:text-base'>View patients queue status</p>
         </Link>
       </div>
     </div>

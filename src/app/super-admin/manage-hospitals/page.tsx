@@ -142,8 +142,8 @@ export default function HospitalsPage() {
     <div className="px-2 my-4">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div>
-          <h1 className="text-2xl font-bold">Manage Hospitals</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-xl md:text-2xl font-bold">Manage Hospitals</h1>
+          <p className="text-muted-foreground text-sm md:text-base">
             Here is the list of govt hospitals currently present in Mumbai
           </p>
         </div>

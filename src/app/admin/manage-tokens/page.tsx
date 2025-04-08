@@ -95,7 +95,7 @@ const ManageTokens = () => {
 
   return (
     <div className="px-2 py-6">
-      <h1 className="text-2xl font-semibold mb-6">Manage Tokens</h1>
+      <h1 className="text-xl md:text-2xl font-semibold mb-6">Manage Tokens</h1>
       
       <div className="mb-6">
         <div className="flex flex-col md:flex-row gap-4">

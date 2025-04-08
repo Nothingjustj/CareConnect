@@ -80,7 +80,7 @@ export default function HospitalAnalyticsPage() {
   }
 
   return (
-    <div className="p-4 space-y-6">
+    <div className="px-2 md:p-4 py-5 space-y-6">
       <h1 className="text-2xl font-bold">Hospital Analytics</h1>
       
       <div className="w-full md:w-1/2">

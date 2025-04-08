@@ -185,7 +185,7 @@ export default function AnalyticsDashboard({
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <h2 className="text-2xl font-bold">Analytics Dashboard</h2>
+        <h2 className="text-xl md:text-2xl font-bold">Analytics Dashboard</h2>
         <Tabs defaultValue={dateRange} onValueChange={setDateRange} className="w-full sm:w-auto">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="7">7 Days</TabsTrigger>
