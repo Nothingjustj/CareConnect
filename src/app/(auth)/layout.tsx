@@ -17,9 +17,9 @@ export default async function AuthLayout({
         backgroundRepeat: "repeat",
       }}
       >
-        <Button className="absolute top-2 left-2 bg-background" variant="ghost" size="sm" asChild>
-          <Link href="/" className="flex items-center gap-1" aria-label="Back to Home">
-            <ChevronLeft className="h-4 w-4" />
+        <Button className="absolute top-2 left-1" variant="ghost" size="sm" asChild>
+          <Link href="/" className="flex items-center gap-0.5" aria-label="Back to Home">
+            <ChevronLeft size={6} />
             Back to Home
           </Link>
         </Button>
