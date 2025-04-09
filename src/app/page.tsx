@@ -234,7 +234,7 @@ export default function Home() {
         </section>
 
         {/* Token Tracking Banner */}
-        <section className="w-full py-24 px-6 border-t">
+        <section className="w-full py-24 px-6">
           <div className="relative container bg-secondary overflow-hidden p-6 md:p-10 max-w-6xl rounded-3xl mx-auto border">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">
               Track Your Token Status
@@ -250,27 +250,122 @@ export default function Home() {
             <Coins className="absolute -bottom-5 -right-5 text-primary/10" size={148} />
           </div>
         </section>
+
+        <section id="testimonials" className="py-20 bg-muted/70">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16 animate__animated animate__fadeIn">
+              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+                Trusted by Leading Healthcare Providers
+              </h2>
+              <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+                See what healthcare professionals are saying about RogiSetu
+              </p>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {/* <!-- Testimonial 1 --> */}
+              <div className="bg-white p-6 rounded-xl shadow-lg animate__animated animate__fadeIn">
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <i className="fas fa-user-md text-primary"></i>
+                  </div>
+                  <div className="ml-4">
+                    <h4 className="font-semibold text-neutral-900">Dr. Rajesh Kumar</h4>
+                    <p className="text-sm text-neutral-600">Medical Director, City Hospital</p>
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <div className="flex text-yellow-400">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                </div>
+                <p className="text-neutral-700">"RogiSetu has transformed our OPD management completely. The automated scheduling and real-time updates have reduced waiting times by 60%. Excellent system!"</p>
+              </div>
+
+              {/* <!-- Testimonial 2 --> */}
+              <div className="bg-white p-6 rounded-xl shadow-lg animate__animated animate__fadeIn" style={{animationDelay: "0.2s"}}>
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <i className="fas fa-user-nurse text-primary"></i>
+                  </div>
+                  <div className="ml-4">
+                    <h4 className="font-semibold text-neutral-900">Mrs. Priya Sharma</h4>
+                    <p className="text-sm text-neutral-600">Head Nurse, Metro Healthcare</p>
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <div className="flex text-yellow-400">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star-half-alt"></i>
+                  </div>
+                </div>
+                <p className="text-neutral-700">"The inventory management system is a game-changer. We can track medicine stock in real-time and the automated alerts help prevent stockouts. Highly recommended!"</p>
+              </div>
+
+              {/* <!-- Testimonial 3 --> */}
+              <div className="bg-white p-6 rounded-xl shadow-lg animate__animated animate__fadeIn" style={{animationDelay: "0.4s"}}>
+                <div className="flex items-center mb-4">
+                  <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
+                    <i className="fas fa-hospital text-primary"></i>
+                  </div>
+                  <div className="ml-4">
+                    <h4 className="font-semibold text-neutral-900">Dr. Amit Patel</h4>
+                    <p className="text-sm text-neutral-600">CEO, Life Care Hospital</p>
+                  </div>
+                </div>
+                <div className="mb-4">
+                  <div className="flex text-yellow-400">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                </div>
+                <p className="text-neutral-700">"Patient satisfaction has improved significantly since we implemented RogiSetu. The SMS notifications and digital queue management have made the process seamless."</p>
+              </div>
+            </div>
+
+            {/* <!-- Stats Section --> */}
+            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-white p-8 rounded-xl shadow-lg animate__animated animate__fadeIn">
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-2">500+</div>
+                <p className="text-neutral-600">Hospitals</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-2">1M+</div>
+                <p className="text-neutral-600">Patients Served</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-2">98%</div>
+                <p className="text-neutral-600">Satisfaction Rate</p>
+              </div>
+              <div className="text-center">
+                <div className="text-3xl font-bold text-primary mb-2">24/7</div>
+                <p className="text-neutral-600">Support</p>
+              </div>
+            </div>
+
+            {/* <!-- CTA --> */}
+            <div className="text-center mt-12">
+              <Button className="px-8 h-12" asChild>
+                <Link href="/contact">
+                  Join Our Growing Network
+                  <i className="fas fa-arrow-right"></i>
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </section>
       </div>
       <Footer />
     </>
   );
 }
-
-// FeatureCard Component
-interface FeatureCardProps {
-  icon: React.ElementType;
-  title: string;
-  description: string;
-}
-
-const FeatureCard: React.FC<FeatureCardProps> = ({
-  icon: Icon,
-  title,
-  description,
-}) => (
-  <div className="bg-blue-500 hover:bg-blue-600 p-6 rounded-lg shadow-md flex flex-col space-y-3 transition-shadow duration-300 hover:shadow-lg hover:shadow-gray-400 cursor-pointer">
-    <Icon className="h-10 w-10 text-white mb-3" />
-    <h3 className="text-lg font-semibold">{title}</h3>
-    <p className="text-gray-200">{description}</p>
-  </div>
-);
