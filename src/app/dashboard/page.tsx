@@ -33,7 +33,7 @@ export default function DashboardPage() {
                         <h3 className="md:text-xl text-lg font-semibold mt-2">Track OPD</h3>
                         <p className="text-sm md:text-base">Track your OPD appointment online by entering the token no.</p>
                     </Link>
-                    <Link href="/dashboard/track-opd" className="bg-muted p-4 rounded-xl border hover:border-primary">
+                    <Link href="/dashboard/appointments" className="bg-muted p-4 rounded-xl border hover:border-primary">
                         <Hospital className="text-primary w-7 h-7 md:w-8 md:h-8" />
                         <h3 className="md:text-xl text-lg font-semibold mt-2">View Appointments</h3>
                         <p className="text-sm md:text-base">View all your previously booked appointments</p>
