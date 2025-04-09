@@ -10,7 +10,7 @@ export default async function AuthLayout({
   }>) {
 
     return (
-      <div className="relative flex flex-col min-h-screen justify-center" 
+      <div className="relative flex flex-col min-h-screen justify-center bg-sidebar" 
       style={{
         backgroundImage: `radial-gradient(circle at 0.5px 0.5px, rgba(6,182,212,0.3) 0.5px, transparent 0)`,
         backgroundSize: "8px 8px",
