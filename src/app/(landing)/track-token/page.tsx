@@ -318,9 +318,9 @@ export default function TrackTokenPage() {
 
 
   return (
-    <div className="max-w-4xl mx-auto px-4">
-      <h1 className="text-3xl font-bold mb-2">Track Your Token</h1>
-      <p className="text-muted-foreground mb-8">
+    <div className="max-w-4xl mx-auto px-4 py-8 w-full">
+      <h1 className="text-2xl md:text-3xl font-bold mb-1 md:mb-2">Track Your Token</h1>
+      <p className="text-muted-foreground mb-8 text-sm md:text-base">
         Enter your token details to check the current status
       </p>
 
