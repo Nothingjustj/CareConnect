@@ -23,8 +23,8 @@ export default function Header() {
           </div>
           <NavLinks />
         </div>
-          <div className="hidden md:flex gap-2">
-            <Button variant="outline" className="px-3 md:px-4 h-8 md:h-9 text-xs md:text-sm" asChild>
+          <div className="hidden md:flex gap-1">
+            <Button variant="ghost" className="px-3 md:px-4 h-8 md:h-9 text-xs md:text-sm" asChild>
               <Link href="/login">Login</Link>
             </Button>
             <Button className="px-3 md:px-4 h-8 md:h-9 text-xs md:text-sm" asChild>
