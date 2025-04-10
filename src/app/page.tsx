@@ -284,7 +284,7 @@ export default function Home() {
               <div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <UserIcon className="h-8 w-8 text-primary" />
+                    <UserIcon className="h-7 w-7 text-primary" />
                   </div>
                   <div className="ml-4">
                     <h4 className="font-semibold text-neutral-900">
@@ -297,11 +297,11 @@ export default function Home() {
                 </div>
                 <div className="mb-4">
                   <div className="flex text-yellow-400">
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
                   </div>
                 </div>
                 <p className="text-neutral-700">
@@ -315,7 +315,7 @@ export default function Home() {
               <div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <UserIcon className="h-8 w-8 text-primary" />
+                    <UserIcon className="h-7 w-7 text-primary" />
                   </div>
                   <div className="ml-4">
                     <h4 className="font-semibold text-neutral-900">
@@ -328,11 +328,11 @@ export default function Home() {
                 </div>
                 <div className="mb-4">
                   <div className="flex text-yellow-400">
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarHalfIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarHalfIcon className="h-4 w-4 fill-yellow-400" />
                   </div>
                 </div>
                 <p className="text-neutral-700">
@@ -346,7 +346,7 @@ export default function Home() {
               <div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <UserIcon className="h-8 w-8 text-primary" />
+                    <UserIcon className="h-7 w-7 text-primary" />
                   </div>
                   <div className="ml-4">
                     <h4 className="font-semibold text-neutral-900">
@@ -359,11 +359,11 @@ export default function Home() {
                 </div>
                 <div className="mb-4">
                   <div className="flex text-yellow-400">
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
-                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
+                    <StarIcon className="h-4 w-4 fill-yellow-400" />
                   </div>
                 </div>
                 <p className="text-neutral-700">
