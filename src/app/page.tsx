@@ -10,8 +10,11 @@ import {
   Bed,
   Building,
   CheckCircle,
-  Check,
   Coins,
+  UserIcon,
+  StarIcon,
+  StarHalfIcon,
+  ArrowRightIcon,
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
@@ -82,13 +85,18 @@ export default function Home() {
               <span className="text-primary">OPD Management</span> System
             </h1>
             <p className="text-balance mt-6 text-base md:text-lg text-secondary-foreground">
-            One-stop solution for managing all your hospital OPD needs. Streamline patient care with our comprehensive digital platform.
+              One-stop solution for managing all your hospital OPD needs.
+              Streamline patient care with our comprehensive digital platform.
             </p>
             <div className="mt-8 flex md:justify-center gap-4">
               <Button className="md:text-base md:py-6 md:px-6" asChild>
                 <Link href="/login">Get started</Link>
               </Button>
-              <Button className="md:text-base md:py-6 md:px-6" variant="outline" asChild>
+              <Button
+                className="md:text-base md:py-6 md:px-6"
+                variant="outline"
+                asChild
+              >
                 <Link href="/hospitals">View Hospitals</Link>
               </Button>
             </div>
@@ -100,7 +108,9 @@ export default function Home() {
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
               <div className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center">
                 <Clock className="h-10 w-10 text-primary mb-2" />
-                <h2 className="text-lg md:text-xl font-bold">Real-time Token Updates</h2>
+                <h2 className="text-lg md:text-xl font-bold">
+                  Real-time Token Updates
+                </h2>
                 <p className="text-sm md:text-base text-muted-foreground">
                   Track your token status in real-time and get notified when
                   it&apos;s your turn.
@@ -108,7 +118,9 @@ export default function Home() {
               </div>
               <div className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center">
                 <Calendar className="h-10 w-10 text-primary mb-2" />
-                <h2 className="text-lg md:text-xl font-bold">Easy Appointment Booking</h2>
+                <h2 className="text-lg md:text-xl font-bold">
+                  Easy Appointment Booking
+                </h2>
                 <p className="text-sm md:text-base text-muted-foreground">
                   Book appointments with your preferred department quickly and
                   easily.
@@ -116,7 +128,9 @@ export default function Home() {
               </div>
               <div className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center">
                 <Bell className="h-10 w-10 text-primary mb-2" />
-                <h2 className="text-lg md:text-xl font-bold">SMS Notifications</h2>
+                <h2 className="text-lg md:text-xl font-bold">
+                  SMS Notifications
+                </h2>
                 <p className="text-sm md:text-base text-muted-foreground">
                   Receive SMS updates about your appointment status and token
                   number.
@@ -247,14 +261,17 @@ export default function Home() {
             <Button size="lg" className="mt-2" asChild>
               <Link href="/track-token">Track Your Token Now</Link>
             </Button>
-            <Coins className="absolute -bottom-5 -right-5 text-primary/10" size={148} />
+            <Coins
+              className="absolute -bottom-5 -right-5 text-primary/10"
+              size={148}
+            />
           </div>
         </section>
 
         <section id="testimonials" className="py-20 bg-muted/70">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16 animate__animated animate__fadeIn">
-              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-4">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2">
                 Trusted by Leading Healthcare Providers
               </h2>
               <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
@@ -264,77 +281,101 @@ export default function Home() {
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* <!-- Testimonial 1 --> */}
-              <div className="bg-white p-6 rounded-xl shadow-lg animate__animated animate__fadeIn">
+              <div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <i className="fas fa-user-md text-primary"></i>
+                    <UserIcon className="h-8 w-8 text-primary" />
                   </div>
                   <div className="ml-4">
-                    <h4 className="font-semibold text-neutral-900">Dr. Rajesh Kumar</h4>
-                    <p className="text-sm text-neutral-600">Medical Director, City Hospital</p>
+                    <h4 className="font-semibold text-neutral-900">
+                      Dr. Rajesh Kumar
+                    </h4>
+                    <p className="text-sm text-neutral-600">
+                      Medical Director, City Hospital
+                    </p>
                   </div>
                 </div>
                 <div className="mb-4">
                   <div className="flex text-yellow-400">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
                   </div>
                 </div>
-                <p className="text-neutral-700">"RogiSetu has transformed our OPD management completely. The automated scheduling and real-time updates have reduced waiting times by 60%. Excellent system!"</p>
+                <p className="text-neutral-700">
+                  "RogiSetu has transformed our OPD management completely. The
+                  automated scheduling and real-time updates have reduced
+                  waiting times by 60%. Excellent system!"
+                </p>
               </div>
 
               {/* <!-- Testimonial 2 --> */}
-              <div className="bg-white p-6 rounded-xl shadow-lg animate__animated animate__fadeIn" style={{animationDelay: "0.2s"}}>
+              <div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <i className="fas fa-user-nurse text-primary"></i>
+                    <UserIcon className="h-8 w-8 text-primary" />
                   </div>
                   <div className="ml-4">
-                    <h4 className="font-semibold text-neutral-900">Mrs. Priya Sharma</h4>
-                    <p className="text-sm text-neutral-600">Head Nurse, Metro Healthcare</p>
+                    <h4 className="font-semibold text-neutral-900">
+                      Mrs. Priya Sharma
+                    </h4>
+                    <p className="text-sm text-neutral-600">
+                      Head Nurse, Metro Healthcare
+                    </p>
                   </div>
                 </div>
                 <div className="mb-4">
                   <div className="flex text-yellow-400">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star-half-alt"></i>
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarHalfIcon className="h-5 w-5 fill-yellow-400" />
                   </div>
                 </div>
-                <p className="text-neutral-700">"The inventory management system is a game-changer. We can track medicine stock in real-time and the automated alerts help prevent stockouts. Highly recommended!"</p>
+                <p className="text-neutral-700">
+                  "The inventory management system is a game-changer. We can
+                  track medicine stock in real-time and the automated alerts
+                  help prevent stockouts. Highly recommended!"
+                </p>
               </div>
 
               {/* <!-- Testimonial 3 --> */}
-              <div className="bg-white p-6 rounded-xl shadow-lg animate__animated animate__fadeIn" style={{animationDelay: "0.4s"}}>
+              <div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
-                    <i className="fas fa-hospital text-primary"></i>
+                    <UserIcon className="h-8 w-8 text-primary" />
                   </div>
                   <div className="ml-4">
-                    <h4 className="font-semibold text-neutral-900">Dr. Amit Patel</h4>
-                    <p className="text-sm text-neutral-600">CEO, Life Care Hospital</p>
+                    <h4 className="font-semibold text-neutral-900">
+                      Dr. Amit Patel
+                    </h4>
+                    <p className="text-sm text-neutral-600">
+                      CEO, Life Care Hospital
+                    </p>
                   </div>
                 </div>
                 <div className="mb-4">
                   <div className="flex text-yellow-400">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
+                    <StarIcon className="h-5 w-5 fill-yellow-400" />
                   </div>
                 </div>
-                <p className="text-neutral-700">"Patient satisfaction has improved significantly since we implemented RogiSetu. The SMS notifications and digital queue management have made the process seamless."</p>
+                <p className="text-neutral-700">
+                  "Patient satisfaction has improved significantly since we
+                  implemented RogiSetu. The SMS notifications and digital queue
+                  management have made the process seamless."
+                </p>
               </div>
             </div>
 
             {/* <!-- Stats Section --> */}
-            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-white p-8 rounded-xl shadow-lg animate__animated animate__fadeIn">
+            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-white p-8 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]">
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-2">500+</div>
                 <p className="text-neutral-600">Hospitals</p>
@@ -358,7 +399,7 @@ export default function Home() {
               <Button className="px-8 h-12" asChild>
                 <Link href="/contact">
                   Join Our Growing Network
-                  <i className="fas fa-arrow-right"></i>
+                  <ArrowRightIcon />
                 </Link>
               </Button>
             </div>
