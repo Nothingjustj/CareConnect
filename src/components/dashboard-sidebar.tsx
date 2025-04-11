@@ -67,7 +67,7 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
           <Image src="/logo.png" width={135} height={135} alt="logo" />
         </Link>
       </SidebarHeader>
-      <SidebarSeparator />
+      {/* <SidebarSeparator /> */}
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
@@ -75,7 +75,7 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
               {items.map((item) => {
                 const isActive = pathname === item.href;
                 return (
-                <SidebarMenuItem className={`rounded-md ${isActive ? "bg-primary/10 text-primary" : "bg-none"}`} key={item.label}>
+                <SidebarMenuItem className={`rounded-none rounded-tr-full rounded-br-full transition-all duration-150 ease-in-out ${isActive ? "bg-primary/10 text-primary border-l-[3px] border-l-primary pl-1" : "bg-none"}`} key={item.label}>
                   <SidebarMenuButton asChild>
                     <Link href={item.href} onClick={() => setOpenMobile(false)}>  
                       <item.icon />
@@ -88,7 +88,7 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarSeparator />
+      {/* <SidebarSeparator /> */}
       <SidebarFooter>
         <NavUser user={user} />
       </SidebarFooter>
