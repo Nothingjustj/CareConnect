@@ -396,7 +396,7 @@ export default function Home() {
 
             {/* <!-- CTA --> */}
             <div className="text-center mt-12">
-              <Button className="px-8 h-12" asChild>
+              <Button className="px-8 h-12 text-[15px]" asChild>
                 <Link href="/contact">
                   Join Our Growing Network
                   <ArrowRightIcon />

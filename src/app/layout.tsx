@@ -24,8 +24,8 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "RogiSetu",
-  description: "Simplifying Hospital OPD System",
+  title: "RogiSetu — Simplifying Hospital OPD System",
+  description: "One-stop solution for managing all your hospital OPD needs. Streamline patient care with our comprehensive digital platform.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
