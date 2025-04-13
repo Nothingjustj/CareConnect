@@ -287,12 +287,12 @@ export default function Home() {
                     <UserIcon className="h-7 w-7 text-primary" />
                   </div>
                   <div className="ml-4">
-                    <h4 className="font-semibold text-neutral-900">
+                    <p className="font-semibold text-neutral-900">
                       Dr. Rajesh Kumar
-                    </h4>
-                    <p className="text-sm text-neutral-600">
-                      Medical Director, City Hospital
                     </p>
+                    <span className="text-sm text-neutral-600">
+                      Medical Director, City Hospital
+                    </span>
                   </div>
                 </div>
                 <div className="mb-4">
@@ -318,12 +318,12 @@ export default function Home() {
                     <UserIcon className="h-7 w-7 text-primary" />
                   </div>
                   <div className="ml-4">
-                    <h4 className="font-semibold text-neutral-900">
+                    <p className="font-semibold text-neutral-900">
                       Mrs. Priya Sharma
-                    </h4>
-                    <p className="text-sm text-neutral-600">
-                      Head Nurse, Metro Healthcare
                     </p>
+                    <span className="text-sm text-neutral-600">
+                      Head Nurse, Metro Healthcare
+                    </span>
                   </div>
                 </div>
                 <div className="mb-4">
@@ -349,12 +349,12 @@ export default function Home() {
                     <UserIcon className="h-7 w-7 text-primary" />
                   </div>
                   <div className="ml-4">
-                    <h4 className="font-semibold text-neutral-900">
+                    <p className="font-semibold text-neutral-900">
                       Dr. Amit Patel
-                    </h4>
-                    <p className="text-sm text-neutral-600">
-                      CEO, Life Care Hospital
                     </p>
+                    <span className="text-sm text-neutral-600">
+                      CEO, Life Care Hospital
+                    </span>
                   </div>
                 </div>
                 <div className="mb-4">
