@@ -6,7 +6,7 @@ export default function OrganizationSchema() {
     "@type": "Organization",
     "name": "RogiSetu",
     "url": "https://rogisetu.vercel.app",
-    "logo": "https://rogisetu.vercel.app/logo.png",
+    "logo": "https://rogisetu.vercel.app/favicon.png",
     "sameAs": [
       "https://twitter.com/sharmaadityax",
       "https://www.linkedin.com/in/aditya-r-sharma/",
