@@ -75,7 +75,7 @@ export function AppSidebar({ user, role }: { user: any; role: string | null}) {
               {items.map((item) => {
                 const isActive = pathname === item.href;
                 return (
-                <SidebarMenuItem className={`rounded-none rounded-tr-full rounded-br-full transition-all duration-150 ease-in-out ${isActive ? "bg-primary/10 text-primary border-l-[3px] border-l-primary pl-1" : "bg-none"}`} key={item.label}>
+                <SidebarMenuItem className={`rounded-none rounded-tr-full rounded-br-full transition-all duration-150 ease-in-out ${isActive ? "bg-primary/10 text-primary border-l-[3px] border-l-primary pl-1.5" : "bg-none"}`} key={item.label}>
                   <SidebarMenuButton asChild>
                     <Link href={item.href} onClick={() => setOpenMobile(false)}>  
                       <item.icon />
