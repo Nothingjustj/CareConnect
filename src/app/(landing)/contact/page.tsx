@@ -1,4 +1,10 @@
-import { Phone, Mail, MapPin, Section } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: 'Contact Us',
+  description: 'Simplifying Hospital OPD Management System',
+}
 
 export default function ContactPage() {
   return (

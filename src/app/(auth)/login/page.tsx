@@ -12,6 +12,6 @@ export default function LoginPage() {
 }
 
 export const metadata: Metadata = {
-  title: 'Login | RogiSetu',
+  title: 'Login',
   description: 'Simplifying Hospital OPD Management System',
 }

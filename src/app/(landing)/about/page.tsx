@@ -1,5 +1,11 @@
 import React from 'react'
 import { Building2, Clock, CalendarCheck, CheckCircle } from "lucide-react";
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'About Us',
+  description: 'Simplifying Hospital OPD Management System',
+}
 
 const AboutPage = () => {
   return (

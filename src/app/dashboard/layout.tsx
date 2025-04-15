@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import DashboardLayout from "@/components/dashboard-layout";
 
 export const metadata: Metadata = {
-    title: 'Dashboard - RogiSetu',
+    title: 'Dashboard',
     description: 'Simplifying Hospital OPD Management System',
 }
 
