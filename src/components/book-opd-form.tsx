@@ -300,11 +300,11 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
   return (
     <form id="appointment-form" className="flex flex-col gap-6" onSubmit={handleSubmit}>
       {step === 1 && (
-        <div className="p-6 border rounded-2xl bg-primary-foreground">
+        <div className="p-4 md:p-6 border rounded-2xl bg-primary-foreground">
           <h3 className="text-xl font-medium mb-6">Appointment Details</h3>
           <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
             <div className="flex flex-col gap-2">
-              <Label>Hospital:</Label>
+              <Label className="flex items-center gap-1">Hospital: <span className="text-xs text-destructive">(*Only 2 hospitals available to test)</span></Label>
               <Select 
                 onValueChange={(value) => {
                   setSelectedHospital(value);
@@ -329,6 +329,7 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
                   </SelectGroup>
                 </SelectContent>
               </Select>
+              <span className="text-xs text-muted-foreground">Choose either: <br /> - Grant Medical College & J J Group of Hospitals <br /> - K. J. Somaiya Hospital, KJH</span>
             </div>
             <div className="flex flex-col gap-2">
               <Label>Department:</Label>
