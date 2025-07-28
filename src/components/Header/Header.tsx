@@ -1,3 +1,4 @@
+"use client"
 import Link from "next/link";
 import NavLinks from "./NavLinks";
 import { Button } from "../ui/button";
@@ -5,10 +6,7 @@ import Logo from "/public/logo.png"
 import Image from "next/image";
 import { PWAInstallButton } from "../pwa-install-button";
 import { motion, useMotionValueEvent, useScroll } from "motion/react"
-import { useEffect, useState } from "react";
-
-// border-b border-b-secondary bg-background/90 
-
+import { useState } from "react";
 
 export default function Header() {
   
