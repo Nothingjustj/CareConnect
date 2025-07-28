@@ -47,6 +47,7 @@ export async function updateSession(request: NextRequest) {
     '/about',
     '/contact',
     '/track-token',
+    '/video.mp4'
   ];
   
   const pathname = request.nextUrl.pathname;

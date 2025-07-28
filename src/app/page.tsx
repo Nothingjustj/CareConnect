@@ -3,6 +3,7 @@ import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { Button } from "@/components/ui/button";
+import { Suspense } from 'react'
 import {
   Bell,
   Calendar,
@@ -16,10 +17,13 @@ import {
   StarIcon,
   StarHalfIcon,
   ArrowRightIcon,
+  PauseIcon,
+  PlayIcon,
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 import { motion } from "motion/react";
+import { useState } from 'react'; // Import useState for managing play/pause state
 
 // Define feature data separately
 const features: {
@@ -65,7 +69,24 @@ const features: {
   },
 ];
 
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+};
+
 export default function Home() {
+  const [isPlaying, setIsPlaying] = useState(false); // State for play/pause
+
+  const togglePlay = () => {
+    const videoElement = document.getElementById("videoElement") as HTMLVideoElement;
+    if (isPlaying) {
+      videoElement.pause();
+    } else {
+      videoElement.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
   return (
     <>
       <PWAInstallPrompt />
@@ -85,24 +106,24 @@ export default function Home() {
           {/* Right Circle Blurred */}
           <div className="absolute bottom-0 right-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[70px] md:blur-[150px] bg-primary/40"></div>
 
-          <div className="w-full max-w-3xl px-6 md:px-0 md:text-center z-10">
+          <div className="w-full max-w-5xl px-6 md:px-0 md:text-center z-10">
             <motion.h1
               className="text-4xl md:text-[3.5rem] font-bold text-balance md:leading-[1.2] tracking-tight"
               initial={{
                 opacity: 0,
                 y: 20,
-                filter: "blur(5px)"
+                filter: "blur(5px)",
               }}
               whileInView={{
                 opacity: 1,
                 y: 0,
-                filter: "blur(0px)"
+                filter: "blur(0px)",
               }}
               transition={{
                 delay: 0.2,
               }}
-              viewport={{ 
-                once: true 
+              viewport={{
+                once: true,
               }}
             >
               Simplifying Hospital{" "}
@@ -113,18 +134,18 @@ export default function Home() {
               initial={{
                 opacity: 0,
                 y: 20,
-                filter: "blur(5px)"
+                filter: "blur(5px)",
               }}
               whileInView={{
                 opacity: 1,
                 y: 0,
-                filter: "blur(0px)"
+                filter: "blur(0px)",
               }}
               transition={{
                 delay: 0.4,
               }}
-              viewport={{ 
-                once: true 
+              viewport={{
+                once: true,
               }}
             >
               One-stop solution for managing all your hospital OPD needs.
@@ -135,12 +156,12 @@ export default function Home() {
               initial={{
                 opacity: 0,
                 y: 20,
-                filter: "blur(5px)"
+                filter: "blur(5px)",
               }}
               whileInView={{
                 opacity: 1,
                 y: 0,
-                filter: "blur(0px)"
+                filter: "blur(0px)",
               }}
               transition={{
                 delay: 0.6,
@@ -157,6 +178,42 @@ export default function Home() {
               >
                 <Link href="/hospitals">View Hospitals</Link>
               </Button>
+            </motion.div>
+            <motion.div
+              className="mt-24 -mb-24 md:-mb-44 relative rounded-2xl shadow-[10px_10px_0px_#eee,-10px_-10px_0px_#eee,-10px_10px_0px_#eee,10px_-10px_0px_#eee]"
+              initial="hidden"
+              whileInView="visible"
+              variants={fadeIn}
+              transition={{ duration: 0.5, delay: 0.8 }}
+              viewport={{ once: true }}
+            >
+              <Suspense fallback={<p>Loading video...</p>}>
+                <video
+                  id="videoElement"
+                  className="rounded-xl shadow-lg w-[100%]"
+                  autoPlay
+                  loop
+                  onMouseEnter={() => setIsPlaying(true)} 
+                  onMouseLeave={() => setIsPlaying(false)}
+                  width="100%"
+                  height="100%"
+                >
+                  <source src="/video.mp4" type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+                <div
+                  className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300" // Centered play button
+                  onClick={togglePlay}
+                >
+                  <button className="bg-black rounded-full p-5 shadow-[0_0_8px_#222,0_0_4px_#333]">
+                    {isPlaying ? (
+                      <PauseIcon className="h-10 w-10 text-white" />
+                    ) : (
+                      <PlayIcon className="h-10 w-10 text-white" />
+                    )}
+                  </button>
+                </div>
+              </Suspense>
             </motion.div>
           </div>
         </section>
@@ -196,7 +253,7 @@ export default function Home() {
                   opacity: 1,
                 }}
                 transition={{
-                  delay:0.2,
+                  delay: 0.2,
                 }}
                 viewport={{ once: true }}
               >
@@ -220,7 +277,7 @@ export default function Home() {
                   opacity: 1,
                 }}
                 transition={{
-                  delay:0.4
+                  delay: 0.4,
                 }}
                 viewport={{ once: true }}
               >
@@ -250,7 +307,7 @@ export default function Home() {
             opacity: 1,
           }}
           transition={{
-            delay:0.5
+            delay: 0.5,
           }}
           viewport={{ once: true }}
         >
