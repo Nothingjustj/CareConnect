@@ -90,11 +90,13 @@ export default function Home() {
               className="text-4xl md:text-[3.5rem] font-bold text-balance md:leading-[1.2] tracking-tight"
               initial={{
                 opacity: 0,
-                y: 10,
+                y: 20,
+                filter: "blur(5px)"
               }}
               whileInView={{
                 opacity: 1,
                 y: 0,
+                filter: "blur(0px)"
               }}
               transition={{
                 delay: 0.2,
@@ -110,11 +112,13 @@ export default function Home() {
               className="text-balance mt-6 text-base md:text-lg text-secondary-foreground"
               initial={{
                 opacity: 0,
-                y: 10,
+                y: 20,
+                filter: "blur(5px)"
               }}
               whileInView={{
                 opacity: 1,
                 y: 0,
+                filter: "blur(0px)"
               }}
               transition={{
                 delay: 0.4,
@@ -130,11 +134,13 @@ export default function Home() {
               className="mt-8 flex md:justify-center gap-4"
               initial={{
                 opacity: 0,
-                y: 10,
+                y: 20,
+                filter: "blur(5px)"
               }}
               whileInView={{
                 opacity: 1,
                 y: 0,
+                filter: "blur(0px)"
               }}
               transition={{
                 delay: 0.6,
