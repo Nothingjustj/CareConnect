@@ -18,10 +18,8 @@ export default function Header() {
   useMotionValueEvent(scrollY, "change", (latest) => {
     if (latest > 150) {
       setVisible(true);
-      console.log("TRUEEE")
     } else {
       setVisible(false);  
-      console.log("FALSEE")
     }
   });
   

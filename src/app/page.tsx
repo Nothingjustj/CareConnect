@@ -3,7 +3,7 @@ import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { Button } from "@/components/ui/button";
-import { Suspense } from 'react'
+import { Suspense } from "react";
 import {
   Bell,
   Calendar,
@@ -23,7 +23,7 @@ import {
 import Link from "next/link";
 import React from "react";
 import { motion } from "motion/react";
-import { useState } from 'react'; // Import useState for managing play/pause state
+import { useState } from "react"; // Import useState for managing play/pause state
 
 // Define feature data separately
 const features: {
@@ -78,7 +78,9 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false); // State for play/pause
 
   const togglePlay = () => {
-    const videoElement = document.getElementById("videoElement") as HTMLVideoElement;
+    const videoElement = document.getElementById(
+      "videoElement"
+    ) as HTMLVideoElement;
     if (isPlaying) {
       videoElement.pause();
     } else {
@@ -106,66 +108,54 @@ export default function Home() {
           {/* Right Circle Blurred */}
           <div className="absolute bottom-0 right-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[70px] md:blur-[150px] bg-primary/40"></div>
 
-          <div className="w-full max-w-5xl px-6 md:px-0 md:text-center z-10">
-            <motion.h1
+          <div className="w-full max-w-6xl px-6 md:px-0 md:text-center z-10">
+            <h1 className="text-4xl md:text-6xl font-bold text-balance md:leading-[1.2] tracking-tight text-neutral-800">
+              {"Simplifying Hospital OPD Management System"
+                .split(" ")
+                .map((word, index) => {
+                  const isBlue = word === "OPD" || word === "Management";
+                  return (
+                  <motion.span
+                    key={index}
+                    initial={{ opacity: 0, filter: "blur(4px)", y: 10 }}
+                    whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                    transition={{
+                      duration: 0.3,
+                      delay: index * 0.1,
+                      ease: "easeInOut",
+                    }}
+                    viewport={{ once: true }}
+                    className={`mr-2 inline-block ${isBlue ? "text-primary" : ""}`}
+                  >
+                    {word}
+                  </motion.span>
+              )})}
+            </h1>
+            {/* <motion.h1
               className="text-4xl md:text-[3.5rem] font-bold text-balance md:leading-[1.2] tracking-tight"
-              initial={{
-                opacity: 0,
-                y: 20,
-                filter: "blur(5px)",
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-              }}
-              transition={{
-                delay: 0.2,
-              }}
-              viewport={{
-                once: true,
-              }}
+              initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
+              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+              transition={{ delay: 0.2 }}
+              viewport={{ once: true }}
             >
               Simplifying Hospital{" "}
               <span className="text-primary">OPD Management</span> System
-            </motion.h1>
+            </motion.h1> */}
             <motion.p
-              className="text-balance mt-6 text-base md:text-lg text-secondary-foreground"
-              initial={{
-                opacity: 0,
-                y: 20,
-                filter: "blur(5px)",
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-              }}
-              transition={{
-                delay: 0.4,
-              }}
-              viewport={{
-                once: true,
-              }}
+              className="text-balance mt-6 md:px-36 text-base md:text-lg text-secondary-foreground"
+              initial={{ opacity: 0, filter: "blur(5px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ delay: 0.8 }}
+              viewport={{ once: true }}
             >
               One-stop solution for managing all your hospital OPD needs.
               Streamline patient care with our comprehensive digital platform.
             </motion.p>
             <motion.div
               className="mt-8 flex md:justify-center gap-4"
-              initial={{
-                opacity: 0,
-                y: 20,
-                filter: "blur(5px)",
-              }}
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                filter: "blur(0px)",
-              }}
-              transition={{
-                delay: 0.6,
-              }}
+              initial={{ opacity: 0, filter: "blur(5px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ delay: 1 }}
               viewport={{ once: true }}
             >
               <Button className="md:text-base md:py-6 md:px-6" asChild>
@@ -184,16 +174,19 @@ export default function Home() {
               initial="hidden"
               whileInView="visible"
               variants={fadeIn}
-              transition={{ duration: 0.5, delay: 0.8 }}
+              transition={{ duration: 0.5, delay: 1.2 }}
               viewport={{ once: true }}
             >
+              <div className="absolute inset-x-0 -top-[0.625rem] h-px w-full bg-neutral-200/80 dark:bg-neutral-800/80">
+                <div className="absolute mx-auto h-px w-40 bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
+              </div>
               <Suspense fallback={<p>Loading video...</p>}>
                 <video
                   id="videoElement"
                   className="rounded-xl shadow-lg w-[100%]"
                   autoPlay
                   loop
-                  onMouseEnter={() => setIsPlaying(true)} 
+                  onMouseEnter={() => setIsPlaying(true)}
                   onMouseLeave={() => setIsPlaying(false)}
                   width="100%"
                   height="100%"
@@ -223,14 +216,8 @@ export default function Home() {
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
               <motion.div
                 className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
-                initial={{
-                  y: 10,
-                  opacity: 0,
-                }}
-                whileInView={{
-                  y: 0,
-                  opacity: 1,
-                }}
+                initial={{ y: 10, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
                 viewport={{ once: true }}
               >
                 <Clock className="h-10 w-10 text-primary mb-2" />
@@ -244,17 +231,9 @@ export default function Home() {
               </motion.div>
               <motion.div
                 className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
-                initial={{
-                  y: 10,
-                  opacity: 0,
-                }}
-                whileInView={{
-                  y: 0,
-                  opacity: 1,
-                }}
-                transition={{
-                  delay: 0.2,
-                }}
+                initial={{ y: 10, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.2 }}
                 viewport={{ once: true }}
               >
                 <Calendar className="h-10 w-10 text-primary mb-2" />
@@ -268,17 +247,9 @@ export default function Home() {
               </motion.div>
               <motion.div
                 className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
-                initial={{
-                  y: 10,
-                  opacity: 0,
-                }}
-                whileInView={{
-                  y: 0,
-                  opacity: 1,
-                }}
-                transition={{
-                  delay: 0.4,
-                }}
+                initial={{ y: 10, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}                
+                transition={{ delay: 0.4 }}
                 viewport={{ once: true }}
               >
                 <Bell className="h-10 w-10 text-primary mb-2" />
@@ -295,21 +266,9 @@ export default function Home() {
         </section>
 
         {/* ----------------Features Section ---------------*/}
-        <motion.section
+        <section
           id="features"
           className="bg-white py-24 px-6"
-          initial={{
-            y: 10,
-            opacity: 0,
-          }}
-          whileInView={{
-            y: 0,
-            opacity: 1,
-          }}
-          transition={{
-            delay: 0.5,
-          }}
-          viewport={{ once: true }}
         >
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900">
@@ -338,7 +297,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </motion.section>
+        </section>
 
         {/* --------------------Solutions-------------------- */}
         <section id="solutions" className="bg-muted/70 py-24 px-6">
