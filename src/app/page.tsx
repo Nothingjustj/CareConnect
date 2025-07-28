@@ -1,3 +1,4 @@
+"use client";
 import Footer from "@/components/Footer/Footer";
 import Header from "@/components/Header/Header";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
@@ -18,6 +19,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import { motion } from "motion/react";
 
 // Define feature data separately
 const features: {
@@ -72,23 +74,73 @@ export default function Home() {
         <section
           className="relative bg-background flex flex-col items-center justify-center py-20 md:py-28 w-full"
           style={{
-            backgroundImage: `radial-gradient(circle at 0.5px 0.5px, rgba(6,182,212,0.3) 0.5px, transparent 0)`,
+            backgroundImage: `radial-gradient(circle at 0.5px 0.5px, rgba(6,182,212,0.7) 0.5px, transparent 0)`,
             backgroundSize: "8px 8px",
             backgroundRepeat: "repeat",
           }}
         >
+          {/* Left Circle Blurred */}
           <div className="absolute top-0 left-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[70px] md:blur-[150px] bg-primary/40"></div>
+
+          {/* Right Circle Blurred */}
           <div className="absolute bottom-0 right-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[70px] md:blur-[150px] bg-primary/40"></div>
+
           <div className="w-full max-w-3xl px-6 md:px-0 md:text-center z-10">
-            <h1 className="text-4xl md:text-[3.5rem] font-bold text-balance md:leading-[1.2] tracking-tight">
+            <motion.h1
+              className="text-4xl md:text-[3.5rem] font-bold text-balance md:leading-[1.2] tracking-tight"
+              initial={{
+                opacity: 0,
+                y: 10,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.2,
+              }}
+              viewport={{ 
+                once: true 
+              }}
+            >
               Simplifying Hospital{" "}
               <span className="text-primary">OPD Management</span> System
-            </h1>
-            <p className="text-balance mt-6 text-base md:text-lg text-secondary-foreground">
+            </motion.h1>
+            <motion.p
+              className="text-balance mt-6 text-base md:text-lg text-secondary-foreground"
+              initial={{
+                opacity: 0,
+                y: 10,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.4,
+              }}
+              viewport={{ 
+                once: true 
+              }}
+            >
               One-stop solution for managing all your hospital OPD needs.
               Streamline patient care with our comprehensive digital platform.
-            </p>
-            <div className="mt-8 flex md:justify-center gap-4">
+            </motion.p>
+            <motion.div
+              className="mt-8 flex md:justify-center gap-4"
+              initial={{
+                opacity: 0,
+                y: 10,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              transition={{
+                delay: 0.6,
+              }}
+              viewport={{ once: true }}
+            >
               <Button className="md:text-base md:py-6 md:px-6" asChild>
                 <Link href="/login">Get started</Link>
               </Button>
@@ -99,14 +151,25 @@ export default function Home() {
               >
                 <Link href="/hospitals">View Hospitals</Link>
               </Button>
-            </div>
+            </motion.div>
           </div>
         </section>
 
         <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/70">
           <div className="container px-6 max-w-7xl mx-auto">
             <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
-              <div className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center">
+              <motion.div
+                className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
+                initial={{
+                  y: 10,
+                  opacity: 0,
+                }}
+                whileInView={{
+                  y: 0,
+                  opacity: 1,
+                }}
+                viewport={{ once: true }}
+              >
                 <Clock className="h-10 w-10 text-primary mb-2" />
                 <h2 className="text-lg md:text-xl font-bold">
                   Real-time Token Updates
@@ -115,8 +178,22 @@ export default function Home() {
                   Track your token status in real-time and get notified when
                   it&apos;s your turn.
                 </p>
-              </div>
-              <div className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center">
+              </motion.div>
+              <motion.div
+                className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
+                initial={{
+                  y: 10,
+                  opacity: 0,
+                }}
+                whileInView={{
+                  y: 0,
+                  opacity: 1,
+                }}
+                transition={{
+                  delay:0.2,
+                }}
+                viewport={{ once: true }}
+              >
                 <Calendar className="h-10 w-10 text-primary mb-2" />
                 <h2 className="text-lg md:text-xl font-bold">
                   Easy Appointment Booking
@@ -125,8 +202,22 @@ export default function Home() {
                   Book appointments with your preferred department quickly and
                   easily.
                 </p>
-              </div>
-              <div className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center">
+              </motion.div>
+              <motion.div
+                className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
+                initial={{
+                  y: 10,
+                  opacity: 0,
+                }}
+                whileInView={{
+                  y: 0,
+                  opacity: 1,
+                }}
+                transition={{
+                  delay:0.4
+                }}
+                viewport={{ once: true }}
+              >
                 <Bell className="h-10 w-10 text-primary mb-2" />
                 <h2 className="text-lg md:text-xl font-bold">
                   SMS Notifications
@@ -135,13 +226,28 @@ export default function Home() {
                   Receive SMS updates about your appointment status and token
                   number.
                 </p>
-              </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
         {/* ----------------Features Section ---------------*/}
-        <section id="features" className="bg-white py-24 px-6">
+        <motion.section
+          id="features"
+          className="bg-white py-24 px-6"
+          initial={{
+            y: 10,
+            opacity: 0,
+          }}
+          whileInView={{
+            y: 0,
+            opacity: 1,
+          }}
+          transition={{
+            delay:0.5
+          }}
+          viewport={{ once: true }}
+        >
           <div className="max-w-5xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-gray-900">
               Comprehensive <span className="text-primary">ROGISETU</span>{" "}
@@ -169,7 +275,7 @@ export default function Home() {
               </div>
             ))}
           </div>
-        </section>
+        </motion.section>
 
         {/* --------------------Solutions-------------------- */}
         <section id="solutions" className="bg-muted/70 py-24 px-6">
