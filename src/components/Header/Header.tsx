@@ -4,10 +4,32 @@ import { Button } from "../ui/button";
 import Logo from "/public/logo.png"
 import Image from "next/image";
 import { PWAInstallButton } from "../pwa-install-button";
+import { motion, useMotionValueEvent, useScroll } from "motion/react"
+import { useEffect, useState } from "react";
+
+// border-b border-b-secondary bg-background/90 
+
 
 export default function Header() {
+  
+  const [visible, setVisible] = useState<boolean>(false);
+  const { scrollY } = useScroll({
+    offset: ["start start", "end start"],
+  });
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    if (latest > 150) {
+      setVisible(true);
+      console.log("TRUEEE")
+    } else {
+      setVisible(false);  
+      console.log("FALSEE")
+    }
+  });
+  
+
   return (
-    <header className="sticky top-0 border-b border-b-secondary py-5 px-4 md:px-12 bg-background/90 backdrop-blur z-30">
+    <motion.header className={`sticky top-0 py-5 px-4 md:px-12 bg-transparent backdrop-blur z-30 ${visible ? "!bg-background/90 border-b border-b-secondary" : "" }`}>
       <div className="w-full max-w-7xl mx-auto flex justify-between items-center relative">
         <Link href="/">
           <Image 
@@ -32,6 +54,6 @@ export default function Header() {
             </Button>
           </div>
       </div>
-    </header>
+    </motion.header>
   );
 }
