@@ -51,7 +51,6 @@ export async function checkAvailability(
       console.error("Error counting appointments:", countError.message, countError.code, countError.details);
       throw countError;
     }
-    console.log("Count of existing appointments:", count); // Log the count
 
     const isAvailable = count !== null && count < hospitalDept.daily_token_limit
     const remainingSlots = hospitalDept.daily_token_limit - (count || 0)
@@ -290,17 +289,17 @@ export async function bookOpdAppointment(formData: FormData) {
     const estimatedTimeString = `${estimatedDate.getFullYear()}-${(estimatedDate.getMonth() + 1).toString().padStart(2, '0')}-${estimatedDate.getDate().toString().padStart(2, '0')} ${estimatedDate.getHours().toString().padStart(2, '0')}:${estimatedDate.getMinutes().toString().padStart(2, '0')}:00`;
     
     // Log the data being inserted for debugging
-    console.log("Creating appointment with data:", {
-      patient_id: userId,
-      hospital_id: hospitalId,
-      department_id: departmentId,
-      hospital_department_id: hospitalDept.id,
-      date: appointmentDate,
-      time_slot: timeSlot,
-      token_number: tokenNumber,
-      status: "waiting",
-      estimated_time: estimatedTimeString,
-    });
+    // console.log("Creating appointment with data:", {
+    //   patient_id: userId,
+    //   hospital_id: hospitalId,
+    //   department_id: departmentId,
+    //   hospital_department_id: hospitalDept.id,
+    //   date: appointmentDate,
+    //   time_slot: timeSlot,
+    //   token_number: tokenNumber,
+    //   status: "waiting",
+    //   estimated_time: estimatedTimeString,
+    // });
     
     // Create the appointment - use userId as patient_id
     const { data: appointment, error: appointmentError } = await supabase

@@ -266,7 +266,7 @@ export default function Home() {
             <motion.span 
               initial={{ opacity: 0, filter: "blur(5px)" }}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
-              transition={{ delay: 0 }}
+              transition={{ delay: 0.2 }}
               viewport={{ once: true }}
               className="uppercase tracking-[0.2rem] text-primary">
               our features
@@ -282,7 +282,7 @@ export default function Home() {
             <motion.p className="text-gray-600 mt-4"
               initial={{ opacity: 0, filter: "blur(5px)" }}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
-              transition={{ delay: 0.4 }}
+              transition={{ delay: 0.2 }}
               viewport={{ once: true }}
             >
               Streamline your hospital operations with our powerful suite of
@@ -325,7 +325,6 @@ export default function Home() {
             <motion.p className="text-muted-foreground mt-3"
               initial={{ opacity: 0, filter: "blur(5px)" }}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
-              transition={{ delay: 0.2 }}
               viewport={{ once: true }}
             >
               Follow these easy steps to book your OPD appointment.
@@ -438,7 +437,7 @@ export default function Home() {
               <motion.h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2"
                 initial={{ opacity: 0, filter: "blur(5px)" }}
                 whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.2 }}
                 viewport={{ once: true }}
               >
                 Trusted by Leading Healthcare Providers
@@ -446,7 +445,7 @@ export default function Home() {
               <motion.p className="text-lg text-neutral-600 max-w-2xl mx-auto"
                 initial={{ opacity: 0, filter: "blur(5px)" }}
                 whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                transition={{ delay: 0.6 }}
+                transition={{ delay: 0.2 }}
                 viewport={{ once: true }}
               >
                 See what healthcare professionals are saying about RogiSetu
@@ -567,7 +566,7 @@ export default function Home() {
             <motion.div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-white p-8 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
               initial={{ opacity: 0, filter: "blur(5px)" }}
                 whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                transition={{ delay: 0.6 }}
+                transition={{ delay: 0.2 }}
                 viewport={{ once: true }}
             >
               <div className="text-center">
@@ -592,7 +591,7 @@ export default function Home() {
             <motion.div className="text-center mt-12"
               initial={{ opacity: 0, filter: "blur(5px)" }}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
-              transition={{ delay: 0.6 }}
+              transition={{ delay: 0.2 }}
               viewport={{ once: true }}
             >
               <Button className="px-8 h-12 text-[15px]" asChild>

@@ -121,7 +121,6 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
         const { data: { user } } = await supabase.auth.getUser();
         
         if (user) {
-          // Try to get patient record by user_id, where user_id is also the id
           const { data: patient, error } = await supabase
             .from("patients")
             .select("*")
@@ -134,28 +133,23 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
           } else if (patient) {
             setPatientDetails(patient);
             
-            // Check if required fields are filled
             const missingDetails = !patient.gender || 
                                   !patient.age || 
                                   !patient.phone_no;
             
             setNeedsPatientDetails(missingDetails);
             
-            // Pre-fill the form with existing data regardless of whether we show it
             if (patient.name) {
-              // Create a reference to the name input and set its value
               const nameInput = document.getElementById('name') as HTMLInputElement;
               if (nameInput) nameInput.value = patient.name;
             }
             
             if (patient.phone_no) {
-              // Create a reference to the phone input and set its value
               const phoneInput = document.getElementById('phone') as HTMLInputElement;
               if (phoneInput) phoneInput.value = patient.phone_no;
             }
             
             if (patient.age) {
-              // Create a reference to the age input and set its value
               const ageInput = document.getElementById('age') as HTMLInputElement;
               if (ageInput) ageInput.value = patient.age;
             }
@@ -164,16 +158,13 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
               setSelectedGender(patient.gender);
             }
           } else {
-            // No patient record found, definitely need to show the form
             setNeedsPatientDetails(true);
             
-            // Try to pre-fill name from user metadata if available
             if (user.user_metadata?.name) {
               const nameInput = document.getElementById('name') as HTMLInputElement;
               if (nameInput) nameInput.value = user.user_metadata.name;
             }
             
-            // Try to pre-fill phone from user metadata if available
             if (user.user_metadata?.phoneNo) {
               const phoneInput = document.getElementById('phone') as HTMLInputElement;
               if (phoneInput) phoneInput.value = user.user_metadata.phoneNo;
@@ -189,7 +180,6 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
         setNeedsPatientDetails(true);
         toast.error(`Failed to fetch your details: ${error instanceof Error ? error.message : String(error)}`);
       } finally {
-        // Set loading to false so the UI can render appropriately
         setLoading(false);
       }
     };
@@ -202,12 +192,9 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
     setLoading(true);
     setFormError(null);
 
-    // Create a new FormData instance
     const formData = new FormData();
     
-    // If we need patient details, validate and add them
     if (needsPatientDetails) {
-      // Validate required fields for patient details
       const form = event.currentTarget as HTMLFormElement;
       const name = (form.elements.namedItem('name') as HTMLInputElement)?.value;
       const phone = (form.elements.namedItem('phone') as HTMLInputElement)?.value;
@@ -246,22 +233,13 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
     const symptoms = (event.currentTarget.elements.namedItem('symptoms') as HTMLTextAreaElement)?.value;
     if (symptoms) formData.append("symptoms", symptoms);
     
-    // Debug: Log all form fields
-    console.log("Form data being submitted:");
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
-    
     try {
       const result = await bookOpdAppointment(formData);
-      console.log("Appointment booking result:", result);
 
       if (result.status === "success") {
         toast.success("Appointment booked successfully!");
-        // Navigate to appointment details or token page
         router.push(`/dashboard/token/${result.tokenNumber}`);
       } else {
-        // Show the exact error message
         setFormError(result.message || "Unknown error occurred");
         toast.error(`Failed to book appointment: ${result.message}`);
       }
@@ -281,7 +259,6 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
         return;
       }
       
-      // If we don't need patient details, we can submit directly
       if (!needsPatientDetails) {
         const form = document.getElementById('appointment-form') as HTMLFormElement;
         if (form) {

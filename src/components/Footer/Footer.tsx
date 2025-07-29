@@ -11,7 +11,6 @@ export default function Footer () {
         <motion.div className="flex flex-wrap justify-between"
           initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ delay: 0.4 }}
         >
           {/* Logo and Description */}
           <div className="w-full lg:w-2/5 mb-6 lg:mb-0">
@@ -75,7 +74,7 @@ export default function Footer () {
         <motion.div className="flex flex-wrap justify-between mt-10 border-t border-t-accent/10 pt-8"
           initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.2 }}
         >
           {/* Legal Links */}
           <div className="w-full text-center flex flex-col md:flex-row gap-4 md:gap-0 items-center justify-between">

@@ -14,7 +14,7 @@ export function PWAInstallPrompt() {
     if (isInstallable) {
       const timer = setTimeout(() => {
         setShowPrompt(true);
-      }, 3000);
+      }, 5000);
 
       return () => clearTimeout(timer);
     }
