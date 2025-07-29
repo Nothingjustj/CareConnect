@@ -97,11 +97,12 @@ export default function Home() {
         <section
           className="relative bg-background flex flex-col items-center justify-center py-20 md:py-28 w-full"
           style={{
-            backgroundImage: `radial-gradient(circle at 0.5px 0.5px, rgba(6,182,212,0.7) 0.5px, transparent 0)`,
-            backgroundSize: "8px 8px",
+            backgroundImage: `radial-gradient(circle at 0.5px 0.5px, rgba(6,182,212,0.7) 1px, transparent 0)`,
+            backgroundSize: "10px 10px",
             backgroundRepeat: "repeat",
           }}
         >
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)] dark:bg-black"></div>
           {/* Left Circle Blurred */}
           <div className="absolute top-0 left-0 md:w-[15rem] w-[7rem] md:h-[15rem] h-[7rem] rounded-full blur-[70px] md:blur-[150px] bg-primary/40"></div>
 
@@ -131,16 +132,6 @@ export default function Home() {
                   </motion.span>
               )})}
             </h1>
-            {/* <motion.h1
-              className="text-4xl md:text-[3.5rem] font-bold text-balance md:leading-[1.2] tracking-tight"
-              initial={{ opacity: 0, y: 20, filter: "blur(5px)" }}
-              whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-              transition={{ delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              Simplifying Hospital{" "}
-              <span className="text-primary">OPD Management</span> System
-            </motion.h1> */}
             <motion.p
               className="text-balance mt-6 md:px-36 text-base md:text-lg text-secondary-foreground"
               initial={{ opacity: 0, filter: "blur(5px)" }}
@@ -184,7 +175,7 @@ export default function Home() {
                 <video
                   id="videoElement"
                   className="rounded-xl shadow-lg w-[100%]"
-                  autoPlay
+                  autoPlay={true}
                   loop
                   onMouseEnter={() => setIsPlaying(true)}
                   onMouseLeave={() => setIsPlaying(false)}
@@ -218,6 +209,7 @@ export default function Home() {
                 className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
                 initial={{ y: 10, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.3 }}
                 viewport={{ once: true }}
               >
                 <Clock className="h-10 w-10 text-primary mb-2" />
@@ -233,7 +225,7 @@ export default function Home() {
                 className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
                 initial={{ y: 10, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.2 }}
+                transition={{ delay: 0.6 }}
                 viewport={{ once: true }}
               >
                 <Calendar className="h-10 w-10 text-primary mb-2" />
@@ -249,7 +241,7 @@ export default function Home() {
                 className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
                 initial={{ y: 10, opacity: 0 }}
                 whileInView={{ y: 0, opacity: 1 }}                
-                transition={{ delay: 0.4 }}
+                transition={{ delay: 0.9 }}
                 viewport={{ once: true }}
               >
                 <Bell className="h-10 w-10 text-primary mb-2" />
@@ -271,20 +263,41 @@ export default function Home() {
           className="bg-white py-24 px-6"
         >
           <div className="max-w-5xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-gray-900">
-              Comprehensive <span className="text-primary">ROGISETU</span>{" "}
-              Features
-            </h2>
-            <p className="text-gray-600 mt-2">
+            <motion.span 
+              initial={{ opacity: 0, filter: "blur(5px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ delay: 0 }}
+              viewport={{ once: true }}
+              className="uppercase tracking-[0.2rem] text-primary">
+              our features
+            </motion.span>
+            <motion.h2 className="text-2xl md:text-4xl font-bold text-gray-900 mt-4"
+              initial={{ opacity: 0, filter: "blur(5px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              What do we offer
+            </motion.h2>
+            <motion.p className="text-gray-600 mt-4"
+              initial={{ opacity: 0, filter: "blur(5px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ delay: 0.4 }}
+              viewport={{ once: true }}
+            >
               Streamline your hospital operations with our powerful suite of
               features designed for modern healthcare management.
-            </p>
+            </motion.p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 max-w-6xl mx-auto">
             {features.map((feature, index) => (
-              <div
+              <motion.div
                 key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.2 }}
+                viewport={{ once: true }}
                 className="bg-white group p-6 rounded-2xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] flex flex-col space-y-3 cursor-pointer"
               >
                 <div className="p-3 rounded-lg bg-gray-100 w-fit group-hover:bg-primary/10 transition duration-300 group-hover:-translate-y-2">
@@ -294,7 +307,7 @@ export default function Home() {
                   {feature.title}
                 </h3>
                 <p className="text-gray-600">{feature.description}</p>
-              </div>
+              </motion.div>
             ))}
           </div>
         </section>
@@ -302,15 +315,24 @@ export default function Home() {
         {/* --------------------Solutions-------------------- */}
         <section id="solutions" className="bg-muted/70 py-24 px-6">
           <div className="max-w-5xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-gray-900">
+            <motion.h2 className="text-2xl md:text-4xl font-bold text-gray-900"
+              initial={{ opacity: 0, filter: "blur(5px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              viewport={{ once: true }}
+            >
               Simple OPD Booking Process
-            </h2>
-            <p className="text-muted-foreground mt-2">
+            </motion.h2>
+            <motion.p className="text-muted-foreground mt-3"
+              initial={{ opacity: 0, filter: "blur(5px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ delay: 0.2 }}
+              viewport={{ once: true }}
+            >
               Follow these easy steps to book your OPD appointment.
-            </p>
+            </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-10 max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-20 max-w-6xl mx-auto">
             {[
               {
                 step: "1",
@@ -339,7 +361,11 @@ export default function Home() {
                 points: ["Receive SMS", "Track token"],
               },
             ].map((item, index) => (
-              <div
+              <motion.div
+                initial={{ opacity: 0, filter: "blur(5px)", x: 20 }}
+                whileInView={{ opacity: 1, filter: "blur(0px)", x: 0 }}
+                transition={{ delay: index * 0.2 }}
+                viewport={{ once: true }}
                 key={index}
                 className="bg-white text-black p-6 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] relative cursor-pointer pt-10"
               >
@@ -358,11 +384,16 @@ export default function Home() {
                     </li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             ))}
           </div>
 
-          <div className="text-center mt-10">
+          <motion.div className="text-center mt-16"
+            initial={{ opacity: 0, filter: "blur(5px)" }}
+            whileInView={{ opacity: 1, filter: "blur(0px)" }}
+            transition={{ delay: 0.2 }}
+            viewport={{ once: true }} 
+          >
             <Button
               className="bg-primary text-white py-6 px-8 rounded-lg text-base hover:bg-primary/90 transition"
               asChild
@@ -372,11 +403,16 @@ export default function Home() {
             <p className="text-muted-foreground text-sm mt-2">
               Need help? Contact our support team 24/7
             </p>
-          </div>
+          </motion.div>
         </section>
 
         {/* Token Tracking Banner */}
-        <section className="w-full py-24 px-6">
+        <motion.section className="w-full py-24 px-6"
+          initial={{ opacity: 0, filter: "blur(5px)" }}
+          whileInView={{ opacity: 1, filter: "blur(0px)" }}
+          transition={{ delay: 0.4 }}
+          viewport={{ once: true }}
+        >
           <div className="relative container bg-secondary overflow-hidden p-6 md:p-10 max-w-6xl rounded-3xl mx-auto border">
             <h2 className="text-2xl md:text-3xl font-bold mb-4">
               Track Your Token Status
@@ -394,22 +430,37 @@ export default function Home() {
               size={148}
             />
           </div>
-        </section>
+        </motion.section>
 
         <section id="testimonials" className="py-20 bg-muted/70">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2">
+              <motion.h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2"
+                initial={{ opacity: 0, filter: "blur(5px)" }}
+                whileInView={{ opacity: 1, filter: "blur(0px)" }}
+                transition={{ delay: 0.4 }}
+                viewport={{ once: true }}
+              >
                 Trusted by Leading Healthcare Providers
-              </h2>
-              <p className="text-lg text-neutral-600 max-w-2xl mx-auto">
+              </motion.h2>
+              <motion.p className="text-lg text-neutral-600 max-w-2xl mx-auto"
+                initial={{ opacity: 0, filter: "blur(5px)" }}
+                whileInView={{ opacity: 1, filter: "blur(0px)" }}
+                transition={{ delay: 0.6 }}
+                viewport={{ once: true }}
+              >
                 See what healthcare professionals are saying about RogiSetu
-              </p>
+              </motion.p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
               {/* <!-- Testimonial 1 --> */}
-              <div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]">
+              <motion.div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
+                initial={{ opacity: 0, filter: "blur(5px)" }}
+                whileInView={{ opacity: 1, filter: "blur(0px)" }}
+                transition={{ delay: 0.2 }}
+                viewport={{ once: true }}
+              >
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
                     <UserIcon className="h-7 w-7 text-primary" />
@@ -437,10 +488,15 @@ export default function Home() {
                   automated scheduling and real-time updates have reduced
                   waiting times by 60%. Excellent system!"
                 </p>
-              </div>
+              </motion.div>
 
               {/* <!-- Testimonial 2 --> */}
-              <div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]">
+              <motion.div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
+                initial={{ opacity: 0, filter: "blur(5px)" }}
+                whileInView={{ opacity: 1, filter: "blur(0px)" }}
+                transition={{ delay: 0.4 }}
+                viewport={{ once: true }}
+              >
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
                     <UserIcon className="h-7 w-7 text-primary" />
@@ -468,10 +524,15 @@ export default function Home() {
                   track medicine stock in real-time and the automated alerts
                   help prevent stockouts. Highly recommended!"
                 </p>
-              </div>
+              </motion.div>
 
               {/* <!-- Testimonial 3 --> */}
-              <div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]">
+              <motion.div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
+                initial={{ opacity: 0, filter: "blur(5px)" }}
+                whileInView={{ opacity: 1, filter: "blur(0px)" }}
+                transition={{ delay: 0.6 }}
+                viewport={{ once: true }}
+              >
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
                     <UserIcon className="h-7 w-7 text-primary" />
@@ -499,11 +560,16 @@ export default function Home() {
                   implemented RogiSetu. The SMS notifications and digital queue
                   management have made the process seamless."
                 </p>
-              </div>
+              </motion.div>
             </div>
 
             {/* <!-- Stats Section --> */}
-            <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-white p-8 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]">
+            <motion.div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-white p-8 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
+              initial={{ opacity: 0, filter: "blur(5px)" }}
+                whileInView={{ opacity: 1, filter: "blur(0px)" }}
+                transition={{ delay: 0.6 }}
+                viewport={{ once: true }}
+            >
               <div className="text-center">
                 <div className="text-3xl font-bold text-primary mb-2">500+</div>
                 <p className="text-neutral-600">Hospitals</p>
@@ -520,17 +586,22 @@ export default function Home() {
                 <div className="text-3xl font-bold text-primary mb-2">24/7</div>
                 <p className="text-neutral-600">Support</p>
               </div>
-            </div>
+            </motion.div>
 
             {/* <!-- CTA --> */}
-            <div className="text-center mt-12">
+            <motion.div className="text-center mt-12"
+              initial={{ opacity: 0, filter: "blur(5px)" }}
+              whileInView={{ opacity: 1, filter: "blur(0px)" }}
+              transition={{ delay: 0.6 }}
+              viewport={{ once: true }}
+            >
               <Button className="px-8 h-12 text-[15px]" asChild>
                 <Link href="/contact">
                   Join Our Growing Network
                   <ArrowRightIcon />
                 </Link>
               </Button>
-            </div>
+            </motion.div>
           </div>
         </section>
       </div>

@@ -25,7 +25,11 @@ export default function Header() {
   
 
   return (
-    <motion.header className={`sticky top-0 py-5 px-4 md:px-12 bg-transparent backdrop-blur z-30 ${visible ? "!bg-background/90 border-b border-b-secondary" : "" }`}>
+    <motion.header className={`sticky top-0 py-5 px-4 md:px-12 bg-transparent backdrop-blur z-30 ${visible ? "!bg-background/90 border-b border-b-secondary" : "" }`}
+      initial={{ y: -10, opacity: 0 }}
+      whileInView={{ y: 0, opacity: 1 }}
+      transition={{ delay: 0.8 }}
+    >
       <div className="w-full max-w-7xl mx-auto flex justify-between items-center relative">
         <Link href="/">
           <Image 

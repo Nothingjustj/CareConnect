@@ -1,12 +1,17 @@
 import { Github, Instagram, Linkedin, Twitter } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion } from "motion/react"
 
 export default function Footer () {
   return (
     <footer className="bg-accent-foreground text-gray-300 py-10">
       <div className="max-w-7xl mx-auto px-4 md:px-0">
-        <div className="flex flex-wrap justify-between">
+        <motion.div className="flex flex-wrap justify-between"
+          initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ delay: 0.4 }}
+        >
           {/* Logo and Description */}
           <div className="w-full lg:w-2/5 mb-6 lg:mb-0">
             <Link href="/">
@@ -64,9 +69,13 @@ export default function Footer () {
             <p className="text-muted/80">+91 1234567890</p>
             <p className="text-muted/80"><Link href="mailto:contact@rogisetu.com" className="hover:text-white">contact@rogisetu.com</Link></p>
           </div>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-wrap justify-between mt-10 border-t border-t-accent/10 pt-8">
+        <motion.div className="flex flex-wrap justify-between mt-10 border-t border-t-accent/10 pt-8"
+          initial={{ opacity: 0, y: 10, filter: "blur(5px)" }}
+          whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+          transition={{ delay: 0.6 }}
+        >
           {/* Legal Links */}
           <div className="w-full text-center flex flex-col md:flex-row gap-4 md:gap-0 items-center justify-between">
             <p className="text-sm">&copy; 2025 RogiSetu. All rights reserved.</p>
@@ -77,7 +86,7 @@ export default function Footer () {
               {/* <Link href="#" className="hover:text-white text-gray-300 text-sm">Cookie Policy</Link> */}
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </footer>
 

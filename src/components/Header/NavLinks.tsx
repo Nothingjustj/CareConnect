@@ -54,9 +54,9 @@ export default function NavLinks() {
     <>
       {/* Desktop Navigation */}
       <div className="hidden md:flex gap-8">
-        {navlinks.map((navlink) => (
+        {navlinks.map((navlink, index) => (
           <Link
-            key={navlink.name}
+            key={index}
             href={navlink.url}
             className={`transition duration-300 text-foreground/60 font-medium hover:text-foreground text-sm ${
               pathname === navlink.url ? "text-gray-700 font-medium" : ""
