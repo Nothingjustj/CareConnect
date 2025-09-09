@@ -1,6 +1,5 @@
 "use server"
 
-import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
 import { createClient as createSupabaseClient } from "@supabase/supabase-js"
@@ -137,10 +136,6 @@ export async function signOut () {
 }
 
 
-// src/actions/auth.ts (modified sections)
-
-// For handling department admins
-// src/actions/auth.ts (fix for the UUID error)
 
 // For handling department admins
 export default async function signUpAsDeptAdmin(formData: FormData) {
