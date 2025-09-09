@@ -1,5 +1,3 @@
-// src/actions/tokens.ts - Updated version
-
 "use server"
 
 import { createClient } from "@/utils/supabase/server"

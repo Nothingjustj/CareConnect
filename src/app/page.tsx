@@ -23,9 +23,8 @@ import {
 import Link from "next/link";
 import React from "react";
 import { motion } from "motion/react";
-import { useState } from "react"; // Import useState for managing play/pause state
+import { useState } from "react";
 
-// Define feature data separately
 const features: {
   icon: React.ReactNode;
   title: string;
@@ -75,7 +74,7 @@ const fadeIn = {
 };
 
 export default function Home() {
-  const [isPlaying, setIsPlaying] = useState(false); // State for play/pause
+  const [isPlaying, setIsPlaying] = useState(false);
 
   const togglePlay = () => {
     const videoElement = document.getElementById(

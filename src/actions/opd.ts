@@ -1,6 +1,5 @@
 "use server"
 
-import { redirect } from "next/navigation"
 import { revalidatePath } from "next/cache"
 import { createClient } from "@/utils/supabase/server"
 import { getUserSession } from "./auth";
@@ -10,7 +9,7 @@ export async function bookOpd(formData: FormData) {
 
     const patientData = {
         name: formData.get("name") as string,
-        phone_no: formData.get("phone") as string, // Fixed field name to match form input
+        phone_no: formData.get("phone") as string,
         age: formData.get("age") as string,
         gender: formData.get("gender") as string,
     }
@@ -23,7 +22,7 @@ export async function bookOpd(formData: FormData) {
             { 
                 user_id: user?.id, 
                 name: patientData.name, 
-                phone_no: patientData.phone_no, // Fixed field name to match database column
+                phone_no: patientData.phone_no,
                 age: patientData.age, 
                 gender: patientData.gender 
             }
@@ -43,7 +42,3 @@ export async function bookOpd(formData: FormData) {
     revalidatePath("/", "layout")
     return { status: "success" };
 }
-
-export async function trackOpd() {}
-
-export async function fetchOpd() {}

@@ -1,15 +1,10 @@
-// src/actions/appointments.ts - Updated version
-
 "use server"
 
 import { createClient } from "@/utils/supabase/server"
 import { revalidatePath } from "next/cache"
-import { redirect } from "next/navigation"
 import { getUserSession } from "./auth"
-import crypto from "crypto"
 
-// src/actions/appointments.ts - Modified checkAvailability function
-
+// Modified checkAvailability function
 export async function checkAvailability(
   hospitalId: string,
   departmentId: number,
