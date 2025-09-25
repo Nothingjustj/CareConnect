@@ -69,8 +69,33 @@ const features: {
 ];
 
 const fadeIn = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const slideInFromLeft = {
+  hidden: { opacity: 0, x: -50 },
+  visible: { opacity: 1, x: 0 },
+};
+
+const slideInFromRight = {
+  hidden: { opacity: 0, x: 50 },
+  visible: { opacity: 1, x: 0 },
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.8 },
+  visible: { opacity: 1, scale: 1 },
+};
+
+const staggerContainer = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
 };
 
 export default function Home() {
@@ -115,21 +140,24 @@ export default function Home() {
                 .map((word, index) => {
                   const isBlue = word === "OPD" || word === "Management";
                   return (
-                  <motion.span
-                    key={index}
-                    initial={{ opacity: 0, filter: "blur(4px)", y: 10 }}
-                    whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                    transition={{
-                      duration: 0.3,
-                      delay: index * 0.1,
-                      ease: "easeInOut",
-                    }}
-                    viewport={{ once: true }}
-                    className={`mr-2 inline-block ${isBlue ? "text-primary" : ""}`}
-                  >
-                    {word}
-                  </motion.span>
-              )})}
+                    <motion.span
+                      key={index}
+                      initial={{ opacity: 0, filter: "blur(4px)", y: 10 }}
+                      whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+                      transition={{
+                        duration: 0.3,
+                        delay: index * 0.1,
+                        ease: "easeInOut",
+                      }}
+                      viewport={{ once: true }}
+                      className={`mr-2 inline-block ${
+                        isBlue ? "text-primary" : ""
+                      }`}
+                    >
+                      {word}
+                    </motion.span>
+                  );
+                })}
             </h1>
             <motion.p
               className="text-balance mt-6 md:px-36 text-base md:text-lg text-secondary-foreground"
@@ -163,9 +191,10 @@ export default function Home() {
               className="mt-24 -mb-24 md:-mb-44 relative rounded-2xl shadow-[10px_10px_0px_#eee,-10px_-10px_0px_#eee,-10px_10px_0px_#eee,10px_-10px_0px_#eee]"
               initial="hidden"
               whileInView="visible"
-              variants={fadeIn}
-              transition={{ duration: 0.5, delay: 1.2 }}
+              variants={scaleIn}
+              transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
               viewport={{ once: true }}
+              whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
             >
               <div className="absolute inset-x-0 -top-[0.625rem] h-px w-full bg-neutral-200/80 dark:bg-neutral-800/80">
                 <div className="absolute mx-auto h-px w-40 bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
@@ -203,15 +232,25 @@ export default function Home() {
 
         <section className="w-full py-12 md:py-24 lg:py-32 bg-muted/70">
           <div className="container px-6 max-w-7xl mx-auto">
-            <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+            <motion.div
+              className="grid gap-10 sm:grid-cols-2 lg:grid-cols-3"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
               <motion.div
-                className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
-                initial={{ y: 10, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                viewport={{ once: true }}
+                className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center group"
+                variants={fadeIn}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
-                <Clock className="h-10 w-10 text-primary mb-2" />
+                <motion.div
+                  whileHover={{ rotate: 360, scale: 1.1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Clock className="h-10 w-10 text-primary mb-2" />
+                </motion.div>
                 <h2 className="text-lg md:text-xl font-bold">
                   Real-time Token Updates
                 </h2>
@@ -221,13 +260,17 @@ export default function Home() {
                 </p>
               </motion.div>
               <motion.div
-                className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
-                initial={{ y: 10, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.6 }}
-                viewport={{ once: true }}
+                className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center group"
+                variants={fadeIn}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
-                <Calendar className="h-10 w-10 text-primary mb-2" />
+                <motion.div
+                  whileHover={{ rotate: 360, scale: 1.1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Calendar className="h-10 w-10 text-primary mb-2" />
+                </motion.div>
                 <h2 className="text-lg md:text-xl font-bold">
                   Easy Appointment Booking
                 </h2>
@@ -237,13 +280,17 @@ export default function Home() {
                 </p>
               </motion.div>
               <motion.div
-                className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center"
-                initial={{ y: 10, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}                
-                transition={{ delay: 0.9 }}
-                viewport={{ once: true }}
+                className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center group"
+                variants={fadeIn}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
-                <Bell className="h-10 w-10 text-primary mb-2" />
+                <motion.div
+                  whileHover={{ rotate: 360, scale: 1.1 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <Bell className="h-10 w-10 text-primary mb-2" />
+                </motion.div>
                 <h2 className="text-lg md:text-xl font-bold">
                   SMS Notifications
                 </h2>
@@ -252,25 +299,24 @@ export default function Home() {
                   number.
                 </p>
               </motion.div>
-            </div>
+            </motion.div>
           </div>
         </section>
 
         {/* ----------------Features Section ---------------*/}
-        <section
-          id="features"
-          className="bg-white py-24 px-6"
-        >
+        <section id="features" className="bg-white py-24 px-6">
           <div className="max-w-5xl mx-auto text-center">
-            <motion.span 
+            <motion.span
               initial={{ opacity: 0, filter: "blur(5px)" }}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
               transition={{ delay: 0.2 }}
               viewport={{ once: true }}
-              className="uppercase tracking-[0.2rem] text-primary">
+              className="uppercase tracking-[0.2rem] text-primary"
+            >
               our features
             </motion.span>
-            <motion.h2 className="text-2xl md:text-4xl font-bold text-gray-900 mt-4"
+            <motion.h2
+              className="text-2xl md:text-4xl font-bold text-gray-900 mt-4"
               initial={{ opacity: 0, filter: "blur(5px)" }}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
               transition={{ delay: 0.2 }}
@@ -278,7 +324,8 @@ export default function Home() {
             >
               What do we offer
             </motion.h2>
-            <motion.p className="text-gray-600 mt-4"
+            <motion.p
+              className="text-gray-600 mt-4"
               initial={{ opacity: 0, filter: "blur(5px)" }}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
               transition={{ delay: 0.2 }}
@@ -289,39 +336,59 @@ export default function Home() {
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 max-w-6xl mx-auto">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 max-w-6xl mx-auto"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {features.map((feature, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.2 }}
-                viewport={{ once: true }}
+                variants={fadeIn}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                whileHover={{
+                  y: -8,
+                  scale: 1.02,
+                  boxShadow:
+                    "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                  transition: { duration: 0.3 },
+                }}
                 className="bg-white group p-6 rounded-2xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] flex flex-col space-y-3 cursor-pointer"
               >
-                <div className="p-3 rounded-lg bg-gray-100 w-fit group-hover:bg-primary/10 transition duration-300 group-hover:-translate-y-2">
+                <motion.div
+                  className="p-3 rounded-lg bg-gray-100 w-fit group-hover:bg-primary/10 transition duration-300"
+                  whileHover={{
+                    y: -4,
+                    rotate: [0, -5, 5, 0],
+                    transition: { duration: 0.4 },
+                  }}
+                >
                   {feature.icon}
-                </div>
+                </motion.div>
                 <h3 className="text-lg font-semibold text-gray-900">
                   {feature.title}
                 </h3>
                 <p className="text-gray-600">{feature.description}</p>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </section>
 
         {/* --------------------Solutions-------------------- */}
         <section id="solutions" className="bg-muted/70 py-24 px-6">
           <div className="max-w-5xl mx-auto text-center">
-            <motion.h2 className="text-2xl md:text-4xl font-bold text-gray-900"
+            <motion.h2
+              className="text-2xl md:text-4xl font-bold text-gray-900"
               initial={{ opacity: 0, filter: "blur(5px)" }}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
               viewport={{ once: true }}
             >
               Simple OPD Booking Process
             </motion.h2>
-            <motion.p className="text-muted-foreground mt-3"
+            <motion.p
+              className="text-muted-foreground mt-3"
               initial={{ opacity: 0, filter: "blur(5px)" }}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
               viewport={{ once: true }}
@@ -330,7 +397,13 @@ export default function Home() {
             </motion.p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-20 max-w-6xl mx-auto">
+          <motion.div
+            className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-20 max-w-6xl mx-auto"
+            variants={staggerContainer}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+          >
             {[
               {
                 step: "1",
@@ -360,37 +433,57 @@ export default function Home() {
               },
             ].map((item, index) => (
               <motion.div
-                initial={{ opacity: 0, filter: "blur(5px)", x: 20 }}
-                whileInView={{ opacity: 1, filter: "blur(0px)", x: 0 }}
-                transition={{ delay: index * 0.2 }}
-                viewport={{ once: true }}
                 key={index}
+                variants={fadeIn}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                whileHover={{
+                  y: -10,
+                  scale: 1.03,
+                  boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+                  transition: { duration: 0.3 },
+                }}
                 className="bg-white text-black p-6 rounded-lg shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)] relative cursor-pointer pt-10"
               >
-                <div className="absolute -top-3 left-5 bg-primary text-white rounded-full px-3 py-1 text-lg font-bold">
+                <motion.div
+                  className="absolute -top-3 left-5 bg-primary text-white rounded-full px-3 py-1 text-lg font-bold"
+                  whileHover={{
+                    scale: 1.1,
+                    rotate: [0, -10, 10, 0],
+                    transition: { duration: 0.4 },
+                  }}
+                >
                   {item.step}
-                </div>
+                </motion.div>
                 <h3 className="text-lg font-semibold">{item.title}</h3>
                 <p className="text-gray-800 mt-2">{item.description}</p>
-                <ul className="mt-3 space-y-2">
+                <motion.ul
+                  className="mt-3 space-y-2"
+                  variants={staggerContainer}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                >
                   {item.points.map((point, i) => (
-                    <li
+                    <motion.li
                       key={i}
+                      variants={slideInFromLeft}
+                      transition={{ duration: 0.4, delay: i * 0.1 }}
                       className="flex items-center gap-2 text-green-700"
                     >
                       <CheckCircle className="h-5 w-5" /> {point}
-                    </li>
+                    </motion.li>
                   ))}
-                </ul>
+                </motion.ul>
               </motion.div>
             ))}
-          </div>
+          </motion.div>
 
-          <motion.div className="text-center mt-16"
+          <motion.div
+            className="text-center mt-16"
             initial={{ opacity: 0, filter: "blur(5px)" }}
             whileInView={{ opacity: 1, filter: "blur(0px)" }}
             transition={{ delay: 0.2 }}
-            viewport={{ once: true }} 
+            viewport={{ once: true }}
           >
             <Button
               className="bg-primary text-white py-6 px-8 rounded-lg text-base hover:bg-primary/90 transition"
@@ -405,35 +498,70 @@ export default function Home() {
         </section>
 
         {/* Token Tracking Banner */}
-        <motion.section className="w-full py-24 px-6"
-          initial={{ opacity: 0, filter: "blur(5px)" }}
-          whileInView={{ opacity: 1, filter: "blur(0px)" }}
-          transition={{ delay: 0.4 }}
+        <motion.section
+          className="w-full py-24 px-6"
+          initial="hidden"
+          whileInView="visible"
+          variants={fadeIn}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           viewport={{ once: true }}
         >
-          <div className="relative container bg-secondary overflow-hidden p-6 md:p-10 max-w-6xl rounded-3xl mx-auto border">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">
+          <motion.div
+            className="relative container bg-secondary overflow-hidden p-6 md:p-10 max-w-6xl rounded-3xl mx-auto border"
+            whileHover={{
+              scale: 1.02,
+              boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
+              transition: { duration: 0.3 },
+            }}
+          >
+            <motion.h2
+              className="text-2xl md:text-3xl font-bold mb-4"
+              variants={slideInFromLeft}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
               Track Your Token Status
-            </h2>
-            <p className="text-muted-foreground mb-6 max-w-3xl">
+            </motion.h2>
+            <motion.p
+              className="text-muted-foreground mb-6 max-w-3xl"
+              variants={slideInFromLeft}
+              transition={{ duration: 0.6, delay: 0.4 }}
+            >
               Already have an appointment? Easily check your token status by
               entering your token details. Stay updated on your position in the
               queue without waiting at the hospital.
-            </p>
-            <Button size="lg" className="mt-2" asChild>
-              <Link href="/track-token">Track Your Token Now</Link>
-            </Button>
-            <Coins
-              className="absolute -bottom-5 -right-5 text-primary/10"
-              size={148}
-            />
-          </div>
+            </motion.p>
+            <motion.div
+              variants={slideInFromLeft}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              <Button size="lg" className="mt-2" asChild>
+                <Link href="/track-token">Track Your Token Now</Link>
+              </Button>
+            </motion.div>
+            <motion.div
+              animate={{
+                rotate: [0, 5, -5, 0],
+                scale: [1, 1.05, 1],
+              }}
+              transition={{
+                duration: 4,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            >
+              <Coins
+                className="absolute -bottom-5 -right-5 text-primary/10"
+                size={148}
+              />
+            </motion.div>
+          </motion.div>
         </motion.section>
 
         <section id="testimonials" className="py-20 bg-muted/70">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
-              <motion.h2 className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2"
+              <motion.h2
+                className="text-3xl md:text-4xl font-bold text-neutral-900 mb-2"
                 initial={{ opacity: 0, filter: "blur(5px)" }}
                 whileInView={{ opacity: 1, filter: "blur(0px)" }}
                 transition={{ delay: 0.2 }}
@@ -441,7 +569,8 @@ export default function Home() {
               >
                 Trusted by Leading Healthcare Providers
               </motion.h2>
-              <motion.p className="text-lg text-neutral-600 max-w-2xl mx-auto"
+              <motion.p
+                className="text-lg text-neutral-600 max-w-2xl mx-auto"
                 initial={{ opacity: 0, filter: "blur(5px)" }}
                 whileInView={{ opacity: 1, filter: "blur(0px)" }}
                 transition={{ delay: 0.2 }}
@@ -451,13 +580,25 @@ export default function Home() {
               </motion.p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <motion.div
+              className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+            >
               {/* <!-- Testimonial 1 --> */}
-              <motion.div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
-                initial={{ opacity: 0, filter: "blur(5px)" }}
-                whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                transition={{ delay: 0.2 }}
-                viewport={{ once: true }}
+              <motion.div
+                className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
+                variants={fadeIn}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                whileHover={{
+                  y: -5,
+                  scale: 1.02,
+                  boxShadow:
+                    "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                  transition: { duration: 0.3 },
+                }}
               >
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
@@ -489,11 +630,17 @@ export default function Home() {
               </motion.div>
 
               {/* <!-- Testimonial 2 --> */}
-              <motion.div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
-                initial={{ opacity: 0, filter: "blur(5px)" }}
-                whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                transition={{ delay: 0.4 }}
-                viewport={{ once: true }}
+              <motion.div
+                className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
+                variants={fadeIn}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                whileHover={{
+                  y: -5,
+                  scale: 1.02,
+                  boxShadow:
+                    "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                  transition: { duration: 0.3 },
+                }}
               >
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
@@ -525,11 +672,17 @@ export default function Home() {
               </motion.div>
 
               {/* <!-- Testimonial 3 --> */}
-              <motion.div className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
-                initial={{ opacity: 0, filter: "blur(5px)" }}
-                whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                transition={{ delay: 0.6 }}
-                viewport={{ once: true }}
+              <motion.div
+                className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
+                variants={fadeIn}
+                transition={{ duration: 0.6, ease: "easeOut" }}
+                whileHover={{
+                  y: -5,
+                  scale: 1.02,
+                  boxShadow:
+                    "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                  transition: { duration: 0.3 },
+                }}
               >
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center">
@@ -559,35 +712,114 @@ export default function Home() {
                   management have made the process seamless."
                 </p>
               </motion.div>
-            </div>
+            </motion.div>
 
             {/* <!-- Stats Section --> */}
-            <motion.div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-white p-8 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
-              initial={{ opacity: 0, filter: "blur(5px)" }}
-                whileInView={{ opacity: 1, filter: "blur(0px)" }}
-                transition={{ delay: 0.2 }}
-                viewport={{ once: true }}
+            <motion.div
+              className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-white p-8 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
+              variants={staggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              whileHover={{
+                scale: 1.02,
+                boxShadow:
+                  "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                transition: { duration: 0.3 },
+              }}
             >
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary mb-2">500+</div>
+              <motion.div
+                className="text-center"
+                variants={scaleIn}
+                transition={{ duration: 0.5 }}
+                whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+              >
+                <motion.div
+                  className="text-3xl font-bold text-primary mb-2"
+                  animate={{
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  500+
+                </motion.div>
                 <p className="text-neutral-600">Hospitals</p>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary mb-2">1M+</div>
+              </motion.div>
+              <motion.div
+                className="text-center"
+                variants={scaleIn}
+                transition={{ duration: 0.5 }}
+                whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+              >
+                <motion.div
+                  className="text-3xl font-bold text-primary mb-2"
+                  animate={{
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    delay: 0.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  1M+
+                </motion.div>
                 <p className="text-neutral-600">Patients Served</p>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary mb-2">98%</div>
+              </motion.div>
+              <motion.div
+                className="text-center"
+                variants={scaleIn}
+                transition={{ duration: 0.5 }}
+                whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+              >
+                <motion.div
+                  className="text-3xl font-bold text-primary mb-2"
+                  animate={{
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    delay: 1,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  98%
+                </motion.div>
                 <p className="text-neutral-600">Satisfaction Rate</p>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-primary mb-2">24/7</div>
+              </motion.div>
+              <motion.div
+                className="text-center"
+                variants={scaleIn}
+                transition={{ duration: 0.5 }}
+                whileHover={{ scale: 1.1, transition: { duration: 0.2 } }}
+              >
+                <motion.div
+                  className="text-3xl font-bold text-primary mb-2"
+                  animate={{
+                    scale: [1, 1.05, 1],
+                  }}
+                  transition={{
+                    duration: 2,
+                    delay: 1.5,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  24/7
+                </motion.div>
                 <p className="text-neutral-600">Support</p>
-              </div>
+              </motion.div>
             </motion.div>
 
             {/* <!-- CTA --> */}
-            <motion.div className="text-center mt-12"
+            <motion.div
+              className="text-center mt-12"
               initial={{ opacity: 0, filter: "blur(5px)" }}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
               transition={{ delay: 0.2 }}
