@@ -20,16 +20,22 @@ import { format } from "date-fns";
 import { Textarea } from "./ui/textarea";
 import { Checkbox } from "./ui/checkbox";
 import { createClient } from "@/utils/supabase/client";
-import { bookOpdAppointment, checkAvailability, getTimeSlots } from "@/actions/appointments";
+import {
+  bookOpdAppointment,
+  checkAvailability,
+  getTimeSlots,
+} from "@/actions/appointments";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 
-const BookOpdForm = ({hospitals}: {hospitals: any}) => {
+const BookOpdForm = ({ hospitals }: { hospitals: any }) => {
   const [date, setDate] = useState<Date | undefined>(undefined);
   const [selectedHospital, setSelectedHospital] = useState<string | null>(null);
-  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(null);
+  const [selectedDepartment, setSelectedDepartment] = useState<string | null>(
+    null
+  );
   const [departments, setDepartments] = useState<any[]>([]);
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
@@ -45,31 +51,38 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
   // Fetch departments when hospital changes
   useEffect(() => {
     const fetchDepartments = async () => {
-      if(!selectedHospital) return;
+      if (!selectedHospital) return;
 
       const supabase = createClient();
       const { data, error } = await supabase
         .from("hospital_departments")
-        .select(`
+        .select(
+          `
           id, 
           daily_token_limit, 
           department_types:department_type_id(id, name)
-        `)
+        `
+        )
         .eq("hospital_id", selectedHospital);
 
-      if(error) {
-        console.error("Error fetching departments: ", error.message, error.code, error.details);
+      if (error) {
+        console.error(
+          "Error fetching departments: ",
+          error.message,
+          error.code,
+          error.details
+        );
         toast.error(`Failed to fetch departments: ${error.message}`);
       } else {
         // Transform the data to make it easier to use
         const transformedDepartments = data.map((dept: any) => ({
           id: dept.department_types.id,
           name: dept.department_types.name,
-          daily_token_limit: dept.daily_token_limit
+          daily_token_limit: dept.daily_token_limit,
         }));
         setDepartments(transformedDepartments || []);
       }
-    }
+    };
 
     fetchDepartments();
   }, [selectedHospital]);
@@ -79,17 +92,17 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
     if (selectedHospital && selectedDepartment && date) {
       const checkAvailabilityAndGetSlots = async () => {
         try {
-          const formattedDate = format(date, 'yyyy-MM-dd');
-          
+          const formattedDate = format(date, "yyyy-MM-dd");
+
           // Check availability
           const availabilityResult = await checkAvailability(
             selectedHospital,
             parseInt(selectedDepartment),
             formattedDate
           );
-          
+
           setAvailabilityStatus(availabilityResult);
-          
+
           // If available, get time slots
           if (availabilityResult.available) {
             const timeSlotsResult = await getTimeSlots(
@@ -97,7 +110,7 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
               parseInt(selectedDepartment),
               formattedDate
             );
-            
+
             setTimeSlots(timeSlotsResult.slots || []);
           } else {
             setTimeSlots([]);
@@ -107,7 +120,7 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
           toast.error("Failed to check availability");
         }
       };
-      
+
       checkAvailabilityAndGetSlots();
     }
   }, [selectedHospital, selectedDepartment, date]);
@@ -118,72 +131,92 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
       setLoading(true);
       try {
         const supabase = createClient();
-        const { data: { user } } = await supabase.auth.getUser();
-        
+        const {
+          data: { user },
+        } = await supabase.auth.getUser();
+
         if (user) {
           const { data: patient, error } = await supabase
             .from("patients")
             .select("*")
             .eq("id", user.id)
             .single();
-          
+
           if (error) {
-            console.error("Error fetching patient details:", error.message, error.code, error.details);
+            console.error(
+              "Error fetching patient details:",
+              error.message,
+              error.code,
+              error.details
+            );
             setNeedsPatientDetails(true);
           } else if (patient) {
             setPatientDetails(patient);
-            
-            const missingDetails = !patient.gender || 
-                                  !patient.age || 
-                                  !patient.phone_no;
-            
+
+            const missingDetails =
+              !patient.gender || !patient.age || !patient.phone_no;
+
             setNeedsPatientDetails(missingDetails);
-            
+
             if (patient.name) {
-              const nameInput = document.getElementById('name') as HTMLInputElement;
+              const nameInput = document.getElementById(
+                "name"
+              ) as HTMLInputElement;
               if (nameInput) nameInput.value = patient.name;
             }
-            
+
             if (patient.phone_no) {
-              const phoneInput = document.getElementById('phone') as HTMLInputElement;
+              const phoneInput = document.getElementById(
+                "phone"
+              ) as HTMLInputElement;
               if (phoneInput) phoneInput.value = patient.phone_no;
             }
-            
+
             if (patient.age) {
-              const ageInput = document.getElementById('age') as HTMLInputElement;
+              const ageInput = document.getElementById(
+                "age"
+              ) as HTMLInputElement;
               if (ageInput) ageInput.value = patient.age;
             }
-            
+
             if (patient.gender) {
               setSelectedGender(patient.gender);
             }
           } else {
             setNeedsPatientDetails(true);
-            
+
             if (user.user_metadata?.name) {
-              const nameInput = document.getElementById('name') as HTMLInputElement;
+              const nameInput = document.getElementById(
+                "name"
+              ) as HTMLInputElement;
               if (nameInput) nameInput.value = user.user_metadata.name;
             }
-            
+
             if (user.user_metadata?.phoneNo) {
-              const phoneInput = document.getElementById('phone') as HTMLInputElement;
+              const phoneInput = document.getElementById(
+                "phone"
+              ) as HTMLInputElement;
               if (phoneInput) phoneInput.value = user.user_metadata.phoneNo;
             }
           }
         } else {
           // No user logged in, redirect to login or show error
           toast.error("You must be logged in to book an appointment");
-          router.push('/login');
+          router.push("/login");
         }
       } catch (error) {
         console.error("Error fetching patient details:", error);
         setNeedsPatientDetails(true);
-        toast.error(`Failed to fetch your details: ${error instanceof Error ? error.message : String(error)}`);
+        toast.error(
+          `Failed to fetch your details: ${
+            error instanceof Error ? error.message : String(error)
+          }`
+        );
       } finally {
         setLoading(false);
       }
     };
-    
+
     fetchPatientDetails();
   }, [router]);
 
@@ -193,20 +226,21 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
     setFormError(null);
 
     const formData = new FormData();
-    
+
     if (needsPatientDetails) {
       const form = event.currentTarget as HTMLFormElement;
-      const name = (form.elements.namedItem('name') as HTMLInputElement)?.value;
-      const phone = (form.elements.namedItem('phone') as HTMLInputElement)?.value;
-      const age = (form.elements.namedItem('age') as HTMLInputElement)?.value;
-      
+      const name = (form.elements.namedItem("name") as HTMLInputElement)?.value;
+      const phone = (form.elements.namedItem("phone") as HTMLInputElement)
+        ?.value;
+      const age = (form.elements.namedItem("age") as HTMLInputElement)?.value;
+
       if (!name || !phone || !age || !selectedGender) {
         setFormError("Please fill all required fields including gender");
         setLoading(false);
         toast.error("Please fill all required fields including gender");
         return;
       }
-      
+
       // Add patient details to form data
       formData.append("name", name);
       formData.append("phone", phone);
@@ -218,21 +252,23 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
       formData.append("phone", patientDetails.phone_no);
       formData.append("age", patientDetails.age || "");
       formData.append("gender", patientDetails.gender || selectedGender || "");
-      
+
       // Add a flag to indicate we're using existing patient
       formData.append("existingPatient", "true");
     }
-    
+
     // Add appointment details
     if (selectedHospital) formData.append("hospital", selectedHospital);
     if (selectedDepartment) formData.append("department", selectedDepartment);
-    if (date) formData.append("date", format(date, 'yyyy-MM-dd'));
+    if (date) formData.append("date", format(date, "yyyy-MM-dd"));
     if (selectedTimeSlot) formData.append("timeSlot", selectedTimeSlot);
-    
+
     // Optional field
-    const symptoms = (event.currentTarget.elements.namedItem('symptoms') as HTMLTextAreaElement)?.value;
+    const symptoms = (
+      event.currentTarget.elements.namedItem("symptoms") as HTMLTextAreaElement
+    )?.value;
     if (symptoms) formData.append("symptoms", symptoms);
-    
+
     try {
       const result = await bookOpdAppointment(formData);
 
@@ -245,44 +281,68 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
       }
     } catch (error) {
       console.error("Error during appointment booking:", error);
-      setFormError(`Exception occurred: ${error instanceof Error ? error.message : String(error)}`);
+      setFormError(
+        `Exception occurred: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
       toast.error("An unexpected error occurred");
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   const goToNextStep = () => {
     if (step === 1) {
-      if (!selectedHospital || !selectedDepartment || !date || !selectedTimeSlot) {
+      if (
+        !selectedHospital ||
+        !selectedDepartment ||
+        !date ||
+        !selectedTimeSlot
+      ) {
         toast.error("Please fill all required fields");
         return;
       }
-      
+
       if (!needsPatientDetails) {
-        const form = document.getElementById('appointment-form') as HTMLFormElement;
+        // Set loading state before triggering form submission
+        setLoading(true);
+        const form = document.getElementById(
+          "appointment-form"
+        ) as HTMLFormElement;
         if (form) {
-          form.dispatchEvent(new Event('submit', { cancelable: true, bubbles: true }));
+          form.dispatchEvent(
+            new Event("submit", { cancelable: true, bubbles: true })
+          );
           return;
         }
       }
     }
     setStep(step + 1);
-  }
+  };
 
   const goToPrevStep = () => {
     setStep(step - 1);
-  }
+  };
 
   return (
-    <form id="appointment-form" className="flex flex-col gap-6" onSubmit={handleSubmit}>
+    <form
+      id="appointment-form"
+      className="flex flex-col gap-6"
+      onSubmit={handleSubmit}
+    >
       {step === 1 && (
         <div className="p-4 md:p-6 border rounded-2xl bg-primary-foreground">
           <h3 className="text-xl font-medium mb-6">Appointment Details</h3>
           <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
             <div className="flex flex-col gap-2">
-              <Label className="flex items-center gap-1">Hospital: <span className="text-xs text-destructive">(*Only 2 hospitals available to test)</span></Label>
-              <Select 
+              <Label className="flex items-center gap-1">
+                Hospital:{" "}
+                <span className="text-xs text-destructive">
+                  (*Only 2 hospitals available to test)
+                </span>
+              </Label>
+              <Select
                 onValueChange={(value) => {
                   setSelectedHospital(value);
                   setSelectedDepartment(null);
@@ -292,25 +352,39 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
                 value={selectedHospital || ""}
               >
                 <SelectTrigger className="bg-white w-full max-w-[80vw] md:max-w-none truncate">
-                  <SelectValue placeholder="Select hospital" className="truncate" />
+                  <SelectValue
+                    placeholder="Select hospital"
+                    className="truncate"
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     {hospitals && hospitals.length > 0 ? (
                       hospitals.map((hospital: any) => (
-                        <SelectItem key={hospital.id} value={hospital.id} className="truncate">{hospital.name}</SelectItem>
+                        <SelectItem
+                          key={hospital.id}
+                          value={hospital.id}
+                          className="truncate"
+                        >
+                          {hospital.name}
+                        </SelectItem>
                       ))
                     ) : (
-                      <SelectItem value="" disabled>No hospitals available</SelectItem>
+                      <SelectItem value="" disabled>
+                        No hospitals available
+                      </SelectItem>
                     )}
                   </SelectGroup>
                 </SelectContent>
               </Select>
-              <span className="text-xs text-muted-foreground">Choose either: <br /> - Grant Medical College & J J Group of Hospitals <br /> - K. J. Somaiya Hospital, KJH</span>
+              <span className="text-xs text-muted-foreground">
+                Choose either: <br /> - Grant Medical College & J J Group of
+                Hospitals <br /> - K. J. Somaiya Hospital, KJH
+              </span>
             </div>
             <div className="flex flex-col gap-2">
               <Label>Department:</Label>
-              <Select 
+              <Select
                 disabled={!selectedHospital || departments.length === 0}
                 onValueChange={(value) => {
                   setSelectedDepartment(value);
@@ -320,16 +394,29 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
                 value={selectedDepartment || ""}
               >
                 <SelectTrigger className="bg-white">
-                  <SelectValue placeholder={selectedHospital ? "Select department" : "Select hospital first"} />
+                  <SelectValue
+                    placeholder={
+                      selectedHospital
+                        ? "Select department"
+                        : "Select hospital first"
+                    }
+                  />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     {departments.length > 0 ? (
                       departments.map((department: any) => (
-                        <SelectItem key={department.id} value={department.id.toString()}>{department.name}</SelectItem>
+                        <SelectItem
+                          key={department.id}
+                          value={department.id.toString()}
+                        >
+                          {department.name}
+                        </SelectItem>
                       ))
                     ) : (
-                      <SelectItem value="No department" disabled>No departments available</SelectItem>
+                      <SelectItem value="No department" disabled>
+                        No departments available
+                      </SelectItem>
                     )}
                   </SelectGroup>
                 </SelectContent>
@@ -357,38 +444,47 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
                     selected={date}
                     onSelect={setDate}
                     initialFocus
-                    disabled={(date) => 
-                      date < new Date(new Date().setHours(0, 0, 0, 0)) || // Disable past dates
-                      date > new Date(new Date().setDate(new Date().getDate() + 7)) // Allow booking up to 7 days in advance
+                    disabled={
+                      (date) =>
+                        date < new Date(new Date().setHours(0, 0, 0, 0)) || // Disable past dates
+                        date >
+                          new Date(new Date().setDate(new Date().getDate() + 7)) // Allow booking up to 7 days in advance
                     }
                   />
                 </PopoverContent>
               </Popover>
             </div>
-            
+
             {/* Availability Status */}
             {availabilityStatus && (
               <div className="sm:col-span-2">
                 {availabilityStatus.available ? (
                   <Alert className="bg-green-50 border-green-200">
                     <Check className="h-4 w-4 text-green-600" />
-                    <AlertTitle className="text-green-800">Slots Available</AlertTitle>
+                    <AlertTitle className="text-green-800">
+                      Slots Available
+                    </AlertTitle>
                     <AlertDescription className="text-green-700">
-                      {availabilityStatus.remainingSlots} slots available out of {availabilityStatus.totalSlots}. Please select a time slot.
+                      {availabilityStatus.remainingSlots} slots available out of{" "}
+                      {availabilityStatus.totalSlots}. Please select a time
+                      slot.
                     </AlertDescription>
                   </Alert>
                 ) : (
                   <Alert className="bg-red-50 border-red-200">
                     <Info className="h-4 w-4 text-red-600" />
-                    <AlertTitle className="text-red-800">No Slots Available</AlertTitle>
+                    <AlertTitle className="text-red-800">
+                      No Slots Available
+                    </AlertTitle>
                     <AlertDescription className="text-red-700">
-                      All slots for this date are booked. Please select another date.
+                      All slots for this date are booked. Please select another
+                      date.
                     </AlertDescription>
                   </Alert>
                 )}
               </div>
             )}
-            
+
             {/* Time Slots */}
             {availabilityStatus?.available && timeSlots.length > 0 && (
               <div className="sm:col-span-2">
@@ -398,10 +494,13 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
                     <Button
                       key={slot}
                       type="button"
-                      variant={selectedTimeSlot === slot ? "default" : "outline"}
+                      variant={
+                        selectedTimeSlot === slot ? "default" : "outline"
+                      }
                       className={cn(
                         "bg-white hover:bg-primary/10",
-                        selectedTimeSlot === slot && "bg-primary text-primary-foreground hover:bg-primary/90"
+                        selectedTimeSlot === slot &&
+                          "bg-primary text-primary-foreground hover:bg-primary/90"
                       )}
                       onClick={() => setSelectedTimeSlot(slot)}
                     >
@@ -411,21 +510,32 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
                 </div>
               </div>
             )}
-            
+
             <div className="sm:col-span-2 flex flex-col gap-2 mt-4">
               <Label>Brief summary of symptoms (optional):</Label>
               <Textarea name="symptoms" className="bg-white" />
             </div>
           </div>
-          
+
           <div className="mt-6">
-            <Button 
-              type="button" 
+            <Button
+              type="button"
               onClick={goToNextStep}
-              disabled={!selectedHospital || !selectedDepartment || !date || !selectedTimeSlot || !availabilityStatus?.available}
+              disabled={
+                loading ||
+                !selectedHospital ||
+                !selectedDepartment ||
+                !date ||
+                !selectedTimeSlot ||
+                !availabilityStatus?.available
+              }
               className="w-full"
             >
-              {needsPatientDetails ? "Continue to Patient Details" : "Book Appointment"}
+              {loading && !needsPatientDetails
+                ? "Booking..."
+                : needsPatientDetails
+                ? "Continue to Patient Details"
+                : "Book Appointment"}
             </Button>
           </div>
         </div>
@@ -434,7 +544,7 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
       {step === 2 && needsPatientDetails && (
         <div className="p-6 border rounded-2xl bg-primary-foreground">
           <h3 className="text-xl font-medium mb-6">Patient Details</h3>
-          
+
           {/* Display form error if present */}
           {formError && (
             <Alert className="mb-4 bg-red-50 border-red-200">
@@ -445,7 +555,7 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
               </AlertDescription>
             </Alert>
           )}
-          
+
           <div className="grid sm:grid-cols-2 gap-x-8 gap-y-4">
             <div className="flex flex-col gap-2">
               <Label>Patient Full Name:</Label>
@@ -459,29 +569,29 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
             </div>
             <div className="flex flex-col gap-2">
               <Label>Phone No:</Label>
-              <Input 
-                className="bg-white" 
-                placeholder="Enter Phone Number" 
-                name="phone" 
+              <Input
+                className="bg-white"
+                placeholder="Enter Phone Number"
+                name="phone"
                 id="phone"
-                required 
+                required
               />
             </div>
             <div className="flex flex-col gap-2">
               <Label>Age:</Label>
-              <Input 
-                className="bg-white" 
-                placeholder="Enter your age" 
-                name="age" 
+              <Input
+                className="bg-white"
+                placeholder="Enter your age"
+                name="age"
                 id="age"
                 type="number"
-                required 
+                required
               />
             </div>
             <div className="flex flex-col gap-2">
               <Label>Gender:</Label>
-              <Select 
-                name="gender" 
+              <Select
+                name="gender"
                 required
                 onValueChange={(value) => setSelectedGender(value)}
                 value={selectedGender || ""}
@@ -499,17 +609,28 @@ const BookOpdForm = ({hospitals}: {hospitals: any}) => {
               </Select>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-2 my-6">
-            <Checkbox id="terms" required /> 
-            <Label className="text-muted-foreground leading-snug" htmlFor="terms">
-              I agree to the <Link href="/terms" className="underline" target="_blank">terms and conditions</Link> and confirm that the
-              information provided is accurate.
+            <Checkbox id="terms" required />
+            <Label
+              className="text-muted-foreground leading-snug"
+              htmlFor="terms"
+            >
+              I agree to the{" "}
+              <Link href="/terms" className="underline" target="_blank">
+                terms and conditions
+              </Link>{" "}
+              and confirm that the information provided is accurate.
             </Label>
           </div>
-          
+
           <div className="flex gap-4">
-            <Button type="button" variant="outline" onClick={goToPrevStep} className="flex-1">
+            <Button
+              type="button"
+              variant="outline"
+              onClick={goToPrevStep}
+              className="flex-1"
+            >
               Back
             </Button>
             <Button type="submit" className="flex-1" disabled={loading}>
