@@ -370,9 +370,9 @@ const BookOpdForm = ({ hospitals }: { hospitals: any }) => {
                         </SelectItem>
                       ))
                     ) : (
-                      <SelectItem value="" disabled>
-                        No hospitals available
-                      </SelectItem>
+                        <SelectItem value="none" disabled>
+                          No hospitals available
+                        </SelectItem>
                     )}
                   </SelectGroup>
                 </SelectContent>
@@ -414,9 +414,9 @@ const BookOpdForm = ({ hospitals }: { hospitals: any }) => {
                         </SelectItem>
                       ))
                     ) : (
-                      <SelectItem value="No department" disabled>
-                        No departments available
-                      </SelectItem>
+                        <SelectItem value="no_department" disabled>
+                          No departments available
+                        </SelectItem>
                     )}
                   </SelectGroup>
                 </SelectContent>

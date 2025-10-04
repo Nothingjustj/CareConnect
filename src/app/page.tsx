@@ -187,7 +187,7 @@ export default function Home() {
                 <Link href="/hospitals">View Hospitals</Link>
               </Button>
             </motion.div>
-            <motion.div
+            {/* <motion.div
               className="mt-24 -mb-24 md:-mb-44 relative rounded-2xl shadow-[10px_10px_0px_#eee,-10px_-10px_0px_#eee,-10px_10px_0px_#eee,10px_-10px_0px_#eee]"
               initial="hidden"
               whileInView="visible"
@@ -226,7 +226,7 @@ export default function Home() {
                   </button>
                 </div>
               </Suspense>
-            </motion.div>
+            </motion.div> */}
           </div>
         </section>
 
@@ -557,7 +557,7 @@ export default function Home() {
           </motion.div>
         </motion.section>
 
-        <section id="testimonials" className="py-20 bg-muted/70">
+        {/* <section id="testimonials" className="py-20 bg-muted/70">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <motion.h2
@@ -587,7 +587,6 @@ export default function Home() {
               whileInView="visible"
               viewport={{ once: true }}
             >
-              {/* <!-- Testimonial 1 --> */}
               <motion.div
                 className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
                 variants={fadeIn}
@@ -629,7 +628,6 @@ export default function Home() {
                 </p>
               </motion.div>
 
-              {/* <!-- Testimonial 2 --> */}
               <motion.div
                 className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
                 variants={fadeIn}
@@ -671,7 +669,6 @@ export default function Home() {
                 </p>
               </motion.div>
 
-              {/* <!-- Testimonial 3 --> */}
               <motion.div
                 className="bg-white p-6 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
                 variants={fadeIn}
@@ -714,7 +711,6 @@ export default function Home() {
               </motion.div>
             </motion.div>
 
-            {/* <!-- Stats Section --> */}
             <motion.div
               className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-8 bg-white p-8 rounded-xl shadow-[0_1px_1px_rgba(0,0,0,0.05),0_4px_6px_rgba(34,42,53,0.04),0_24px_68px_rgba(47,48,55,0.05),0_2px_3px_rgba(0,0,0,0.04)]"
               variants={staggerContainer}
@@ -817,7 +813,6 @@ export default function Home() {
               </motion.div>
             </motion.div>
 
-            {/* <!-- CTA --> */}
             <motion.div
               className="text-center mt-12"
               initial={{ opacity: 0, filter: "blur(5px)" }}
@@ -832,8 +827,7 @@ export default function Home() {
                 </Link>
               </Button>
             </motion.div>
-          </div>
-        </section>
+        </section> */}
       </div>
       <Footer />
     </>

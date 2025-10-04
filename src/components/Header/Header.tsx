@@ -2,7 +2,7 @@
 import Link from "next/link";
 import NavLinks from "./NavLinks";
 import { Button } from "../ui/button";
-import Logo from "/public/logo.png"
+import Logo from "/public/logoCare.png"
 import Image from "next/image";
 import { PWAInstallButton } from "../pwa-install-button";
 import { motion, useMotionValueEvent, useScroll } from "motion/react"
@@ -19,7 +19,7 @@ export default function Header() {
     if (latest > 150) {
       setVisible(true);
     } else {
-      setVisible(false);  
+      setVisible(false);
     }
   });
   
