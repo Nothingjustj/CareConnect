@@ -7,9 +7,11 @@ import { Menu, X } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { Button } from "../ui/button";
 import { PWAInstallButton } from "../pwa-install-button";
+import { useI18n } from "@/components/i18n/LanguageProvider";
 
 export default function NavLinks() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { t } = useI18n();
   const pathname = usePathname();
 
   // Close the menu when the route changes
@@ -19,32 +21,32 @@ export default function NavLinks() {
 
   const navlinks = [
     {
-      name: "Home",
+      name: t("nav.home"),
       url: "/",
       active: true,
     },
     {
-      name: "Features",
+      name: t("nav.features"),
       url: "/#features",
       active: true,
     },
     {
-      name: "Solutions",
+      name: t("nav.solutions"),
       url: "/#solutions",
       active: true,
     },
     {
-      name: "Track Token",
+      name: t("nav.track_token"),
       url: "/track-token",
       active: true,
     },
     {
-      name: "About",
+      name: t("nav.about"),
       url: "/about",
       active: true,
     },
     {
-      name: "Contact",
+      name: t("nav.contact"),
       url: "/contact",
       active: true,
     },

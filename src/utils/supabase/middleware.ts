@@ -9,8 +9,8 @@ export async function updateSession(request: NextRequest) {
 
   // ====== Use environment variables ======
   const supabase = createServerClient(
-    process.env.SUPABASE_URL!, // Server-side env variable
-    process.env.SUPABASE_KEY!, // Server-side env variable
+    process.env.NEXT_PUBLIC_SUPABASE_URL!, // Server-side env variable
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, // Server-side env variable
     {
       cookies: {
         getAll() {

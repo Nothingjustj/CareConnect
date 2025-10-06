@@ -1,0 +1,62 @@
+{
+  "app": {
+    "name": "CareConnect",
+    "tagline": "Hospital OPD Platform"
+  },
+  "nav": {
+    "home": "Home",
+    "features": "Features",
+    "solutions": "Solutions",
+    "track_token": "Track Token",
+    "about": "About",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register"
+  },
+  "auth": {
+    "back_to_home": "Back to Home"
+  },
+  "dashboard": {
+    "role": "Role"
+  },
+  "common": {
+    "cta_get_started": "Get started"
+  },
+  "landing": {
+    "hero": {
+      "tagline": "Powering Smarter Healthcare",
+      "subtitle": "One-stop solution for managing all your hospital OPD needs. Streamline patient care with our comprehensive digital platform.",
+      "view_hospitals": "View Hospitals"
+    },
+    "benefits": {
+      "token_updates": {"title": "Real-time Token Updates", "desc": "Monitor your token live and get notified when it's your turn."},
+      "easy_booking": {"title": "Easy Appointment Booking", "desc": "Easily book appointments with the department you trust most."},
+      "email_verification": {"title": "Email Verification", "desc": "Receive updates about your appointment status and token number."}
+    },
+    "features": {
+      "kicker": "our features",
+      "title": "What do we offer",
+      "subtitle": "Streamline your hospital operations with our powerful suite of features designed for modern healthcare management."
+    },
+    "cta": {"book_now": "Book Appointment Now", "support_help": "Need help? Contact our support team 24/7"},
+    "token_banner": {"title": "Track Your Token Status", "desc": "Already have an appointment? Easily check your token status by entering your token details. Stay updated on your position in the queue without waiting at the hospital.", "cta": "Track Your Token Now"},
+    "stats": {"hospitals": "Hospitals", "patients_served": "Patients Served", "satisfaction": "Satisfaction Rate", "support": "Support"},
+    "join_network": "Join Our Growing Network"
+  },
+  "footer": {
+    "description": "Simplifying Hospital OPD Management System for better healthcare delivery.",
+    "quick_links": {"title": "Quick Links", "features": "Features", "solutions": "Solutions", "about": "About", "contact": "Contact"},
+    "resources": {"title": "Resources", "book_opd": "Book OPD", "track_opd": "Track OPD", "hospitals": "Hospitals"},
+    "contact": {"title": "Contact Us"},
+    "legal": {"privacy": "Privacy Policy", "terms": "Terms of Service"},
+    "developed_by": "Developed by NCC Cadets",
+    "copyright": "All rights reserved."
+  },
+  "sidebar": {
+    "patient": {"dashboard": "Dashboard", "my_appointments": "My Appointments", "book_opd": "Book OPD", "track_opd": "Track OPD", "my_account": "My Account"},
+    "dept": {"dashboard": "Dashboard", "manage_tokens": "Manage Tokens", "queue_status": "Queue Status", "analytics": "Analytics", "my_account": "My Account"},
+    "hosp": {"dashboard": "Dashboard", "manage_departments": "Manage Departments", "manage_staffs": "Manage Staffs", "analytics": "Analytics", "my_account": "My Account"},
+    "super": {"dashboard": "Dashboard", "manage_hospitals": "Manage Hospitals", "manage_admins": "Manage Admins", "department_types": "Department Types", "view_analytics": "View Analytics", "my_account": "My Account"}
+  }
+}
+

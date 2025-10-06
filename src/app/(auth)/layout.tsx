@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, ChevronLeft } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useI18n } from "@/components/i18n/LanguageProvider";
 
 export default async function AuthLayout({
     children,
@@ -9,6 +10,7 @@ export default async function AuthLayout({
     children: React.ReactNode;
   }>) {
 
+    // This is a server component; translate static strings on client entry points instead
     return (
       <div className="relative flex flex-col min-h-screen justify-center bg-sidebar" 
       style={{
@@ -25,7 +27,7 @@ export default async function AuthLayout({
         </Button>
         <header className="flex justify-center">
           <Link href="/">
-            <Image src="/logo.png" width={170} height={100} alt="RogitSetu Logo" />
+            <Image src="/Whitelogo.png" width={170} height={100} alt="RogitSetu Logo" />
           </Link>
         </header>
         {children}

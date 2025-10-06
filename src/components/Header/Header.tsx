@@ -1,6 +1,8 @@
 "use client"
 import Link from "next/link";
 import NavLinks from "./NavLinks";
+import LanguageSwitch from "@/components/i18n/LanguageSwitch";
+import { useI18n } from "@/components/i18n/LanguageProvider";
 import { Button } from "../ui/button";
 import Logo from "/public/logoCare.png"
 import Image from "next/image";
@@ -9,6 +11,7 @@ import { motion, useMotionValueEvent, useScroll } from "motion/react"
 import { useState } from "react";
 
 export default function Header() {
+  const { t } = useI18n();
   
   const [visible, setVisible] = useState<boolean>(false);
   const { scrollY } = useScroll({
@@ -34,24 +37,26 @@ export default function Header() {
         <Link href="/">
           <Image 
             src={Logo} 
-            alt="RogiSetu Header Logo Image" 
+            alt="CareConnect Header Logo Image" 
             className="w-[110px] md:w-[150px] h-auto"
             priority
           />
         </Link>
         <div className="flex gap-2">
-          <div className="flex md:hidden">
+          <div className="flex md:hidden items-center gap-2">
             <PWAInstallButton />
+            <LanguageSwitch />
           </div>
           <NavLinks />
         </div>
-          <div className="hidden md:flex gap-1">
+          <div className="hidden md:flex gap-1 items-center">
             <Button variant="ghost" className="px-3 md:px-4 h-8 md:h-9 text-xs md:text-sm" asChild>
-              <Link href="/login">Login</Link>
+              <Link href="/login">{t("nav.login")}</Link>
             </Button>
             <Button className="px-3 md:px-4 h-8 md:h-9 text-xs md:text-sm" asChild>
-              <Link href="/register">Register</Link>
+              <Link href="/register">{t("nav.register")}</Link>
             </Button>
+            <LanguageSwitch />
           </div>
       </div>
     </motion.header>

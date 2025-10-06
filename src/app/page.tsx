@@ -24,6 +24,7 @@ import Link from "next/link";
 import React from "react";
 import { motion } from "motion/react";
 import { useState } from "react";
+import { useI18n } from "@/components/i18n/LanguageProvider";
 
 const features: {
   icon: React.ReactNode;
@@ -50,9 +51,9 @@ const features: {
   },
   {
     icon: <Pill className="h-10 w-10 text-primary" />,
-    title: "Medicine Inventory",
+    title: "ChatBot Assistance",
     description:
-      "Comprehensive medicine stock management with automated reorder notifications.",
+      "Ai-Powered chatbot to assist patients with booking, inquiries, and support.",
   },
   {
     icon: <Bed className="h-10 w-10 text-primary" />,
@@ -62,9 +63,9 @@ const features: {
   },
   {
     icon: <Bell className="h-10 w-10 text-primary" />,
-    title: "SMS Notifications",
+    title: "email Verification",
     description:
-      "Automated SMS updates for appointments, prescriptions, and important reminders.",
+      "email verfication for new user registeration.",
   },
 ];
 
@@ -100,6 +101,7 @@ const staggerContainer = {
 
 export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
+  const { t } = useI18n();
 
   const togglePlay = () => {
     const videoElement = document.getElementById(
@@ -135,30 +137,36 @@ export default function Home() {
 
           <div className="w-full max-w-6xl px-6 md:px-0 md:text-center z-10">
             <h1 className="text-4xl md:text-6xl font-bold text-balance md:leading-[1.2] tracking-tight text-neutral-800">
-              {"Simplifying Hospital OPD Management System"
-                .split(" ")
-                .map((word, index) => {
-                  const isBlue = word === "OPD" || word === "Management";
-                  return (
-                    <motion.span
-                      key={index}
-                      initial={{ opacity: 0, filter: "blur(4px)", y: 10 }}
-                      whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
-                      transition={{
-                        duration: 0.3,
-                        delay: index * 0.1,
-                        ease: "easeInOut",
-                      }}
-                      viewport={{ once: true }}
-                      className={`mr-2 inline-block ${
-                        isBlue ? "text-primary" : ""
-                      }`}
-                    >
-                      {word}
-                    </motion.span>
-                  );
-                })}
-            </h1>
+  <motion.span
+    initial={{ opacity: 0, filter: "blur(4px)", y: 10 }}
+    whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+    transition={{
+      duration: 0.3,
+      delay: 0,
+      ease: "easeInOut",
+    }}
+    viewport={{ once: true }}
+    className="inline-block text-[#556647]"
+
+  >
+    {t("app.name")}
+  </motion.span>
+  <br />
+  <motion.span
+    initial={{ opacity: 0, filter: "blur(4px)", y: 10 }}
+    whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+    transition={{
+      duration: 0.3,
+      delay: 0.1,
+      ease: "easeInOut",
+    }}
+    viewport={{ once: true }}
+    className="inline-block"
+  >
+    {t("landing.hero.tagline")}
+  </motion.span>
+</h1>
+
             <motion.p
               className="text-balance mt-6 md:px-36 text-base md:text-lg text-secondary-foreground"
               initial={{ opacity: 0, filter: "blur(5px)" }}
@@ -166,67 +174,27 @@ export default function Home() {
               transition={{ delay: 0.8 }}
               viewport={{ once: true }}
             >
-              One-stop solution for managing all your hospital OPD needs.
-              Streamline patient care with our comprehensive digital platform.
+              {t("landing.hero.subtitle")}
             </motion.p>
             <motion.div
-              className="mt-8 flex md:justify-center gap-4"
-              initial={{ opacity: 0, filter: "blur(5px)" }}
+              className="text-balance mt-6 md:px-36 text-base md:text-lg text-secondary-foreground"
+              initial={{ opacity: 0, filter: "blur(5px)"}}
               whileInView={{ opacity: 1, filter: "blur(0px)" }}
-              transition={{ delay: 1 }}
+              transition={{ delay: 0.8 }}
               viewport={{ once: true }}
             >
               <Button className="md:text-base md:py-6 md:px-6" asChild>
-                <Link href="/login">Get started</Link>
+                <Link href="/login">{t("common.cta_get_started")}</Link>
               </Button>
               <Button
                 className="md:text-base md:py-6 md:px-6"
                 variant="outline"
                 asChild
               >
-                <Link href="/hospitals">View Hospitals</Link>
+                <Link href="/hospitals">{t("landing.hero.view_hospitals")}</Link>
               </Button>
             </motion.div>
-            {/* <motion.div
-              className="mt-24 -mb-24 md:-mb-44 relative rounded-2xl shadow-[10px_10px_0px_#eee,-10px_-10px_0px_#eee,-10px_10px_0px_#eee,10px_-10px_0px_#eee]"
-              initial="hidden"
-              whileInView="visible"
-              variants={scaleIn}
-              transition={{ duration: 0.8, delay: 1.2, ease: "easeOut" }}
-              viewport={{ once: true }}
-              whileHover={{ scale: 1.02, transition: { duration: 0.3 } }}
-            >
-              <div className="absolute inset-x-0 -top-[0.625rem] h-px w-full bg-neutral-200/80 dark:bg-neutral-800/80">
-                <div className="absolute mx-auto h-px w-40 bg-gradient-to-r from-transparent via-blue-500 to-transparent" />
-              </div>
-              <Suspense fallback={<p>Loading video...</p>}>
-                <video
-                  id="videoElement"
-                  className="rounded-xl shadow-lg w-[100%]"
-                  autoPlay={true}
-                  loop
-                  onMouseEnter={() => setIsPlaying(true)}
-                  onMouseLeave={() => setIsPlaying(false)}
-                  width="100%"
-                  height="100%"
-                >
-                  <source src="/video.mp4" type="video/mp4" />
-                  Your browser does not support the video tag.
-                </video>
-                <div
-                  className="absolute inset-0 flex items-center justify-center opacity-0 hover:opacity-100 transition-opacity duration-300" // Centered play button
-                  onClick={togglePlay}
-                >
-                  <button className="bg-black rounded-full p-5 shadow-[0_0_8px_#222,0_0_4px_#333]">
-                    {isPlaying ? (
-                      <PauseIcon className="h-10 w-10 text-white" />
-                    ) : (
-                      <PlayIcon className="h-10 w-10 text-white" />
-                    )}
-                  </button>
-                </div>
-              </Suspense>
-            </motion.div> */}
+            
           </div>
         </section>
 
@@ -251,13 +219,8 @@ export default function Home() {
                 >
                   <Clock className="h-10 w-10 text-primary mb-2" />
                 </motion.div>
-                <h2 className="text-lg md:text-xl font-bold">
-                  Real-time Token Updates
-                </h2>
-                <p className="text-sm md:text-base text-muted-foreground">
-                  Track your token status in real-time and get notified when
-                  it&apos;s your turn.
-                </p>
+                <h2 className="text-lg md:text-xl font-bold">{t("landing.benefits.token_updates.title")}</h2>
+                <p className="text-sm md:text-base text-muted-foreground">{t("landing.benefits.token_updates.desc")}</p>
               </motion.div>
               <motion.div
                 className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center group"
@@ -271,13 +234,8 @@ export default function Home() {
                 >
                   <Calendar className="h-10 w-10 text-primary mb-2" />
                 </motion.div>
-                <h2 className="text-lg md:text-xl font-bold">
-                  Easy Appointment Booking
-                </h2>
-                <p className="text-sm md:text-base text-muted-foreground">
-                  Book appointments with your preferred department quickly and
-                  easily.
-                </p>
+                <h2 className="text-lg md:text-xl font-bold">{t("landing.benefits.easy_booking.title")}</h2>
+                <p className="text-sm md:text-base text-muted-foreground">{t("landing.benefits.easy_booking.desc")}</p>
               </motion.div>
               <motion.div
                 className="flex flex-col md:items-center space-y-1 md:space-y-4 md:text-center group"
@@ -291,13 +249,8 @@ export default function Home() {
                 >
                   <Bell className="h-10 w-10 text-primary mb-2" />
                 </motion.div>
-                <h2 className="text-lg md:text-xl font-bold">
-                  SMS Notifications
-                </h2>
-                <p className="text-sm md:text-base text-muted-foreground">
-                  Receive SMS updates about your appointment status and token
-                  number.
-                </p>
+                <h2 className="text-lg md:text-xl font-bold">{t("landing.benefits.email_verification.title")}</h2>
+                <p className="text-sm md:text-base text-muted-foreground">{t("landing.benefits.email_verification.desc")}</p>
               </motion.div>
             </motion.div>
           </div>
@@ -313,7 +266,7 @@ export default function Home() {
               viewport={{ once: true }}
               className="uppercase tracking-[0.2rem] text-primary"
             >
-              our features
+              {t("landing.features.kicker")}
             </motion.span>
             <motion.h2
               className="text-2xl md:text-4xl font-bold text-gray-900 mt-4"
@@ -322,7 +275,7 @@ export default function Home() {
               transition={{ delay: 0.2 }}
               viewport={{ once: true }}
             >
-              What do we offer
+              {t("landing.features.title")}
             </motion.h2>
             <motion.p
               className="text-gray-600 mt-4"
@@ -331,8 +284,7 @@ export default function Home() {
               transition={{ delay: 0.2 }}
               viewport={{ once: true }}
             >
-              Streamline your hospital operations with our powerful suite of
-              features designed for modern healthcare management.
+              {t("landing.features.subtitle")}
             </motion.p>
           </div>
 
@@ -489,10 +441,10 @@ export default function Home() {
               className="bg-primary text-white py-6 px-8 rounded-lg text-base hover:bg-primary/90 transition"
               asChild
             >
-              <Link href="/dashboard/book-opd">Book Appointment Now</Link>
+              <Link href="/dashboard/book-opd">{t("landing.cta.book_now")}</Link>
             </Button>
             <p className="text-muted-foreground text-sm mt-2">
-              Need help? Contact our support team 24/7
+              {t("landing.cta.support_help")}
             </p>
           </motion.div>
         </section>
@@ -519,23 +471,21 @@ export default function Home() {
               variants={slideInFromLeft}
               transition={{ duration: 0.6, delay: 0.2 }}
             >
-              Track Your Token Status
+              {t("landing.token_banner.title")}
             </motion.h2>
             <motion.p
               className="text-muted-foreground mb-6 max-w-3xl"
               variants={slideInFromLeft}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              Already have an appointment? Easily check your token status by
-              entering your token details. Stay updated on your position in the
-              queue without waiting at the hospital.
+              {t("landing.token_banner.desc")}
             </motion.p>
             <motion.div
               variants={slideInFromLeft}
               transition={{ duration: 0.6, delay: 0.6 }}
             >
               <Button size="lg" className="mt-2" asChild>
-                <Link href="/track-token">Track Your Token Now</Link>
+                <Link href="/track-token">{t("landing.token_banner.cta")}</Link>
               </Button>
             </motion.div>
             <motion.div
@@ -743,7 +693,7 @@ export default function Home() {
                 >
                   500+
                 </motion.div>
-                <p className="text-neutral-600">Hospitals</p>
+                <p className="text-neutral-600">{t("landing.stats.hospitals")}</p>
               </motion.div>
               <motion.div
                 className="text-center"
@@ -765,7 +715,7 @@ export default function Home() {
                 >
                   1M+
                 </motion.div>
-                <p className="text-neutral-600">Patients Served</p>
+                <p className="text-neutral-600">{t("landing.stats.patients_served")}</p>
               </motion.div>
               <motion.div
                 className="text-center"
@@ -787,7 +737,7 @@ export default function Home() {
                 >
                   98%
                 </motion.div>
-                <p className="text-neutral-600">Satisfaction Rate</p>
+                <p className="text-neutral-600">{t("landing.stats.satisfaction")}</p>
               </motion.div>
               <motion.div
                 className="text-center"
@@ -809,7 +759,7 @@ export default function Home() {
                 >
                   24/7
                 </motion.div>
-                <p className="text-neutral-600">Support</p>
+                <p className="text-neutral-600">{t("landing.stats.support")}</p>
               </motion.div>
             </motion.div>
 
@@ -822,7 +772,7 @@ export default function Home() {
             >
               <Button className="px-8 h-12 text-[15px]" asChild>
                 <Link href="/contact">
-                  Join Our Growing Network
+                  {t("landing.join_network")}
                   <ArrowRightIcon />
                 </Link>
               </Button>
