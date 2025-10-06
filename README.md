@@ -1,5 +1,5 @@
 <div align="center">
-    <img src="https://github.com/user-attachments/assets/85e65bf3-2fa5-4cc4-9f1e-c46f40ec069e" alt="RogiSetu Logo" width="150" />
+    <img src="public/whitelogo.png" alt="CareConnect Logo" width="150" />
     <div id="toc">
       <ul style="list-style: none">
         <summary>
@@ -12,7 +12,7 @@
 
 ## Overview
 
-RogiSetu is a comprehensive web application built with Next.js that simplifies hospital OPD (Outpatient Department) management. It provides features for patients to book appointments, track tokens, and for hospital staff to manage departments and patient flow.
+CareConnect is a comprehensive web application built with Next.js that simplifies hospital OPD (Outpatient Department) management. It provides features for patients to book appointments, track tokens, and for hospital staff to manage departments and patient flow.
 <br /><br />
 The deployed version can be found at [`rogisetu.vercel.app`](https://rogisetu.vercel.app)
 
