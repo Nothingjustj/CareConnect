@@ -31,7 +31,7 @@ export function PWAInstallPrompt() {
         <div className="flex items-center gap-2">
           <Download className="h-4 w-4 text-primary" />
           <p className="text-sm text-foreground">
-            Install <strong>RogiSetu</strong> app for a better experience.
+            Install <strong>CareConnect</strong> app for a better experience.
           </p>
         </div>
         <div className="flex items-center gap-2">

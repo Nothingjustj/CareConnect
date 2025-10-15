@@ -4,7 +4,7 @@ import NavLinks from "./NavLinks";
 import LanguageSwitch from "@/components/i18n/LanguageSwitch";
 import { useI18n } from "@/components/i18n/LanguageProvider";
 import { Button } from "../ui/button";
-import Logo from "/public/logoCare.png"
+import Logo from "/public/greenl.png"
 import Image from "next/image";
 import { PWAInstallButton } from "../pwa-install-button";
 import { motion, useMotionValueEvent, useScroll } from "motion/react"
@@ -38,7 +38,7 @@ export default function Header() {
           <Image 
             src={Logo} 
             alt="CareConnect Header Logo Image" 
-            className="w-[110px] md:w-[150px] h-auto"
+            className="w-[290px] md:w-[250px] h-auto"
             priority
           />
         </Link>

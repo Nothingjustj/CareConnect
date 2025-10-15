@@ -29,27 +29,27 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: {
     default: "CareConnect — Powering Smarter Healthcare",
-    template: "%s | RogiSetu"
+    template: "%s | CareConnect",
   },
   description: "Bridging patients and hospitals with seamless digital healthcare solutions. Simplify appointments, manage records, and enhance care delivery.",
   keywords: ["hospital management", "OPD system", "patient care", "healthcare platform", "digital hospital", "medical records", "appointment booking", "healthcare management"],
-  authors: [{ name: "Aditya Sharma" }],
-  creator: "Aditya Sharma",
-  publisher: "Aditya Sharma",
+  authors: [{ name: "Jagriti Sharma" }],
+  creator: "Jagriti Sharma",
+  publisher: "Jagriti Sharma",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://rogisetu.vercel.app'),
+  metadataBase: new URL('https://careconnect.vercel.app'),
   alternates: {
     canonical: '/',
   },
   openGraph: {
     title: "CareConnect — Powering Smarter Healthcare",
     description: "Bridging patients and hospitals with seamless digital healthcare solutions. Simplify appointments, manage records, and enhance care delivery.",
-    url: 'https://rogisetu.vercel.app',
-    siteName: 'RogiSetu',
+    url: 'https://careconnect.vercel.app',
+    siteName: 'CareConnect',
     images: [
       {
         url: '/og-image.png',

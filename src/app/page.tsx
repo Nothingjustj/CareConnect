@@ -49,18 +49,8 @@ const features: {
     description:
       "Access services from multiple government hospitals through a single platform.",
   },
-  {
-    icon: <Pill className="h-10 w-10 text-primary" />,
-    title: "ChatBot Assistance",
-    description:
-      "Ai-Powered chatbot to assist patients with booking, inquiries, and support.",
-  },
-  {
-    icon: <Bed className="h-10 w-10 text-primary" />,
-    title: "Real-time Bed Tracking",
-    description:
-      "Live monitoring of bed availability across departments with instant status updates.",
-  },
+  
+
   {
     icon: <Bell className="h-10 w-10 text-primary" />,
     title: "email Verification",
@@ -289,7 +279,7 @@ export default function Home() {
           </div>
 
           <motion.div
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10 max-w-6xl mx-auto"
+            className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-10 max-w-6xl mx-auto"
             variants={staggerContainer}
             initial="hidden"
             whileInView="visible"
@@ -526,7 +516,7 @@ export default function Home() {
                 transition={{ delay: 0.2 }}
                 viewport={{ once: true }}
               >
-                See what healthcare professionals are saying about RogiSetu
+                See what healthcare professionals are saying about CareConnect
               </motion.p>
             </div>
 
@@ -572,7 +562,7 @@ export default function Home() {
                   </div>
                 </div>
                 <p className="text-neutral-700">
-                  "RogiSetu has transformed our OPD management completely. The
+                  "CareConnect has transformed our OPD management completely. The
                   automated scheduling and real-time updates have reduced
                   waiting times by 60%. Excellent system!"
                 </p>
@@ -655,7 +645,7 @@ export default function Home() {
                 </div>
                 <p className="text-neutral-700">
                   "Patient satisfaction has improved significantly since we
-                  implemented RogiSetu. The SMS notifications and digital queue
+                  implemented CareConnect. The SMS notifications and digital queue
                   management have made the process seamless."
                 </p>
               </motion.div>

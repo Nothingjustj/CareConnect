@@ -20,8 +20,8 @@ export default function Footer () {
               <Image
                 src="/Whitelogo.png"
                 alt="logo in footer"
-                width={170}
-                height={80}
+                width={250}
+                height={200}
               />
             </Link>
             <p className="text-gray-400 mt-4 text-balance">

@@ -4,27 +4,27 @@ export default function OrganizationSchema() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
-    "name": "RogiSetu",
-    "url": "https://rogisetu.vercel.app",
-    "logo": "https://rogisetu.vercel.app/logoCare.png",
+    "name": "CareConnect",
+    "url": "https://CareConnecpp",
+    "logo": "https:/CareConnecapp/logoCare.png",
     "sameAs": [
-      "https://twitter.com/sharmaadityax",
-      "https://www.linkedin.com/in/aditya-r-sharma/",
-      "https://www.facebook.com/adityasharma4857"
+      "https://twitter.com/sharma",
+      "https://www.linkedin.com/in/jagriti/",
+    
     ],
     "contactPoint": {
       "@type": "ContactPoint",
-      "telephone": "+91-7304066855",
+      "telephone": "+91-1234567890",
       "contactType": "customer service",
       "areaServed": "IN",
       "availableLanguage": ["English", "Hindi"]
     },
     "address": {
       "@type": "PostalAddress",
-      "streetAddress": "Mira Road",
-      "addressLocality": "Mumbai",
-      "addressRegion": "Maharashtra",
-      "postalCode": "401107",
+      "streetAddress": "Ludhiana",
+      "addressLocality": "Ludhiana",
+      "addressRegion": "Punjab",
+      "postalCode": "141013",
       "addressCountry": "IN"
     }
   };
